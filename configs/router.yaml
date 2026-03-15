@@ -1,5 +1,7 @@
 max_active_leaders: 2
 default_mode: research
+default_regime: high_vol
+token_budget: low
 
 routing:
   trend_up:
