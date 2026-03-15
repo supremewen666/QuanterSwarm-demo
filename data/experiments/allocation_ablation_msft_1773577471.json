@@ -1,0 +1,67 @@
+{
+  "experiment_id": "allocation_ablation_msft_1773577471",
+  "experiment_type": "allocation_ablation",
+  "symbol": "MSFT",
+  "results": [
+    {
+      "name": "simple",
+      "regime": "high_vol",
+      "regime_confidence": 0.89,
+      "annualized_return": 114936678893.717,
+      "sharpe": 2.0307,
+      "sortino": 0.224,
+      "max_drawdown": 0.0,
+      "win_rate": 1.0,
+      "turnover": 0.112,
+      "exposure_summary": {
+        "gross_exposure": 0.0,
+        "cash_buffer": 1.0,
+        "position_count": 0
+      },
+      "strategy_contribution": {
+        "momentum": 0.49,
+        "breakout_event": 0.334
+      }
+    },
+    {
+      "name": "volatility_aware",
+      "regime": "high_vol",
+      "regime_confidence": 0.89,
+      "annualized_return": 114936678893.717,
+      "sharpe": 2.0307,
+      "sortino": 0.224,
+      "max_drawdown": 0.0,
+      "win_rate": 1.0,
+      "turnover": 0.112,
+      "exposure_summary": {
+        "gross_exposure": 0.0,
+        "cash_buffer": 1.0,
+        "position_count": 0
+      },
+      "strategy_contribution": {
+        "momentum": 0.49,
+        "breakout_event": 0.334
+      }
+    },
+    {
+      "name": "correlation_aware",
+      "regime": "high_vol",
+      "regime_confidence": 0.89,
+      "annualized_return": 114936678893.717,
+      "sharpe": 2.0307,
+      "sortino": 0.224,
+      "max_drawdown": 0.0,
+      "win_rate": 1.0,
+      "turnover": 0.112,
+      "exposure_summary": {
+        "gross_exposure": 0.0,
+        "cash_buffer": 1.0,
+        "position_count": 0
+      },
+      "strategy_contribution": {
+        "momentum": 0.49,
+        "breakout_event": 0.334
+      }
+    }
+  ]
+}

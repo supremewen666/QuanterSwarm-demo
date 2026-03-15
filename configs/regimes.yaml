@@ -1,15 +1,42 @@
 regimes:
   trend_up:
     leaders: [momentum, breakout_event]
+    fallback_leaders: [momentum]
+    weights:
+      momentum: 0.6
+      breakout_event: 0.4
   trend_down:
     leaders: [mean_reversion, stat_arb]
+    fallback_leaders: [mean_reversion]
+    weights:
+      mean_reversion: 0.55
+      stat_arb: 0.45
   sideways:
     leaders: [mean_reversion, stat_arb]
+    fallback_leaders: [stat_arb]
+    weights:
+      mean_reversion: 0.5
+      stat_arb: 0.5
   high_vol:
     leaders: [breakout_event, momentum]
+    fallback_leaders: [breakout_event]
+    weights:
+      breakout_event: 0.7
+      momentum: 0.3
   panic:
     leaders: [breakout_event]
+    fallback_leaders: [breakout_event]
+    weights:
+      breakout_event: 1.0
   risk_on:
     leaders: [momentum, breakout_event]
+    fallback_leaders: [momentum]
+    weights:
+      momentum: 0.65
+      breakout_event: 0.35
   risk_off:
     leaders: [mean_reversion, stat_arb]
+    fallback_leaders: [mean_reversion]
+    weights:
+      mean_reversion: 0.6
+      stat_arb: 0.4

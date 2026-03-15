@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from time import time
+
 from quanter_swarm.market.fundamentals_feed import fetch_fundamentals
 from quanter_swarm.market.macro_feed import fetch_macro_snapshot
 from quanter_swarm.market.news_feed import fetch_news
@@ -15,6 +17,7 @@ def build_snapshot(symbol: str) -> dict:
     macro_inputs = fetch_macro_snapshot(symbol)
     return {
         "symbol": symbol.upper(),
+        "as_of_ts": int(time()),
         "market_packet": {
             "symbol": market_packet["symbol"],
             "price": market_packet["price"],

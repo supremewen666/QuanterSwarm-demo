@@ -18,6 +18,7 @@ REQUIRED_CONFIGS = (
     "risk.yaml",
     "portfolio.yaml",
     "execution.yaml",
+    "paper_broker.yaml",
     "ranking.yaml",
     "evolution.yaml",
 )
@@ -52,7 +53,7 @@ def validate_repo_configs(config_dir: Path | None = None) -> dict[str, Any]:
     resolved_dir = config_dir or Path("configs")
     missing = [name for name in REQUIRED_CONFIGS if not (resolved_dir / name).exists()]
     if missing:
-        return {"ok": False, "missing": missing, "invalid": [], "unknown_leaders": []}
+        return {"ok": False, "missing": missing, "invalid": [], "unknown_leaders": [], "config_errors": []}
 
     invalid: list[str] = []
     for name in REQUIRED_CONFIGS:
@@ -63,6 +64,7 @@ def validate_repo_configs(config_dir: Path | None = None) -> dict[str, Any]:
 
     router = load_yaml(resolved_dir / "router.yaml")
     regimes = load_yaml(resolved_dir / "regimes.yaml").get("regimes", {})
+    portfolio = load_yaml(resolved_dir / "portfolio.yaml").get("portfolio", {})
     known_leaders = {path.stem for path in (resolved_dir / "leaders").glob("*.yaml")}
     referenced = {
         leader
@@ -74,9 +76,16 @@ def validate_repo_configs(config_dir: Path | None = None) -> dict[str, Any]:
         for leader in config.get("leaders", [])
     }
     unknown_leaders = sorted(referenced - known_leaders)
+    config_errors: list[str] = []
+    if router.get("low_confidence_policy") not in {"fallback", "no_trade", None}:
+        config_errors.append("router.low_confidence_policy must be fallback|no_trade")
+    allocation_mode = portfolio.get("allocation_mode", "simple")
+    if allocation_mode not in {"simple", "volatility_aware", "correlation_aware"}:
+        config_errors.append("portfolio.allocation_mode must be simple|volatility_aware|correlation_aware")
     return {
-        "ok": not missing and not invalid and not unknown_leaders,
+        "ok": not missing and not invalid and not unknown_leaders and not config_errors,
         "missing": missing,
         "invalid": invalid,
         "unknown_leaders": unknown_leaders,
+        "config_errors": config_errors,
     }

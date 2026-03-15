@@ -1,3 +1,7 @@
 paper_broker:
   slippage_bps: 5
   commission_per_trade: 0.0
+  commission_bps: 1.0
+  fill_model: partial
+  gap_sensitivity: 0.35
+  open_session_penalty_bps: 6.0

@@ -2,3 +2,19 @@ portfolio:
   target_positions: 5
   rebalance_frequency: weekly
   cash_buffer: 0.05
+  allocation_mode: simple
+  correlation_penalty: 0.35
+  turnover_penalty: 0.15
+  regime_overrides:
+    high_vol:
+      exposure_multiplier: 0.7
+      cash_buffer: 0.2
+      target_positions: 3
+    panic:
+      exposure_multiplier: 0.0
+      cash_buffer: 1.0
+      target_positions: 0
+    risk_off:
+      exposure_multiplier: 0.6
+      cash_buffer: 0.25
+      target_positions: 2

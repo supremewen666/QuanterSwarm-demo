@@ -1,0 +1,63 @@
+{
+  "symbol": "AAPL",
+  "actions": [
+    {
+      "executed": true,
+      "status": "accepted",
+      "order_id": "paper_6e049c708331436cbd70b5dd0d2b4441",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 109.0,
+        "decision_price": 109.0,
+        "volatility": 0.06,
+        "avg_volume": 1020286,
+        "is_open_session": true,
+        "gap_pct": 0.0
+      },
+      "decision_price": 109.0,
+      "execution_price": 109.0,
+      "fill_price": 109.343082,
+      "fill_ratio": 0.7335,
+      "filled_notional": 11002.5,
+      "slippage_bps": 31.4754,
+      "commission_cost": 1.10025,
+      "total_cost": 35.731059,
+      "audit": {
+        "order_intent": {
+          "symbol": "AAPL",
+          "leader": "momentum",
+          "notional": 15000.0,
+          "decision_price": 109.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7335,
+          "participation_rate": 0.014702,
+          "slippage_bps": 31.4754,
+          "is_open_session": true,
+          "gap_pct": 0.0
+        },
+        "slippage_amount": 34.630809,
+        "total_cost": 35.731059,
+        "execution_summary": {
+          "execution_price": 109.0,
+          "realized_fill_price": 109.343082,
+          "filled_notional": 11002.5,
+          "commission_cost": 1.10025
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "pnl": 0.24,
+    "annualized_return": 30.24,
+    "drawdown": 0.0,
+    "sharpe": 5.6569,
+    "sortino": 0.24,
+    "stability": 1.0,
+    "win_rate": 1.0,
+    "turnover_proxy": 0.12
+  }
+}

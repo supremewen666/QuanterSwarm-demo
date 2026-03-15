@@ -1,0 +1,67 @@
+{
+  "experiment_id": "specialist_ablation_nvda_1773577581",
+  "experiment_type": "specialist_ablation",
+  "symbol": "NVDA",
+  "results": [
+    {
+      "name": "full_specialists",
+      "regime": "high_vol",
+      "regime_confidence": 0.62,
+      "annualized_return": 68.796,
+      "sharpe": 42.8978,
+      "sortino": 0.546,
+      "max_drawdown": 0.0,
+      "win_rate": 1.0,
+      "turnover": 0.273,
+      "exposure_summary": {
+        "gross_exposure": 0.3,
+        "cash_buffer": 0.7,
+        "position_count": 2
+      },
+      "strategy_contribution": {
+        "breakout_event": 0.782,
+        "momentum": 0.764
+      }
+    },
+    {
+      "name": "without_sentiment",
+      "regime": "high_vol",
+      "regime_confidence": 0.62,
+      "annualized_return": 68.796,
+      "sharpe": 42.8978,
+      "sortino": 0.546,
+      "max_drawdown": 0.0,
+      "win_rate": 1.0,
+      "turnover": 0.273,
+      "exposure_summary": {
+        "gross_exposure": 0.3,
+        "cash_buffer": 0.7,
+        "position_count": 2
+      },
+      "strategy_contribution": {
+        "breakout_event": 0.782,
+        "momentum": 0.764
+      }
+    },
+    {
+      "name": "without_macro_event",
+      "regime": "high_vol",
+      "regime_confidence": 0.62,
+      "annualized_return": 53.676,
+      "sharpe": 5.9064,
+      "sortino": 0.426,
+      "max_drawdown": 0.0,
+      "win_rate": 1.0,
+      "turnover": 0.213,
+      "exposure_summary": {
+        "gross_exposure": 0.3,
+        "cash_buffer": 0.7,
+        "position_count": 2
+      },
+      "strategy_contribution": {
+        "momentum": 0.764,
+        "breakout_event": 0.662
+      }
+    }
+  ]
+}

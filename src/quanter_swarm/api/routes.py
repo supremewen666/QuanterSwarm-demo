@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 
-from quanter_swarm.api.schemas import HealthResponse, ResearchRequest, ResearchResponse
+from quanter_swarm.api.schemas import BatchResearchResponse, HealthResponse, ResearchRequest, ResearchResponse
 from quanter_swarm.orchestrator.root_agent import RootAgent
 
 router = APIRouter()
@@ -15,4 +15,18 @@ def healthcheck() -> HealthResponse:
 
 @router.post("/research", response_model=ResearchResponse)
 def research(request: ResearchRequest) -> ResearchResponse:
-    return ResearchResponse.model_validate(RootAgent().run(symbol=request.symbol))
+    target_symbol = request.symbol or (request.symbols or ["AAPL"])[0]
+    result = RootAgent().run(symbol=target_symbol)
+    result["regime"] = result["active_regime"]
+    return ResearchResponse.model_validate(result)
+
+
+@router.post("/research/batch", response_model=BatchResearchResponse)
+def research_batch(request: ResearchRequest) -> BatchResearchResponse:
+    symbols = request.symbols or ([request.symbol] if request.symbol else [])
+    results = []
+    for symbol in symbols:
+        result = RootAgent().run(symbol=symbol)
+        result["regime"] = result["active_regime"]
+        results.append(ResearchResponse.model_validate(result))
+    return BatchResearchResponse(results=results)

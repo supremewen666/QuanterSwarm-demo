@@ -27,3 +27,25 @@ def test_router_agent_uses_flat_config_defaults() -> None:
     )
     assert route["leaders"] == ["breakout_event"]
     assert route["token_budget"] == "low"
+
+
+def test_router_agent_applies_low_confidence_policy() -> None:
+    route = RouterAgent().route(
+        {"label": "trend_up", "confidence": 0.3},
+        {
+            "confidence_threshold": 0.5,
+            "low_confidence_policy": "fallback",
+            "max_active_leaders": 2,
+        },
+        {
+            "regimes": {
+                "trend_up": {
+                    "leaders": ["momentum", "breakout_event"],
+                    "fallback_leaders": ["momentum"],
+                }
+            }
+        },
+    )
+    assert route["leaders"] == ["momentum"]
+    assert route["low_confidence_mode"] is True
+    assert route["selected_reasons"]["momentum"] == "low_regime_confidence_fallback_leader"

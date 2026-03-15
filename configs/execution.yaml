@@ -1,3 +1,4 @@
 execution:
   mode: paper
   allow_live: false
+  assume_open_session: true

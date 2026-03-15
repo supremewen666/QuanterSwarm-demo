@@ -21,6 +21,8 @@ def main() -> None:
             parts.append(f"invalid={','.join(validation['invalid'])}")
         if validation["unknown_leaders"]:
             parts.append(f"unknown_leaders={','.join(validation['unknown_leaders'])}")
+        if validation["config_errors"]:
+            parts.append(f"config_errors={','.join(validation['config_errors'])}")
         print("config_validation_failed:" + ";".join(parts))
         raise SystemExit(1)
     print("config_validation_ok")

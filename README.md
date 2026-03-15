@@ -252,6 +252,46 @@ If you want the API locally, run:
 PYTHONPATH=src uvicorn quanter_swarm.api.app:app --reload
 ```
 
+## Experiment and Ablation
+
+Run structured ablation experiments and save comparable outputs under `data/experiments/`:
+
+```bash
+python scripts/run_ablation.py router_ablation AAPL
+python scripts/run_ablation.py specialist_ablation MSFT
+python scripts/run_ablation.py allocation_ablation NVDA
+```
+
+Each experiment writes:
+
+- one JSON artifact with metrics and contribution breakdown
+- one markdown summary for quick review
+
+## API Contract
+
+`POST /research` accepts:
+
+- `symbol` or `symbols`
+- `horizon` (`1d|1w|2w|1m`)
+- `portfolio_mode` (`single|multi`)
+- `risk_tolerance` (`low|medium|high`)
+- `output_format` (`json|markdown`)
+- `data_freshness_preference` (`latest|cached`)
+
+`POST /research/batch` accepts `symbols` and returns a list of structured results.
+
+Core response fields include:
+
+- `regime` / `active_regime`
+- `regime_confidence`
+- `active_strategy_teams`
+- `factor_scorecard`
+- `risk_alerts`
+- `portfolio_suggestion`
+- `paper_trade_actions`
+- `evaluation_summary`
+- `decision_trace_summary`
+
 ## Recommended MVP
 
 Phase 1 should prioritize the shortest end-to-end paper-trading loop:

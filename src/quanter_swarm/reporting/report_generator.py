@@ -23,6 +23,7 @@ def generate_report(payload: dict) -> dict:
     return {
         "symbol": payload["symbol"],
         "active_regime": payload["active_regime"],
+        "regime_confidence": payload.get("regime_confidence", 0.0),
         "active_strategy_teams": payload["active_strategy_teams"],
         "market_summary": payload["market_summary"],
         "fundamentals_summary": payload["fundamentals_summary"],
@@ -34,10 +35,12 @@ def generate_report(payload: dict) -> dict:
         "paper_trade_actions": payload["paper_trade_actions"],
         "evaluation_summary": payload["evaluation_summary"],
         "one_page_summary": one_page,
+        "decision_trace_summary": payload.get("decision_trace_summary", {}),
         "markdown_summary": render_markdown_report(
             {
                 "symbol": payload["symbol"],
                 "active_regime": payload["active_regime"],
+                "regime_confidence": payload.get("regime_confidence", 0.0),
                 "active_strategy_teams": payload["active_strategy_teams"],
                 "market_summary": payload["market_summary"],
                 "factor_scorecard": scorecard,
@@ -46,6 +49,7 @@ def generate_report(payload: dict) -> dict:
                 "paper_trade_actions": payload["paper_trade_actions"],
                 "evaluation_summary": payload["evaluation_summary"],
                 "one_page_summary": one_page,
+                "decision_trace_summary": payload.get("decision_trace_summary", {}),
             }
         ),
     }

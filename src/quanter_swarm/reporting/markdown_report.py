@@ -29,11 +29,13 @@ def render_markdown_report(report: dict) -> str:
     one_page = report["one_page_summary"]
     highlights = "\n".join(f"- {item}" for item in one_page.get("highlights", [])) or "- None"
     warnings = "\n".join(f"- {warning}" for warning in risk_alerts.get("warnings", [])) or "- Clear"
+    trace = report.get("decision_trace_summary", {})
     return "\n".join(
         [
             f"# {report['symbol']} Research Cycle",
             "",
             f"- Regime: `{report['active_regime']}`",
+            f"- Regime confidence: `{report.get('regime_confidence', 0.0)}`",
             f"- Active leaders: {', '.join(report['active_strategy_teams']) or 'none'}",
             f"- Factor score: `{scorecard['composite_score']}`",
             "",
@@ -61,5 +63,6 @@ def render_markdown_report(report: dict) -> str:
             "## Evaluation",
             f"- Signal count: {evaluation.get('signal_count')}",
             f"- Execution reason: {evaluation.get('execution_reason')}",
+            f"- Routing mode: {'low-confidence' if trace.get('routing', {}).get('low_confidence_mode') else 'normal'}",
         ]
     ).strip()

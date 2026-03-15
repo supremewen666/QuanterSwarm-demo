@@ -25,6 +25,29 @@ Use the repository's deterministic workflow before improvising with custom reaso
 1. Run `python skill/quanter-swarm/scripts/validate_configs.py`.
 2. Run `python skill/quanter-swarm/scripts/run_analysis_cycle.py <SYMBOL>` for research output.
 3. Run `python skill/quanter-swarm/scripts/export_report.py <SYMBOL>` only when the user needs a saved artifact.
+4. Run `python skill/quanter-swarm/scripts/run_ablation.py <router_ablation|specialist_ablation|allocation_ablation> <SYMBOL>` when the user asks for evidence or strategy comparison.
+
+## Input contract (schema-first)
+
+Use this request shape whenever possible:
+
+```json
+{
+  "symbol": "AAPL",
+  "symbols": ["AAPL", "MSFT"],
+  "horizon": "1w",
+  "portfolio_mode": "single",
+  "risk_tolerance": "medium",
+  "output_format": "json",
+  "data_freshness_preference": "latest"
+}
+```
+
+Notes:
+
+- at least one of `symbol` or `symbols` is required
+- `output_format` can be `json` or `markdown`
+- for multi-ticket comparison, prefer `symbols` and batch endpoint
 
 ## Inputs to confirm only if needed
 
@@ -60,6 +83,54 @@ Read only the reference that matches the current task:
   Runs one paper-trading cycle with the same structured output surface.
 - `scripts/export_report.py [symbol] --format json|markdown --output <path>`
   Saves a user-facing report artifact under `data/reports/` by default.
+- `scripts/run_ablation.py <router_ablation|specialist_ablation|allocation_ablation> [symbol]`
+  Runs reproducible experiment comparisons and writes JSON + markdown under `data/experiments/`.
+
+## Output contract (minimum fields)
+
+- `regime` / `active_regime`
+- `regime_confidence`
+- `active_strategy_teams`
+- `thesis_summary` (via one-page summary highlights)
+- `factor_scorecard`
+- `risk_alerts`
+- `portfolio_suggestion`
+- `paper_trade_actions`
+- `evaluation_summary`
+- `decision_trace_summary`
+
+## Fallback and downgrade rules
+
+Apply these rules explicitly in outputs:
+
+1. Missing news:
+- downgrade to market + fundamentals, set sentiment to neutral, add `sentiment_fallback` to trace.
+2. Missing fundamentals:
+- downgrade to technical/price-action emphasis, and mark low-confidence in summary.
+3. Low regime confidence:
+- use fallback leaders or no-trade according to `router.yaml` policy.
+4. All ideas below threshold:
+- return `no_trade`; do not force recommendations.
+
+When fallback is active, include a short limitation statement in the user-facing summary.
+
+## Golden examples
+
+1. Single-ticket research:
+- input: `{"symbol":"AAPL","horizon":"1w","output_format":"markdown"}`
+- expected: one structured report with regime confidence and decision trace summary.
+2. Multi-ticket ranking:
+- input: `{"symbols":["AAPL","MSFT","NVDA"],"portfolio_mode":"multi"}`
+- expected: batch results with comparable scorecards and risk alerts.
+3. Risk-off scenario:
+- input: `{"symbol":"XLF","risk_tolerance":"low"}`
+- expected: reduced exposure or no-trade if guardrail blocks.
+4. Event-driven scenario:
+- input: `{"symbol":"TSLA","horizon":"1d"}`
+- expected: event impact and execution assumptions visible in trace.
+5. No-trade scenario:
+- input: low-confidence / weak-signal market state
+- expected: `portfolio_suggestion.mode = no_trade` and explicit rationale.
 
 ## Hard rules
 
