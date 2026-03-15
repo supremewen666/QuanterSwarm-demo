@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RiskPacket",
+  "type": "object",
+  "properties": {
+    "portfolio_id": { "type": "string" },
+    "var_95": { "type": "number" },
+    "max_drawdown": { "type": "number" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["portfolio_id"]
+}

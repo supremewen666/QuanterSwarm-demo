@@ -1,0 +1,4 @@
+ranking:
+  weight_signal: 0.5
+  weight_risk: 0.3
+  weight_regime_fit: 0.2

@@ -1,0 +1,15 @@
+regimes:
+  trend_up:
+    leaders: [momentum, breakout_event]
+  trend_down:
+    leaders: [mean_reversion, stat_arb]
+  sideways:
+    leaders: [mean_reversion, stat_arb]
+  high_vol:
+    leaders: [breakout_event, momentum]
+  panic:
+    leaders: [breakout_event]
+  risk_on:
+    leaders: [momentum, breakout_event]
+  risk_off:
+    leaders: [mean_reversion, stat_arb]

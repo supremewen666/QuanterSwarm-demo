@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MarketPacket",
+  "type": "object",
+  "properties": {
+    "symbol": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "price": { "type": "number" },
+    "volume": { "type": "number" }
+  },
+  "required": ["symbol", "timestamp"]
+}

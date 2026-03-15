@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExecutionPacket",
+  "type": "object",
+  "properties": {
+    "order_id": { "type": "string" },
+    "status": { "type": "string" },
+    "symbol": { "type": "string" }
+  },
+  "required": ["order_id", "status", "symbol"]
+}

@@ -1,0 +1,98 @@
+{
+  "symbol": "MSFT",
+  "active_regime": "high_vol",
+  "active_strategy_teams": [
+    "breakout_event",
+    "momentum"
+  ],
+  "market_summary": {
+    "price": 118.0,
+    "change_pct": 0.1132,
+    "volatility": 0.1166
+  },
+  "fundamentals_summary": {
+    "valuation_score": 0.65,
+    "growth_score": 0.4,
+    "quality_score": 0.7,
+    "leverage_penalty": 0.2
+  },
+  "sentiment_summary": {
+    "score": 0.55,
+    "compressed_context": "MSFT new product cycle supports growth expectations; MSFT management commentary signals disciplined execution"
+  },
+  "event_impact_summary": {
+    "event": {
+      "event": {
+        "macro_risk": 0.8,
+        "macro_theme": "disinflation"
+      },
+      "impact": "negative",
+      "confidence": 0.8
+    },
+    "impact_score": 0.3,
+    "horizon": "1d-1w"
+  },
+  "factor_scorecard": {
+    "symbol": "MSFT",
+    "composite_score": 0.61
+  },
+  "risk_alerts": {
+    "warnings": [
+      "high_volatility",
+      "elevated_macro_risk"
+    ],
+    "status": "alert"
+  },
+  "portfolio_suggestion": {
+    "positions": [],
+    "cash_buffer": 1.0,
+    "gross_exposure": 0.0,
+    "mode": "no_trade",
+    "rationale": "no qualified ideas after risk review"
+  },
+  "paper_trade_actions": [],
+  "evaluation_summary": {
+    "top_signal": {
+      "leader": "momentum",
+      "symbol": "MSFT",
+      "score": 1.0,
+      "thesis": "trend_continuation",
+      "regime_fit": 0.8,
+      "risk_penalty": 0.4,
+      "composite_rank_score": 0.89
+    },
+    "signal_count": 2,
+    "metrics": {
+      "pnl": 0.224,
+      "drawdown": 0.0,
+      "sharpe": 2.0307,
+      "sortino": 0.224,
+      "stability": 1.0,
+      "win_rate": 1.0
+    },
+    "execution_reason": "paper_mode_enabled",
+    "guardrail": {
+      "status": "blocked",
+      "approved": false,
+      "exposure_multiplier": 0.0,
+      "reason": "risk_rejected",
+      "warnings": [
+        "high_volatility",
+        "elevated_macro_risk"
+      ]
+    },
+    "evolution": {
+      "threshold": 0.48,
+      "action": "slightly_loosen"
+    }
+  },
+  "one_page_summary": {
+    "title": "MSFT high_vol research cycle",
+    "highlights": [
+      "leaders=breakout_event,momentum",
+      "factor_score=0.61",
+      "portfolio_mode=no_trade"
+    ]
+  },
+  "markdown_summary": "# MSFT Research Cycle\n\n- Regime: `high_vol`\n- Active leaders: breakout_event, momentum\n- Factor score: `0.61`\n\n## Market Summary\n- Price: 118.0\n- Change: 0.1132\n- Volatility: 0.1166\n\n## Risk\n- Status: `alert`\n- high_volatility\n- elevated_macro_risk\n\n## Portfolio Suggestion\n- Mode: `no_trade`\n- Gross exposure: 0.00%\n- Cash buffer: 100.00%\n- No positions\n\n## Paper Trade Actions\n- No paper trades executed\n\n## One-Page Summary\n- leaders=breakout_event,momentum\n- factor_score=0.61\n- portfolio_mode=no_trade\n\n## Evaluation\n- Signal count: 2\n- Execution reason: paper_mode_enabled"
+}

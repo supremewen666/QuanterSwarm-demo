@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SentimentPacket",
+  "type": "object",
+  "properties": {
+    "symbol": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "score": { "type": "number" },
+    "sources": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["symbol", "timestamp", "score"]
+}

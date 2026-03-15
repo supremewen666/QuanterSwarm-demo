@@ -1,0 +1,3 @@
+leader:
+  name: mean_reversion
+  zscore_threshold: 2.0

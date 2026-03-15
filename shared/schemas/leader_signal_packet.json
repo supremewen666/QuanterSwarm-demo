@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LeaderSignalPacket",
+  "type": "object",
+  "properties": {
+    "leader": { "type": "string" },
+    "symbol": { "type": "string" },
+    "score": { "type": "number" }
+  },
+  "required": ["leader", "symbol", "score"]
+}

@@ -1,0 +1,128 @@
+{
+  "symbol": "NVDA",
+  "active_regime": "high_vol",
+  "active_strategy_teams": [
+    "breakout_event",
+    "momentum"
+  ],
+  "market_summary": {
+    "price": 108.0,
+    "change_pct": 0.0385,
+    "volatility": 0.0492
+  },
+  "fundamentals_summary": {
+    "valuation_score": 0.45,
+    "growth_score": 0.45,
+    "quality_score": 0.85,
+    "leverage_penalty": 0.35
+  },
+  "sentiment_summary": {
+    "score": 0.6,
+    "compressed_context": "NVDA earnings outlook remains stable; NVDA sector demand momentum updated"
+  },
+  "event_impact_summary": {
+    "event": {
+      "event": {
+        "macro_risk": 0.0,
+        "macro_theme": "policy_uncertainty"
+      },
+      "impact": "positive",
+      "confidence": 1.0
+    },
+    "impact_score": 0.7,
+    "horizon": "1d-1w"
+  },
+  "factor_scorecard": {
+    "symbol": "NVDA",
+    "composite_score": 0.63
+  },
+  "risk_alerts": {
+    "warnings": [],
+    "status": "clear"
+  },
+  "portfolio_suggestion": {
+    "positions": [
+      {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "weight": 0.15
+      },
+      {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "weight": 0.15
+      }
+    ],
+    "cash_buffer": 0.7,
+    "gross_exposure": 0.3,
+    "mode": "paper",
+    "rationale": "risk-adjusted allocation across active leaders"
+  },
+  "paper_trade_actions": [
+    {
+      "executed": true,
+      "status": "accepted",
+      "order_id": "paper_f3c28b0225c1434587bfa3d63404689f",
+      "order": {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "notional": 15000.0,
+        "reference_price": 108.0
+      },
+      "fill_price": 108.0
+    },
+    {
+      "executed": true,
+      "status": "accepted",
+      "order_id": "paper_fcb616b9b6a2426f8a004bbe38ac205e",
+      "order": {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 108.0
+      },
+      "fill_price": 108.0
+    }
+  ],
+  "evaluation_summary": {
+    "top_signal": {
+      "leader": "breakout_event",
+      "symbol": "NVDA",
+      "score": 0.72,
+      "thesis": "breakout_with_catalyst",
+      "regime_fit": 0.8,
+      "risk_penalty": 0.0,
+      "composite_rank_score": 0.782
+    },
+    "signal_count": 2,
+    "metrics": {
+      "pnl": 0.546,
+      "drawdown": 0.0,
+      "sharpe": 42.8978,
+      "sortino": 0.546,
+      "stability": 1.0,
+      "win_rate": 1.0
+    },
+    "execution_reason": "paper_mode_enabled",
+    "guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": []
+    },
+    "evolution": {
+      "threshold": 0.48,
+      "action": "slightly_loosen"
+    }
+  },
+  "one_page_summary": {
+    "title": "NVDA high_vol research cycle",
+    "highlights": [
+      "leaders=breakout_event,momentum",
+      "factor_score=0.63",
+      "portfolio_mode=paper"
+    ]
+  },
+  "markdown_summary": "# NVDA Research Cycle\n\n- Regime: `high_vol`\n- Active leaders: breakout_event, momentum\n- Factor score: `0.63`\n\n## Market Summary\n- Price: 108.0\n- Change: 0.0385\n- Volatility: 0.0492\n\n## Risk\n- Status: `clear`\n- Clear\n\n## Portfolio Suggestion\n- Mode: `paper`\n- Gross exposure: 30.00%\n- Cash buffer: 70.00%\n- NVDA via `breakout_event` at 15.00%\n- NVDA via `momentum` at 15.00%\n\n## Paper Trade Actions\n- NVDA accepted at 108.0\n- NVDA accepted at 108.0\n\n## One-Page Summary\n- leaders=breakout_event,momentum\n- factor_score=0.63\n- portfolio_mode=paper\n\n## Evaluation\n- Signal count: 2\n- Execution reason: paper_mode_enabled"
+}

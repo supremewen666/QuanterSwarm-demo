@@ -1,0 +1,4 @@
+app:
+  name: QuanterSwarm
+  environment: dev
+  execution_mode: paper

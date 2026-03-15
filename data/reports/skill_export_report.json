@@ -1,0 +1,100 @@
+{
+  "active_regime": "high_vol",
+  "active_strategy_teams": [
+    "momentum",
+    "mean_reversion",
+    "stat_arb"
+  ],
+  "market_summary": {
+    "price": 114.0,
+    "change_pct": 0.0,
+    "volatility": 0.06
+  },
+  "fundamentals_summary": {
+    "valuation_score": 0.72,
+    "growth_score": 0.8,
+    "quality_score": 0.3,
+    "leverage_penalty": 0.3
+  },
+  "sentiment_summary": {
+    "score": 0.6,
+    "compressed_context": "AAPL earnings outlook remains stable; AAPL sector demand momentum updated"
+  },
+  "event_impact_summary": {
+    "event": {
+      "event": {
+        "macro_risk": 0.7,
+        "macro_theme": "disinflation"
+      },
+      "impact": "negative",
+      "confidence": 0.7
+    },
+    "impact_score": 0.3,
+    "horizon": "1d-1w"
+  },
+  "factor_scorecard": {
+    "symbol": "AAPL",
+    "composite_score": 0.44
+  },
+  "risk_alerts": {
+    "warnings": [],
+    "status": "clear"
+  },
+  "portfolio_suggestion": {
+    "positions": [
+      {
+        "symbol": "AAPL",
+        "leader": "mean_reversion",
+        "weight": 0.15
+      },
+      {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "weight": 0.15
+      }
+    ],
+    "cash_buffer": 0.7,
+    "mode": "paper"
+  },
+  "paper_trade_actions": [
+    {
+      "status": "accepted",
+      "order_id": "paper_8fed0e00b7b24cb79aaf0e27a5c4644f",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "mean_reversion",
+        "notional": 15000.0,
+        "reference_price": 114.0
+      },
+      "fill_price": 114.0
+    },
+    {
+      "status": "accepted",
+      "order_id": "paper_20336e92b1594691a473a93e2d3398a5",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 114.0
+      },
+      "fill_price": 114.0
+    }
+  ],
+  "evaluation_summary": {
+    "top_signal": {
+      "leader": "mean_reversion",
+      "symbol": "AAPL",
+      "score": 0.55,
+      "thesis": "reversion_bias"
+    },
+    "signal_count": 3
+  },
+  "one_page_summary": {
+    "title": "AAPL high_vol research cycle",
+    "highlights": [
+      "leaders=momentum,mean_reversion,stat_arb",
+      "factor_score=0.44",
+      "portfolio_mode=paper"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReportPacket",
+  "type": "object",
+  "properties": {
+    "report_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "summary": { "type": "string" }
+  },
+  "required": ["report_id", "created_at", "summary"]
+}

@@ -1,0 +1,25 @@
+{
+  "symbol": "AAPL",
+  "actions": [
+    {
+      "executed": true,
+      "status": "accepted",
+      "order_id": "paper_ce6851bca73244c6866c768d1c1b8fdc",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 109.0
+      },
+      "fill_price": 109.0
+    }
+  ],
+  "metrics": {
+    "pnl": 0.24,
+    "drawdown": 0.0,
+    "sharpe": 5.6569,
+    "sortino": 0.24,
+    "stability": 1.0,
+    "win_rate": 1.0
+  }
+}

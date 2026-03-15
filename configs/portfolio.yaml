@@ -1,0 +1,4 @@
+portfolio:
+  target_positions: 5
+  rebalance_frequency: weekly
+  cash_buffer: 0.05

@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  quanter-swarm:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "pip install -r requirements.txt && PYTHONPATH=src python3 -m quanter_swarm.main"

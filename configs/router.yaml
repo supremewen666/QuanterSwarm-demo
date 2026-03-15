@@ -1,0 +1,20 @@
+max_active_leaders: 2
+default_mode: research
+
+routing:
+  trend_up:
+    - momentum
+    - breakout_event
+  trend_down:
+    - breakout_event
+  sideways:
+    - mean_reversion
+    - stat_arb
+  high_vol:
+    - breakout_event
+    - mean_reversion
+  panic: []
+
+valve:
+  merge_similarity_threshold: 0.75
+  split_similarity_threshold: 0.40

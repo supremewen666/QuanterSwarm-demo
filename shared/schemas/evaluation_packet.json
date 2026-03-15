@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvaluationPacket",
+  "type": "object",
+  "properties": {
+    "metric": { "type": "string" },
+    "value": { "type": "number" }
+  },
+  "required": ["metric", "value"]
+}

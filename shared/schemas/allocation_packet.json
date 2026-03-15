@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AllocationPacket",
+  "type": "object",
+  "properties": {
+    "positions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "weight": { "type": "number" }
+        },
+        "required": ["symbol", "weight"]
+      }
+    }
+  },
+  "required": ["positions"]
+}

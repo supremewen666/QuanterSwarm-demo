@@ -1,0 +1,37 @@
+{
+  "symbol": "NVDA",
+  "actions": [
+    {
+      "executed": true,
+      "status": "accepted",
+      "order_id": "paper_f3c28b0225c1434587bfa3d63404689f",
+      "order": {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "notional": 15000.0,
+        "reference_price": 108.0
+      },
+      "fill_price": 108.0
+    },
+    {
+      "executed": true,
+      "status": "accepted",
+      "order_id": "paper_fcb616b9b6a2426f8a004bbe38ac205e",
+      "order": {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 108.0
+      },
+      "fill_price": 108.0
+    }
+  ],
+  "metrics": {
+    "pnl": 0.546,
+    "drawdown": 0.0,
+    "sharpe": 42.8978,
+    "sortino": 0.546,
+    "stability": 1.0,
+    "win_rate": 1.0
+  }
+}

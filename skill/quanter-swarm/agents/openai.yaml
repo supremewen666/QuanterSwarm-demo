@@ -1,0 +1,7 @@
+interface:
+  display_name: QuanterSwarm
+  short_description: Routed multi-agent stock analysis, risk review, and paper-trading research
+  category: Finance
+  brand_color: "#0F172A"
+  icon: assets/icon.png
+  default_prompt: Run a regime-aware stock research cycle, summarize risk, and return a structured paper-trading report.

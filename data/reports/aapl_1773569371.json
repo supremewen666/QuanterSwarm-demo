@@ -1,0 +1,111 @@
+{
+  "symbol": "AAPL",
+  "active_regime": "high_vol",
+  "active_strategy_teams": [
+    "breakout_event",
+    "momentum"
+  ],
+  "market_summary": {
+    "price": 109.0,
+    "change_pct": 0.0,
+    "volatility": 0.06
+  },
+  "fundamentals_summary": {
+    "valuation_score": 0.72,
+    "growth_score": 0.8,
+    "quality_score": 0.3,
+    "leverage_penalty": 0.3
+  },
+  "sentiment_summary": {
+    "score": 0.45,
+    "compressed_context": "AAPL guidance revision highlights policy uncertainty; AAPL input cost pressure remains elevated"
+  },
+  "event_impact_summary": {
+    "event": {
+      "event": {
+        "macro_risk": 0.7,
+        "macro_theme": "disinflation"
+      },
+      "impact": "negative",
+      "confidence": 0.7
+    },
+    "impact_score": 0.3,
+    "horizon": "1d-1w"
+  },
+  "factor_scorecard": {
+    "symbol": "AAPL",
+    "composite_score": 0.41
+  },
+  "risk_alerts": {
+    "warnings": [],
+    "status": "clear"
+  },
+  "portfolio_suggestion": {
+    "positions": [
+      {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "weight": 0.15
+      }
+    ],
+    "cash_buffer": 0.85,
+    "gross_exposure": 0.15,
+    "mode": "paper",
+    "rationale": "risk-adjusted allocation across active leaders"
+  },
+  "paper_trade_actions": [
+    {
+      "executed": true,
+      "status": "accepted",
+      "order_id": "paper_2280040f103646f4af21e5a2428f1f4f",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 109.0
+      },
+      "fill_price": 109.0
+    }
+  ],
+  "evaluation_summary": {
+    "top_signal": {
+      "leader": "momentum",
+      "symbol": "AAPL",
+      "score": 0.5,
+      "thesis": "trend_continuation",
+      "regime_fit": 0.8,
+      "risk_penalty": 0.0,
+      "composite_rank_score": 0.65
+    },
+    "signal_count": 2,
+    "metrics": {
+      "pnl": 0.24,
+      "drawdown": 0.0,
+      "sharpe": 5.6569,
+      "sortino": 0.24,
+      "stability": 1.0,
+      "win_rate": 1.0
+    },
+    "execution_reason": "paper_mode_enabled",
+    "guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": []
+    },
+    "evolution": {
+      "threshold": 0.5,
+      "action": "hold"
+    }
+  },
+  "one_page_summary": {
+    "title": "AAPL high_vol research cycle",
+    "highlights": [
+      "leaders=breakout_event,momentum",
+      "factor_score=0.41",
+      "portfolio_mode=paper"
+    ]
+  },
+  "markdown_summary": "# AAPL Research Cycle\n\n- Regime: `high_vol`\n- Active leaders: breakout_event, momentum\n- Factor score: `0.41`\n\n## Market Summary\n- Price: 109.0\n- Change: 0.0\n- Volatility: 0.06\n\n## Risk\n- Status: `clear`\n- Clear\n\n## Portfolio Suggestion\n- Mode: `paper`\n- Gross exposure: 15.00%\n- Cash buffer: 85.00%\n- AAPL via `momentum` at 15.00%\n\n## Paper Trade Actions\n- AAPL accepted at 109.0\n\n## One-Page Summary\n- leaders=breakout_event,momentum\n- factor_score=0.41\n- portfolio_mode=paper\n\n## Evaluation\n- Signal count: 2\n- Execution reason: paper_mode_enabled"
+}

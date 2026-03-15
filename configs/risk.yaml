@@ -1,0 +1,4 @@
+risk:
+  max_single_weight: 0.15
+  max_sector_weight: 0.35
+  max_drawdown_limit: 0.10

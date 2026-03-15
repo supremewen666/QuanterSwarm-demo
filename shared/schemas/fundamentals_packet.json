@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FundamentalsPacket",
+  "type": "object",
+  "properties": {
+    "symbol": { "type": "string" },
+    "as_of_date": { "type": "string", "format": "date" },
+    "metrics": { "type": "object", "additionalProperties": { "type": "number" } }
+  },
+  "required": ["symbol", "as_of_date"]
+}

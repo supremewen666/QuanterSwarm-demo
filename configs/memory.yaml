@@ -1,0 +1,3 @@
+memory:
+  compression_ratio_target: 0.3
+  retrieval_top_k: 5
