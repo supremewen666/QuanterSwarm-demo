@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResearchRequest",
+  "type": "object",
+  "properties": {
+    "symbol": { "type": "string" },
+    "symbols": { "type": "array", "items": { "type": "string" } },
+    "horizon": { "enum": ["1d", "1w", "2w", "1m"] },
+    "portfolio_mode": { "enum": ["single", "multi"] },
+    "risk_tolerance": { "enum": ["low", "medium", "high"] },
+    "output_format": { "enum": ["json", "markdown"] },
+    "data_freshness_preference": { "enum": ["latest", "cached"] }
+  },
+  "anyOf": [
+    { "required": ["symbol"] },
+    { "required": ["symbols"] }
+  ]
+}

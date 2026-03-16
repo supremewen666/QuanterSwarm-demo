@@ -1,4 +1,5 @@
 """Run the project analysis cycle."""
+# ruff: noqa: E402
 
 from __future__ import annotations
 

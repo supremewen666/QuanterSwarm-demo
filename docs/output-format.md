@@ -12,3 +12,8 @@ Required user-facing fields:
 - paper trade actions
 - evaluation summary
 - decision trace summary
+
+Schema-first contracts are enforced in:
+
+- `src/quanter_swarm/contracts.py`
+- `shared/schemas/*.schema.json`

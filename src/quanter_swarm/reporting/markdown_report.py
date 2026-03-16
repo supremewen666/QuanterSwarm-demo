@@ -30,6 +30,8 @@ def render_markdown_report(report: dict) -> str:
     highlights = "\n".join(f"- {item}" for item in one_page.get("highlights", [])) or "- None"
     warnings = "\n".join(f"- {warning}" for warning in risk_alerts.get("warnings", [])) or "- Clear"
     trace = report.get("decision_trace_summary", {})
+    config_info = report.get("config_provenance", {})
+    rejected = trace.get("rejected_candidates", [])
     return "\n".join(
         [
             f"# {report['symbol']} Research Cycle",
@@ -64,5 +66,8 @@ def render_markdown_report(report: dict) -> str:
             f"- Signal count: {evaluation.get('signal_count')}",
             f"- Execution reason: {evaluation.get('execution_reason')}",
             f"- Routing mode: {'low-confidence' if trace.get('routing', {}).get('low_confidence_mode') else 'normal'}",
+            f"- Trace ID: {trace.get('trace_id', 'n/a')}",
+            f"- Rejected candidates: {len(rejected)}",
+            f"- Config fingerprint: {config_info.get('fingerprint', 'n/a')}",
         ]
     ).strip()

@@ -1,0 +1,138 @@
+{
+  "backtest_id": "walk_forward_1773661968",
+  "symbols": [
+    "AAPL",
+    "MSFT"
+  ],
+  "steps": 6,
+  "capital": 100000.0,
+  "summary_metrics": {
+    "pnl": 0.0741,
+    "annualized_return": 3.1135,
+    "drawdown": 0.0,
+    "sharpe": 2.0877,
+    "sortino": 0.0741,
+    "stability": 1.0,
+    "win_rate": 0.5,
+    "turnover_proxy": 0.0124
+  },
+  "leader_attribution": {
+    "breakout_event": 0.04291,
+    "momentum": 0.033008
+  },
+  "portfolio_attribution": {
+    "mode_counts": {
+      "reduced_exposure": 3.0,
+      "no_trade": 3.0
+    },
+    "allocation_mode_counts": {
+      "correlation_aware": 2.0,
+      "simple": 3.0,
+      "volatility_aware": 1.0
+    }
+  },
+  "step_results": [
+    {
+      "step": 0,
+      "symbol": "AAPL",
+      "regime": "high_vol",
+      "trace_id": "cycle_f1c7d8af40b64aca8da385745672be8b",
+      "scenario": {
+        "allocation_mode": "correlation_aware",
+        "max_active_leaders": 1
+      },
+      "realized_return": 0.009545,
+      "leader_attribution": {
+        "breakout_event": 0.009902
+      },
+      "portfolio_attribution": {
+        "allocation_mode": "correlation_aware",
+        "mode": "reduced_exposure"
+      }
+    },
+    {
+      "step": 1,
+      "symbol": "MSFT",
+      "regime": "high_vol",
+      "trace_id": "cycle_feba4c1fb29a43d09a104c639e3e8456",
+      "scenario": {},
+      "realized_return": 0.0,
+      "leader_attribution": {},
+      "portfolio_attribution": {
+        "allocation_mode": "simple",
+        "mode": "no_trade"
+      }
+    },
+    {
+      "step": 2,
+      "symbol": "AAPL",
+      "regime": "high_vol",
+      "trace_id": "cycle_23d1f95f428c48b69420ec2545e14c76",
+      "scenario": {
+        "disable_specialists": {
+          "sentiment": true
+        }
+      },
+      "realized_return": 0.032293,
+      "leader_attribution": {
+        "momentum": 0.016504,
+        "breakout_event": 0.016504
+      },
+      "portfolio_attribution": {
+        "allocation_mode": "simple",
+        "mode": "reduced_exposure"
+      }
+    },
+    {
+      "step": 3,
+      "symbol": "MSFT",
+      "regime": "high_vol",
+      "trace_id": "cycle_9efa9aa17feb4e369537679acaac305f",
+      "scenario": {
+        "allocation_mode": "volatility_aware"
+      },
+      "realized_return": 0.0,
+      "leader_attribution": {},
+      "portfolio_attribution": {
+        "allocation_mode": "volatility_aware",
+        "mode": "no_trade"
+      }
+    },
+    {
+      "step": 4,
+      "symbol": "AAPL",
+      "regime": "high_vol",
+      "trace_id": "cycle_a8c86d73a8a64ff39705cb223887844f",
+      "scenario": {
+        "disable_specialists": {
+          "sentiment": true
+        }
+      },
+      "realized_return": 0.032293,
+      "leader_attribution": {
+        "momentum": 0.016504,
+        "breakout_event": 0.016504
+      },
+      "portfolio_attribution": {
+        "allocation_mode": "simple",
+        "mode": "reduced_exposure"
+      }
+    },
+    {
+      "step": 5,
+      "symbol": "MSFT",
+      "regime": "high_vol",
+      "trace_id": "cycle_cf16ab1e4be04aa89aa102a767f4e420",
+      "scenario": {
+        "allocation_mode": "correlation_aware",
+        "max_active_leaders": 1
+      },
+      "realized_return": 0.0,
+      "leader_attribution": {},
+      "portfolio_attribution": {
+        "allocation_mode": "correlation_aware",
+        "mode": "no_trade"
+      }
+    }
+  ]
+}

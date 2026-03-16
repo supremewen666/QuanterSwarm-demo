@@ -1,4 +1,5 @@
 """Run the project paper-trading cycle."""
+# ruff: noqa: E402
 
 from __future__ import annotations
 

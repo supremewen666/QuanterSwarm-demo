@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 SEVERE_WARNINGS = {"elevated_macro_risk", "drawdown_breach", "panic_regime"}
 
 
@@ -36,4 +35,4 @@ def assess_guardrails(risk_report: dict) -> dict:
 
 
 def passes_guardrails(risk_report: dict) -> bool:
-    return assess_guardrails(risk_report)["status"] == "pass"
+    return bool(assess_guardrails(risk_report)["status"] == "pass")

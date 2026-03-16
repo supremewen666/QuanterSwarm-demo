@@ -1,4 +1,5 @@
 """Export a structured report to the data directory."""
+# ruff: noqa: E402
 
 from __future__ import annotations
 

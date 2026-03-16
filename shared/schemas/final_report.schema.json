@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FinalReport",
+  "type": "object",
+  "required": [
+    "symbol",
+    "active_regime",
+    "regime_confidence",
+    "active_strategy_teams",
+    "factor_scorecard",
+    "risk_alerts",
+    "portfolio_suggestion",
+    "paper_trade_actions",
+    "evaluation_summary",
+    "decision_trace_summary"
+  ],
+  "properties": {
+    "symbol": { "type": "string" },
+    "active_regime": { "type": "string" },
+    "regime_confidence": { "type": "number" },
+    "active_strategy_teams": { "type": "array", "items": { "type": "string" } },
+    "portfolio_suggestion": { "$ref": "./portfolio_suggestion.schema.json" },
+    "paper_trade_actions": { "type": "array", "items": { "$ref": "./paper_trade_action.schema.json" } },
+    "decision_trace_summary": { "type": "object" }
+  }
+}

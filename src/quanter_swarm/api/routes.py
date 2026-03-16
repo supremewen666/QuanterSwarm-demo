@@ -2,7 +2,12 @@
 
 from fastapi import APIRouter
 
-from quanter_swarm.api.schemas import BatchResearchResponse, HealthResponse, ResearchRequest, ResearchResponse
+from quanter_swarm.api.schemas import (
+    BatchResearchResponse,
+    HealthResponse,
+    ResearchRequest,
+    ResearchResponse,
+)
 from quanter_swarm.orchestrator.root_agent import RootAgent
 
 router = APIRouter()

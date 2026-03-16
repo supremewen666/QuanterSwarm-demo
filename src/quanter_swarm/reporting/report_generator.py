@@ -9,6 +9,8 @@ from quanter_swarm.reporting.scorecard_builder import build_scorecard
 
 
 def generate_report(payload: dict) -> dict:
+    fallback_modes = payload.get("decision_trace_summary", {}).get("fallback_modes", [])
+    limitation = "none" if not fallback_modes else ",".join(fallback_modes)
     scorecard = build_scorecard(payload["symbol"], payload["factor_score"])
     risk_summary = build_risk_summary(payload["risk_alerts"])
     one_page = build_one_page_summary(
@@ -17,6 +19,7 @@ def generate_report(payload: dict) -> dict:
             f"leaders={','.join(payload['active_strategy_teams']) or 'none'}",
             f"factor_score={payload['factor_score']}",
             f"portfolio_mode={payload['portfolio_suggestion']['mode']}",
+            f"limitations={limitation}",
         ],
     )
 
@@ -35,6 +38,8 @@ def generate_report(payload: dict) -> dict:
         "paper_trade_actions": payload["paper_trade_actions"],
         "evaluation_summary": payload["evaluation_summary"],
         "one_page_summary": one_page,
+        "config_provenance": payload.get("config_provenance", {}),
+        "decision_trace": payload.get("decision_trace_summary", {}),
         "decision_trace_summary": payload.get("decision_trace_summary", {}),
         "markdown_summary": render_markdown_report(
             {

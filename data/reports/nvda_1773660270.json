@@ -1,0 +1,402 @@
+{
+  "symbol": "NVDA",
+  "active_regime": "high_vol",
+  "regime_confidence": 0.62,
+  "active_strategy_teams": [
+    "breakout_event",
+    "momentum"
+  ],
+  "market_summary": {
+    "price": 108.0,
+    "change_pct": 0.0385,
+    "volatility": 0.0492,
+    "data_quality": {
+      "ok": true,
+      "issues": [],
+      "freshness_sec": 0
+    }
+  },
+  "fundamentals_summary": {
+    "valuation_score": 0.45,
+    "growth_score": 0.45,
+    "quality_score": 0.85,
+    "leverage_penalty": 0.35
+  },
+  "sentiment_summary": {
+    "score": 0.6,
+    "compressed_context": "NVDA earnings outlook remains stable; NVDA sector demand momentum updated"
+  },
+  "event_impact_summary": {
+    "event": {
+      "event": {
+        "macro_risk": 0.0,
+        "macro_theme": "policy_uncertainty"
+      },
+      "impact": "positive",
+      "confidence": 1.0
+    },
+    "impact_score": 0.7,
+    "horizon": "1d-1w"
+  },
+  "factor_scorecard": {
+    "symbol": "NVDA",
+    "composite_score": 0.63
+  },
+  "risk_alerts": {
+    "warnings": [],
+    "status": "clear"
+  },
+  "portfolio_suggestion": {
+    "positions": [
+      {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "weight": 0.15
+      },
+      {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "weight": 0.15
+      }
+    ],
+    "cash_buffer": 0.7,
+    "gross_exposure": 0.3,
+    "mode": "reduced_exposure",
+    "allocation_mode": "simple",
+    "rationale": "simple allocation with risk-adjusted exposure scaling",
+    "position_rationales": [
+      {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "weight": 0.15,
+        "reason": {
+          "score": 0.72,
+          "confidence": 0.7,
+          "volatility": 0.0492,
+          "correlation": 0.6936,
+          "event_risk": 0.7,
+          "allocation_mode": "simple"
+        }
+      },
+      {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "weight": 0.15,
+        "reason": {
+          "score": 0.69,
+          "confidence": 0.676,
+          "volatility": 0.0492,
+          "correlation": 0.6936,
+          "event_risk": 0.7,
+          "allocation_mode": "simple"
+        }
+      }
+    ]
+  },
+  "paper_trade_actions": [
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_0b854b2de14649b18f07ad8f36f279e4",
+      "order": {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "notional": 15000.0,
+        "reference_price": 108.0,
+        "decision_price": 108.0,
+        "volatility": 0.0492,
+        "avg_volume": 1020297,
+        "is_open_session": true,
+        "gap_pct": 0.0385,
+        "event_window": true
+      },
+      "decision_price": 108.0,
+      "execution_price": 109.4553,
+      "fill_price": 109.778537,
+      "fill_ratio": 0.7767,
+      "filled_notional": 11650.5,
+      "slippage_bps": 29.5314,
+      "commission_cost": 1.16505,
+      "total_cost": 193.02471,
+      "audit": {
+        "order_intent": {
+          "symbol": "NVDA",
+          "leader": "breakout_event",
+          "notional": 15000.0,
+          "decision_price": 108.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7767,
+          "participation_rate": 0.014702,
+          "slippage_bps": 29.5314,
+          "is_open_session": true,
+          "gap_pct": 0.0385,
+          "event_window": true
+        },
+        "slippage_amount": 191.85966,
+        "total_cost": 193.02471,
+        "execution_summary": {
+          "execution_price": 109.4553,
+          "realized_fill_price": 109.778537,
+          "filled_notional": 11650.5,
+          "commission_cost": 1.16505
+        }
+      }
+    },
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_211384be2a0648e3b320bb815c3033fc",
+      "order": {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 108.0,
+        "decision_price": 108.0,
+        "volatility": 0.0492,
+        "avg_volume": 1020297,
+        "is_open_session": true,
+        "gap_pct": 0.0385,
+        "event_window": true
+      },
+      "decision_price": 108.0,
+      "execution_price": 109.4553,
+      "fill_price": 109.778537,
+      "fill_ratio": 0.7767,
+      "filled_notional": 11650.5,
+      "slippage_bps": 29.5314,
+      "commission_cost": 1.16505,
+      "total_cost": 193.02471,
+      "audit": {
+        "order_intent": {
+          "symbol": "NVDA",
+          "leader": "momentum",
+          "notional": 15000.0,
+          "decision_price": 108.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7767,
+          "participation_rate": 0.014702,
+          "slippage_bps": 29.5314,
+          "is_open_session": true,
+          "gap_pct": 0.0385,
+          "event_window": true
+        },
+        "slippage_amount": 191.85966,
+        "total_cost": 193.02471,
+        "execution_summary": {
+          "execution_price": 109.4553,
+          "realized_fill_price": 109.778537,
+          "filled_notional": 11650.5,
+          "commission_cost": 1.16505
+        }
+      }
+    }
+  ],
+  "evaluation_summary": {
+    "top_signal": {
+      "leader": "breakout_event",
+      "symbol": "NVDA",
+      "score": 0.72,
+      "thesis": "breakout_with_catalyst",
+      "regime_fit": 0.8,
+      "risk_penalty": 0.0,
+      "leader_weight": 0.7,
+      "volatility": 0.0492,
+      "correlation": 0.6936,
+      "event_risk": 0.7,
+      "confidence": 0.7,
+      "composite_rank_score": 0.782
+    },
+    "signal_count": 2,
+    "metrics": {
+      "pnl": 0.546,
+      "annualized_return": 68.796,
+      "drawdown": 0.0,
+      "sharpe": 42.8978,
+      "sortino": 0.546,
+      "stability": 1.0,
+      "win_rate": 1.0,
+      "turnover_proxy": 0.273
+    },
+    "execution_reason": "paper_mode_enabled",
+    "guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": []
+    },
+    "evolution": {
+      "threshold": 0.48,
+      "action": "slightly_loosen"
+    }
+  },
+  "one_page_summary": {
+    "title": "NVDA high_vol research cycle",
+    "highlights": [
+      "leaders=breakout_event,momentum",
+      "factor_score=0.63",
+      "portfolio_mode=reduced_exposure"
+    ]
+  },
+  "decision_trace": {
+    "trace_id": "cycle_c39af249c9a344b696856e905e8bd9eb",
+    "regime": {
+      "label": "high_vol",
+      "confidence": 0.62,
+      "supporting_features": {
+        "trend_strength": 0.0385,
+        "volatility": 0.0492,
+        "correlation": 0.6936,
+        "dispersion": 0.492,
+        "breadth": 0.55,
+        "volume_anomaly": 0.385,
+        "event_density": 0.7,
+        "macro_risk": 0.0
+      },
+      "alternatives": [
+        {
+          "label": "trend_up",
+          "score": 0.7177
+        },
+        {
+          "label": "risk_on",
+          "score": 0.5309
+        }
+      ],
+      "smoothing_applied": false
+    },
+    "fallback_modes": [],
+    "specialist_contribution": {
+      "sentiment_score": 0.6,
+      "event_impact_score": 0.7,
+      "factor_score": 0.63
+    },
+    "routing": {
+      "selected_reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "skipped_reasons": {},
+      "low_confidence_mode": false
+    },
+    "leader_scores": [
+      {
+        "leader": "breakout_event",
+        "score": 0.72,
+        "rank_score": 0.782,
+        "risk_penalty": 0.0
+      },
+      {
+        "leader": "momentum",
+        "score": 0.69,
+        "rank_score": 0.764,
+        "risk_penalty": 0.0
+      }
+    ],
+    "risk_guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": []
+    },
+    "rejected_candidates": [],
+    "portfolio_scaling": {
+      "mode": "reduced_exposure",
+      "gross_exposure": 0.3,
+      "cash_buffer": 0.7
+    },
+    "execution_assumptions": {
+      "fill_model": "partial",
+      "fill_ratio": 0.7767,
+      "participation_rate": 0.014702,
+      "slippage_bps": 29.5314,
+      "is_open_session": true,
+      "gap_pct": 0.0385,
+      "event_window": true
+    }
+  },
+  "decision_trace_summary": {
+    "trace_id": "cycle_c39af249c9a344b696856e905e8bd9eb",
+    "regime": {
+      "label": "high_vol",
+      "confidence": 0.62,
+      "supporting_features": {
+        "trend_strength": 0.0385,
+        "volatility": 0.0492,
+        "correlation": 0.6936,
+        "dispersion": 0.492,
+        "breadth": 0.55,
+        "volume_anomaly": 0.385,
+        "event_density": 0.7,
+        "macro_risk": 0.0
+      },
+      "alternatives": [
+        {
+          "label": "trend_up",
+          "score": 0.7177
+        },
+        {
+          "label": "risk_on",
+          "score": 0.5309
+        }
+      ],
+      "smoothing_applied": false
+    },
+    "fallback_modes": [],
+    "specialist_contribution": {
+      "sentiment_score": 0.6,
+      "event_impact_score": 0.7,
+      "factor_score": 0.63
+    },
+    "routing": {
+      "selected_reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "skipped_reasons": {},
+      "low_confidence_mode": false
+    },
+    "leader_scores": [
+      {
+        "leader": "breakout_event",
+        "score": 0.72,
+        "rank_score": 0.782,
+        "risk_penalty": 0.0
+      },
+      {
+        "leader": "momentum",
+        "score": 0.69,
+        "rank_score": 0.764,
+        "risk_penalty": 0.0
+      }
+    ],
+    "risk_guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": []
+    },
+    "rejected_candidates": [],
+    "portfolio_scaling": {
+      "mode": "reduced_exposure",
+      "gross_exposure": 0.3,
+      "cash_buffer": 0.7
+    },
+    "execution_assumptions": {
+      "fill_model": "partial",
+      "fill_ratio": 0.7767,
+      "participation_rate": 0.014702,
+      "slippage_bps": 29.5314,
+      "is_open_session": true,
+      "gap_pct": 0.0385,
+      "event_window": true
+    }
+  },
+  "markdown_summary": "# NVDA Research Cycle\n\n- Regime: `high_vol`\n- Regime confidence: `0.62`\n- Active leaders: breakout_event, momentum\n- Factor score: `0.63`\n\n## Market Summary\n- Price: 108.0\n- Change: 0.0385\n- Volatility: 0.0492\n\n## Risk\n- Status: `clear`\n- Clear\n\n## Portfolio Suggestion\n- Mode: `reduced_exposure`\n- Gross exposure: 30.00%\n- Cash buffer: 70.00%\n- NVDA via `breakout_event` at 15.00%\n- NVDA via `momentum` at 15.00%\n\n## Paper Trade Actions\n- NVDA partial at 109.778537\n- NVDA partial at 109.778537\n\n## One-Page Summary\n- leaders=breakout_event,momentum\n- factor_score=0.63\n- portfolio_mode=reduced_exposure\n\n## Evaluation\n- Signal count: 2\n- Execution reason: paper_mode_enabled\n- Routing mode: normal\n- Trace ID: cycle_c39af249c9a344b696856e905e8bd9eb\n- Rejected candidates: 0"
+}

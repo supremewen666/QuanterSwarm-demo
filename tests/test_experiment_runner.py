@@ -6,7 +6,8 @@ from quanter_swarm.evaluation.experiment_runner import ExperimentRunner
 def test_experiment_runner_router_ablation_outputs_results(tmp_path: Path) -> None:
     payload = ExperimentRunner(data_dir=tmp_path).run("router_ablation", "AAPL")
     assert payload["experiment_type"] == "router_ablation"
-    assert len(payload["results"]) == 2
+    assert len(payload["results"]) == 4
+    assert {row["name"] for row in payload["results"]} >= {"routed", "always_on", "routed_max_1", "routed_max_3"}
     assert (tmp_path / f"{payload['experiment_id']}.json").exists()
     assert (tmp_path / f"{payload['experiment_id']}.md").exists()
 

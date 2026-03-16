@@ -1,0 +1,18 @@
+{
+  "symbol": "AAPL",
+  "active_regime": "high_vol",
+  "active_strategy_teams": [
+    "breakout_event",
+    "momentum"
+  ],
+  "factor_scorecard": {
+    "symbol": "AAPL"
+  },
+  "portfolio_suggestion": {
+    "mode": "reduced_exposure",
+    "allocation_mode": "simple"
+  },
+  "evaluation_summary": {
+    "execution_reason": "paper_mode_enabled"
+  }
+}

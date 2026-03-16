@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from quanter_swarm.execution.audit_log import audit
-from quanter_swarm.execution.fills import estimate_fill_ratio
+from quanter_swarm.execution.fills import decide_fill_status, estimate_fill_ratio
 from quanter_swarm.execution.slippage import apply_slippage, estimate_slippage_bps
 from quanter_swarm.utils.config import load_yaml
 from quanter_swarm.utils.ids import new_id
@@ -32,6 +32,7 @@ class PaperBroker:
         volatility = max(0.0, float(order.get("volatility", 0.0)))
         gap_pct = float(order.get("gap_pct", 0.0))
         is_open = bool(order.get("is_open_session", self.default_assume_open))
+        event_window = bool(order.get("event_window", False))
 
         effective_slippage_bps = estimate_slippage_bps(
             base_bps=self.base_slippage_bps + (self.open_session_penalty if is_open else 0.0),
@@ -46,6 +47,16 @@ class PaperBroker:
             volatility=volatility,
             fill_model=self.fill_model,
         )
+        status = decide_fill_status(
+            participation_rate=participation_rate,
+            volatility=volatility,
+            event_window=event_window,
+            fill_ratio=fill_ratio,
+        )
+        if status == "unfilled":
+            fill_ratio = 0.0
+        if status == "delayed":
+            fill_ratio = min(fill_ratio, 0.5)
         filled_notional = notional * fill_ratio
         commission_cost = self.commission_per_trade + filled_notional * self.commission_bps / 10000
         slippage_cost = max(0.0, filled_notional * max(0.0, fill_price - decision_price) / max(0.01, decision_price))
@@ -65,6 +76,7 @@ class PaperBroker:
                     "slippage_bps": effective_slippage_bps,
                     "is_open_session": is_open,
                     "gap_pct": gap_pct,
+                    "event_window": event_window,
                 },
                 "slippage_amount": slippage_cost,
                 "total_cost": slippage_cost + commission_cost,
@@ -78,7 +90,7 @@ class PaperBroker:
         )
 
         return {
-            "status": "accepted",
+            "status": status,
             "order_id": new_id("paper"),
             "order": order,
             "decision_price": round(decision_price, 6),

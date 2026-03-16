@@ -6,5 +6,5 @@ from quanter_swarm.orchestrator.cycle_manager import CycleManager
 
 
 class RootAgent:
-    def run(self, symbol: str | None = None) -> dict:
-        return CycleManager().run_cycle(symbol=symbol)
+    def run(self, symbol: str | None = None, scenario: dict | None = None) -> dict:
+        return CycleManager().run_cycle(symbol=symbol, scenario=scenario)

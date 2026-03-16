@@ -1,0 +1,49 @@
+{
+  "experiment_id": "router_ablation_aapl_1773581698",
+  "experiment_type": "router_ablation",
+  "symbol": "AAPL",
+  "results": [
+    {
+      "name": "routed",
+      "regime": "high_vol",
+      "regime_confidence": 0.69,
+      "annualized_return": 30.24,
+      "sharpe": 5.6569,
+      "sortino": 0.24,
+      "max_drawdown": 0.0,
+      "win_rate": 1.0,
+      "turnover": 0.12,
+      "exposure_summary": {
+        "gross_exposure": 0.3,
+        "cash_buffer": 0.7,
+        "position_count": 2
+      },
+      "strategy_contribution": {
+        "momentum": 0.65,
+        "breakout_event": 0.59
+      }
+    },
+    {
+      "name": "always_on",
+      "regime": "high_vol",
+      "regime_confidence": 0.69,
+      "annualized_return": 32.13,
+      "sharpe": 6.5433,
+      "sortino": 0.51,
+      "max_drawdown": 0.0,
+      "win_rate": 1.0,
+      "turnover": 0.1275,
+      "exposure_summary": {
+        "gross_exposure": 0.4494,
+        "cash_buffer": 0.5506,
+        "position_count": 3
+      },
+      "strategy_contribution": {
+        "mean_reversion": 0.68,
+        "momentum": 0.65,
+        "breakout_event": 0.59,
+        "stat_arb": 0.59
+      }
+    }
+  ]
+}

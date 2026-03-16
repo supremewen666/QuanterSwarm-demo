@@ -1,0 +1,20 @@
+from quanter_swarm.skill_interface import run_skill_request
+
+
+def test_skill_interface_returns_fixed_contract_fields() -> None:
+    response = run_skill_request({"symbol": "AAPL"}, mode="normal")
+    assert response["regime"]
+    assert "active_leaders" in response
+    assert "decision_trace_summary" in response
+
+
+def test_skill_interface_missing_data_mode_marks_fallback() -> None:
+    response = run_skill_request({"symbol": "AAPL"}, mode="missing_data")
+    fallback = response["decision_trace_summary"]["fallback_modes"]
+    assert "sentiment_fallback" in fallback
+    assert "fundamentals_fallback" in fallback
+
+
+def test_skill_interface_no_trade_mode_forces_no_trade() -> None:
+    response = run_skill_request({"symbol": "AAPL"}, mode="no_trade")
+    assert response["portfolio_suggestion"]["mode"] == "no_trade"

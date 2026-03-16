@@ -26,6 +26,7 @@ Use the repository's deterministic workflow before improvising with custom reaso
 2. Run `python skill/quanter-swarm/scripts/run_analysis_cycle.py <SYMBOL>` for research output.
 3. Run `python skill/quanter-swarm/scripts/export_report.py <SYMBOL>` only when the user needs a saved artifact.
 4. Run `python skill/quanter-swarm/scripts/run_ablation.py <router_ablation|specialist_ablation|allocation_ablation> <SYMBOL>` when the user asks for evidence or strategy comparison.
+5. Run `python skill/quanter-swarm/scripts/run_skill_request.py --request-json '<JSON>' --mode <normal|degraded|missing_data|no_trade>` for strict skill I/O contract output.
 
 ## Input contract (schema-first)
 
@@ -85,6 +86,8 @@ Read only the reference that matches the current task:
   Saves a user-facing report artifact under `data/reports/` by default.
 - `scripts/run_ablation.py <router_ablation|specialist_ablation|allocation_ablation> [symbol]`
   Runs reproducible experiment comparisons and writes JSON + markdown under `data/experiments/`.
+- `scripts/run_skill_request.py --request-json '<JSON>' --mode <normal|degraded|missing_data|no_trade>`
+  Executes the skill adapter and returns fixed response fields for downstream integration.
 
 ## Output contract (minimum fields)
 
@@ -114,6 +117,13 @@ Apply these rules explicitly in outputs:
 
 When fallback is active, include a short limitation statement in the user-facing summary.
 
+## Mode semantics
+
+- `normal`: full pipeline with default specialists.
+- `degraded`: disables sentiment and macro-event specialists; keeps routing and risk controls active.
+- `missing_data`: simulates missing news and missing fundamentals paths; enforces fallback labels in trace.
+- `no_trade`: forces no-trade output while still producing full research and risk diagnostics.
+
 ## Golden examples
 
 1. Single-ticket research:
@@ -131,6 +141,8 @@ When fallback is active, include a short limitation statement in the user-facing
 5. No-trade scenario:
 - input: low-confidence / weak-signal market state
 - expected: `portfolio_suggestion.mode = no_trade` and explicit rationale.
+
+See `references/examples.md` for full input/output snippets.
 
 ## Hard rules
 

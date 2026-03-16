@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PortfolioSuggestion",
+  "type": "object",
+  "required": ["positions", "cash_buffer", "gross_exposure", "mode", "allocation_mode", "rationale"],
+  "properties": {
+    "positions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "leader", "weight"],
+        "properties": {
+          "symbol": { "type": "string" },
+          "leader": { "type": "string" },
+          "weight": { "type": "number" }
+        }
+      }
+    },
+    "cash_buffer": { "type": "number" },
+    "gross_exposure": { "type": "number" },
+    "mode": { "type": "string" },
+    "allocation_mode": { "type": "string" },
+    "rationale": { "type": "string" }
+  }
+}

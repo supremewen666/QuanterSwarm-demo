@@ -228,6 +228,27 @@ Core design and policy documents live under `docs/`:
 - `docs/token-latency-budget.md`
 - `docs/output-format.md`
 - `docs/openclaw-integration.md`
+- `docs/status-matrix.md`
+- `docs/ablation-plan.md`
+- `docs/monitoring.md`
+
+## Implementation Status
+
+Current capabilities (implemented):
+
+- regime classification with confidence/smoothing and explainable routing
+- schema-validated leader/ranked idea/portfolio/paper action/report contracts
+- portfolio construction in simple / volatility-aware / correlation-aware modes
+- paper execution with slippage, partial/delayed/unfilled fills, cost breakdown
+- decision trace with trace id and rejected-candidate reasons
+- ablation runner and golden/e2e regression tests
+- leaderboard/regime monitoring with drift and output-quality detection
+
+Planned extensions:
+
+- explicit orchestration state machine hardening (stage-specific failure handling refinements)
+
+For exact docs-to-code mapping, see `docs/status-matrix.md`.
 
 ## Quick Start
 
@@ -267,6 +288,21 @@ Each experiment writes:
 - one JSON artifact with metrics and contribution breakdown
 - one markdown summary for quick review
 
+## Walk-Forward Backtest
+
+Run the replay-enabled walk-forward backtest:
+
+```bash
+python scripts/run_backtest.py --symbols AAPL,MSFT,NVDA --steps 20 --capital 100000
+```
+
+Outputs are written to `data/backtests/` as JSON and markdown, including:
+
+- step-level replay returns
+- leader-level attribution
+- portfolio-level attribution
+- aggregated risk/return metrics
+
 ## API Contract
 
 `POST /research` accepts:
@@ -291,6 +327,24 @@ Core response fields include:
 - `paper_trade_actions`
 - `evaluation_summary`
 - `decision_trace_summary`
+
+The report also contains `decision_trace` (full trace object) with a stable `trace_id`.
+Each report includes `config_provenance` with a config fingerprint and effective config summary.
+
+## Golden and E2E tests
+
+Golden fixtures and end-to-end behavior tests live under:
+
+- `tests/e2e/test_research_cycle.py`
+- `tests/golden/research_cycle_aapl.json`
+- `tests/golden/research_cycle_msft_no_trade.json`
+- `tests/golden/research_cycle_outline.md`
+
+These tests assert stable system-level behavior for:
+
+- normal routed run
+- no-trade run
+- markdown report outline
 
 ## Recommended MVP
 

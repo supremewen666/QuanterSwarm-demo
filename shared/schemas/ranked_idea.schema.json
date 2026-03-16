@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RankedIdea",
+  "type": "object",
+  "required": ["leader", "symbol", "score", "composite_rank_score", "confidence"],
+  "properties": {
+    "leader": { "type": "string" },
+    "symbol": { "type": "string" },
+    "score": { "type": "number" },
+    "composite_rank_score": { "type": "number" },
+    "confidence": { "type": "number" }
+  }
+}

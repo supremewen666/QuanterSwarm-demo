@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LeaderOutput",
+  "type": "object",
+  "required": ["leader", "symbol", "score", "thesis"],
+  "properties": {
+    "leader": { "type": "string" },
+    "symbol": { "type": "string" },
+    "score": { "type": "number" },
+    "thesis": { "type": "string" }
+  }
+}

@@ -1,4 +1,5 @@
 """Run QuanterSwarm ablation experiments from the skill package."""
+# ruff: noqa: E402
 
 from __future__ import annotations
 

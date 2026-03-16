@@ -4,4 +4,24 @@ interface:
   category: Finance
   brand_color: "#0F172A"
   icon: assets/icon.png
-  default_prompt: Run a regime-aware stock research cycle, summarize risk, and return a structured paper-trading report.
+  default_prompt: Run a regime-aware stock research cycle, summarize risk, and return a schema-aligned paper-trading report.
+contract:
+  request_schema: shared/schemas/research_request.schema.json
+  response_schema: shared/schemas/final_report.schema.json
+  required_output_fields:
+    - regime
+    - regime_confidence
+    - active_leaders
+    - thesis_summary
+    - factor_scorecard
+    - risk_alerts
+    - portfolio_suggestion
+    - paper_trade_actions
+    - evaluation_summary
+    - decision_trace_summary
+modes:
+  supported:
+    - normal
+    - degraded
+    - missing_data
+    - no_trade

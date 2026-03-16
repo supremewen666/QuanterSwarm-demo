@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PaperTradeAction",
+  "type": "object",
+  "required": ["executed", "status", "order_id", "decision_price", "fill_price", "total_cost", "order"],
+  "properties": {
+    "executed": { "type": "boolean" },
+    "status": { "type": "string" },
+    "order_id": { "type": "string" },
+    "decision_price": { "type": "number" },
+    "fill_price": { "type": "number" },
+    "total_cost": { "type": "number" },
+    "order": { "type": "object" }
+  }
+}

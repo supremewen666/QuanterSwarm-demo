@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from hashlib import sha256
 from pathlib import Path
 from typing import Any
 
@@ -84,3 +85,69 @@ def load_settings() -> Settings:
         config_dir=config_dir,
         default_symbols=[symbol.strip() for symbol in default_symbols.split(",") if symbol.strip()],
     )
+
+
+def load_runtime_configs(config_dir: Path) -> dict[str, dict[str, Any]]:
+    names = (
+        "app.yaml",
+        "router.yaml",
+        "regimes.yaml",
+        "risk.yaml",
+        "portfolio.yaml",
+        "execution.yaml",
+        "paper_broker.yaml",
+        "ranking.yaml",
+        "evolution.yaml",
+    )
+    return {name: load_yaml(config_dir / name) for name in names}
+
+
+def config_provenance(configs: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    payload = {name: configs[name] for name in sorted(configs)}
+    fingerprint = sha256(str(payload).encode("utf-8")).hexdigest()[:16]
+    return {
+        "files": sorted(configs.keys()),
+        "fingerprint": fingerprint,
+        "router": payload.get("router.yaml", {}),
+        "regimes": payload.get("regimes.yaml", {}),
+        "risk": payload.get("risk.yaml", {}),
+        "portfolio": payload.get("portfolio.yaml", {}),
+    }
+
+
+def validate_config_consistency(config_dir: Path) -> None:
+    configs = load_runtime_configs(config_dir)
+    router = configs["router.yaml"]
+    regimes = configs["regimes.yaml"].get("regimes", {})
+    risk = configs["risk.yaml"].get("risk", {})
+    execution = configs["execution.yaml"].get("execution", {})
+    portfolio = configs["portfolio.yaml"].get("portfolio", {})
+    known_leaders = {path.stem for path in (config_dir / "leaders").glob("*.yaml")}
+
+    default_regime = router.get("default_regime", "sideways")
+    if default_regime not in regimes:
+        raise ValueError(f"router.default_regime '{default_regime}' not found in regimes.yaml")
+
+    referenced = {
+        leader
+        for leaders in router.get("routing", {}).values()
+        for leader in leaders
+    } | {
+        leader
+        for regime_cfg in regimes.values()
+        for leader in regime_cfg.get("leaders", [])
+    }
+    unknown = sorted(referenced - known_leaders)
+    if unknown:
+        raise ValueError(f"Unknown leaders referenced by config: {','.join(unknown)}")
+
+    if execution.get("mode") == "live" or execution.get("allow_live") is True:
+        raise ValueError("Dangerous config: live execution is not allowed by default.")
+
+    max_single = float(risk.get("max_single_weight", 0.0))
+    if not (0.0 < max_single <= 0.35):
+        raise ValueError("risk.max_single_weight must be within (0, 0.35].")
+
+    cash_buffer = float(portfolio.get("cash_buffer", 0.0))
+    if not (0.0 <= cash_buffer <= 0.9):
+        raise ValueError("portfolio.cash_buffer must be within [0, 0.9].")

@@ -1,0 +1,746 @@
+{
+  "symbol": "AAPL",
+  "active_regime": "high_vol",
+  "regime_confidence": 0.69,
+  "active_strategy_teams": [
+    "breakout_event",
+    "momentum"
+  ],
+  "market_summary": {
+    "price": 109.0,
+    "change_pct": 0.0,
+    "volatility": 0.06,
+    "data_quality": {
+      "ok": true,
+      "issues": [],
+      "freshness_sec": 0
+    }
+  },
+  "fundamentals_summary": {
+    "valuation_score": 0.72,
+    "growth_score": 0.8,
+    "quality_score": 0.3,
+    "leverage_penalty": 0.3
+  },
+  "sentiment_summary": {
+    "score": 0.45,
+    "compressed_context": "AAPL guidance revision highlights policy uncertainty; AAPL input cost pressure remains elevated"
+  },
+  "event_impact_summary": {
+    "event": {
+      "event": {
+        "macro_risk": 0.7,
+        "macro_theme": "disinflation"
+      },
+      "impact": "negative",
+      "confidence": 0.7
+    },
+    "impact_score": 0.3,
+    "horizon": "1d-1w"
+  },
+  "factor_scorecard": {
+    "symbol": "AAPL",
+    "composite_score": 0.41
+  },
+  "risk_alerts": {
+    "warnings": [],
+    "status": "clear"
+  },
+  "portfolio_suggestion": {
+    "positions": [
+      {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "weight": 0.15
+      },
+      {
+        "symbol": "AAPL",
+        "leader": "breakout_event",
+        "weight": 0.15
+      }
+    ],
+    "cash_buffer": 0.7,
+    "gross_exposure": 0.3,
+    "mode": "reduced_exposure",
+    "allocation_mode": "simple",
+    "rationale": "simple allocation with risk-adjusted exposure scaling",
+    "position_rationales": [
+      {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "weight": 0.15,
+        "reason": {
+          "score": 0.5,
+          "confidence": 0.538,
+          "volatility": 0.06,
+          "correlation": 0.78,
+          "event_risk": 0.3,
+          "allocation_mode": "simple"
+        }
+      },
+      {
+        "symbol": "AAPL",
+        "leader": "breakout_event",
+        "weight": 0.15,
+        "reason": {
+          "score": 0.4,
+          "confidence": 0.458,
+          "volatility": 0.06,
+          "correlation": 0.78,
+          "event_risk": 0.3,
+          "allocation_mode": "simple"
+        }
+      }
+    ]
+  },
+  "paper_trade_actions": [
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_22c35e68cb83462fb6e69f8ecbde32b2",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 109.0,
+        "decision_price": 109.0,
+        "volatility": 0.06,
+        "avg_volume": 1020286,
+        "is_open_session": true,
+        "gap_pct": 0.0,
+        "event_window": false
+      },
+      "decision_price": 109.0,
+      "execution_price": 109.0,
+      "fill_price": 109.343082,
+      "fill_ratio": 0.7335,
+      "filled_notional": 11002.5,
+      "slippage_bps": 31.4754,
+      "commission_cost": 1.10025,
+      "total_cost": 35.731059,
+      "audit": {
+        "order_intent": {
+          "symbol": "AAPL",
+          "leader": "momentum",
+          "notional": 15000.0,
+          "decision_price": 109.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7335,
+          "participation_rate": 0.014702,
+          "slippage_bps": 31.4754,
+          "is_open_session": true,
+          "gap_pct": 0.0,
+          "event_window": false
+        },
+        "slippage_amount": 34.630809,
+        "total_cost": 35.731059,
+        "execution_summary": {
+          "execution_price": 109.0,
+          "realized_fill_price": 109.343082,
+          "filled_notional": 11002.5,
+          "commission_cost": 1.10025
+        }
+      }
+    },
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_4d1f9aa089db459ead5a50fbfe3724ce",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "breakout_event",
+        "notional": 15000.0,
+        "reference_price": 109.0,
+        "decision_price": 109.0,
+        "volatility": 0.06,
+        "avg_volume": 1020286,
+        "is_open_session": true,
+        "gap_pct": 0.0,
+        "event_window": false
+      },
+      "decision_price": 109.0,
+      "execution_price": 109.0,
+      "fill_price": 109.343082,
+      "fill_ratio": 0.7335,
+      "filled_notional": 11002.5,
+      "slippage_bps": 31.4754,
+      "commission_cost": 1.10025,
+      "total_cost": 35.731059,
+      "audit": {
+        "order_intent": {
+          "symbol": "AAPL",
+          "leader": "breakout_event",
+          "notional": 15000.0,
+          "decision_price": 109.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7335,
+          "participation_rate": 0.014702,
+          "slippage_bps": 31.4754,
+          "is_open_session": true,
+          "gap_pct": 0.0,
+          "event_window": false
+        },
+        "slippage_amount": 34.630809,
+        "total_cost": 35.731059,
+        "execution_summary": {
+          "execution_price": 109.0,
+          "realized_fill_price": 109.343082,
+          "filled_notional": 11002.5,
+          "commission_cost": 1.10025
+        }
+      }
+    }
+  ],
+  "evaluation_summary": {
+    "top_signal": {
+      "leader": "momentum",
+      "symbol": "AAPL",
+      "score": 0.5,
+      "thesis": "trend_continuation",
+      "regime_fit": 0.8,
+      "risk_penalty": 0.0,
+      "leader_weight": 0.3,
+      "volatility": 0.06,
+      "correlation": 0.78,
+      "event_risk": 0.3,
+      "confidence": 0.538,
+      "composite_rank_score": 0.65
+    },
+    "signal_count": 2,
+    "metrics": {
+      "pnl": 0.24,
+      "annualized_return": 30.24,
+      "drawdown": 0.0,
+      "sharpe": 5.6569,
+      "sortino": 0.24,
+      "stability": 1.0,
+      "win_rate": 1.0,
+      "turnover_proxy": 0.12
+    },
+    "execution_reason": "paper_mode_enabled",
+    "guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": []
+    },
+    "evolution": {
+      "threshold": 0.5,
+      "action": "hold"
+    }
+  },
+  "one_page_summary": {
+    "title": "AAPL high_vol research cycle",
+    "highlights": [
+      "leaders=breakout_event,momentum",
+      "factor_score=0.41",
+      "portfolio_mode=reduced_exposure",
+      "limitations=none"
+    ]
+  },
+  "config_provenance": {
+    "files": [
+      "app.yaml",
+      "evolution.yaml",
+      "execution.yaml",
+      "paper_broker.yaml",
+      "portfolio.yaml",
+      "ranking.yaml",
+      "regimes.yaml",
+      "risk.yaml",
+      "router.yaml"
+    ],
+    "fingerprint": "c7ce0897539d4af6",
+    "router": {
+      "max_active_leaders": 2,
+      "default_mode": "research",
+      "default_regime": "high_vol",
+      "token_budget": "low",
+      "confidence_threshold": 0.5,
+      "low_confidence_policy": "fallback",
+      "routing": {
+        "trend_up": [
+          "momentum",
+          "breakout_event"
+        ],
+        "trend_down": [
+          "breakout_event"
+        ],
+        "sideways": [
+          "mean_reversion",
+          "stat_arb"
+        ],
+        "high_vol": [
+          "breakout_event",
+          "mean_reversion"
+        ],
+        "panic": []
+      },
+      "valve": {
+        "merge_similarity_threshold": 0.75,
+        "split_similarity_threshold": 0.4
+      }
+    },
+    "regimes": {
+      "regimes": {
+        "trend_up": {
+          "leaders": [
+            "momentum",
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "momentum"
+          ],
+          "weights": {
+            "momentum": 0.6,
+            "breakout_event": 0.4
+          }
+        },
+        "trend_down": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "mean_reversion"
+          ],
+          "weights": {
+            "mean_reversion": 0.55,
+            "stat_arb": 0.45
+          }
+        },
+        "sideways": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "stat_arb"
+          ],
+          "weights": {
+            "mean_reversion": 0.5,
+            "stat_arb": 0.5
+          }
+        },
+        "high_vol": {
+          "leaders": [
+            "breakout_event",
+            "momentum"
+          ],
+          "fallback_leaders": [
+            "breakout_event"
+          ],
+          "weights": {
+            "breakout_event": 0.7,
+            "momentum": 0.3
+          }
+        },
+        "panic": {
+          "leaders": [
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "breakout_event"
+          ],
+          "weights": {
+            "breakout_event": 1.0
+          }
+        },
+        "risk_on": {
+          "leaders": [
+            "momentum",
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "momentum"
+          ],
+          "weights": {
+            "momentum": 0.65,
+            "breakout_event": 0.35
+          }
+        },
+        "risk_off": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "mean_reversion"
+          ],
+          "weights": {
+            "mean_reversion": 0.6,
+            "stat_arb": 0.4
+          }
+        }
+      }
+    },
+    "risk": {
+      "risk": {
+        "max_single_weight": 0.15,
+        "max_sector_weight": 0.35,
+        "max_drawdown_limit": 0.1
+      }
+    },
+    "portfolio": {
+      "portfolio": {
+        "target_positions": 5,
+        "rebalance_frequency": "weekly",
+        "cash_buffer": 0.05,
+        "allocation_mode": "simple",
+        "correlation_penalty": 0.35,
+        "turnover_penalty": 0.15,
+        "regime_overrides": {
+          "high_vol": {
+            "exposure_multiplier": 0.7,
+            "cash_buffer": 0.2,
+            "target_positions": 3
+          },
+          "panic": {
+            "exposure_multiplier": 0.0,
+            "cash_buffer": 1.0,
+            "target_positions": 0
+          },
+          "risk_off": {
+            "exposure_multiplier": 0.6,
+            "cash_buffer": 0.25,
+            "target_positions": 2
+          }
+        }
+      }
+    }
+  },
+  "decision_trace": {
+    "trace_id": "cycle_d625c4e233814156b451fca18e7b8047",
+    "regime": {
+      "label": "high_vol",
+      "confidence": 0.69,
+      "supporting_features": {
+        "trend_strength": 0.0,
+        "volatility": 0.06,
+        "correlation": 0.78,
+        "dispersion": 0.6,
+        "breadth": 0.55,
+        "volume_anomaly": 0.0,
+        "event_density": 0.3,
+        "macro_risk": 0.7
+      },
+      "alternatives": [
+        {
+          "label": "sideways",
+          "score": 0.62
+        },
+        {
+          "label": "panic",
+          "score": 0.55
+        }
+      ],
+      "smoothing_applied": false
+    },
+    "fallback_modes": [],
+    "specialist_contribution": {
+      "sentiment_score": 0.45,
+      "event_impact_score": 0.3,
+      "factor_score": 0.41
+    },
+    "routing": {
+      "selected_reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "skipped_reasons": {},
+      "low_confidence_mode": false
+    },
+    "leader_scores": [
+      {
+        "leader": "momentum",
+        "score": 0.5,
+        "rank_score": 0.65,
+        "risk_penalty": 0.0
+      },
+      {
+        "leader": "breakout_event",
+        "score": 0.4,
+        "rank_score": 0.59,
+        "risk_penalty": 0.0
+      }
+    ],
+    "risk_guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": []
+    },
+    "rejected_candidates": [],
+    "portfolio_scaling": {
+      "mode": "reduced_exposure",
+      "gross_exposure": 0.3,
+      "cash_buffer": 0.7
+    },
+    "execution_assumptions": {
+      "fill_model": "partial",
+      "fill_ratio": 0.7335,
+      "participation_rate": 0.014702,
+      "slippage_bps": 31.4754,
+      "is_open_session": true,
+      "gap_pct": 0.0,
+      "event_window": false
+    },
+    "state_machine": {
+      "terminated": false,
+      "termination_reason": "",
+      "stages": [
+        {
+          "stage": "ingest",
+          "status": "ok",
+          "detail": {
+            "symbol": "AAPL",
+            "has_market_packet": true
+          }
+        },
+        {
+          "stage": "regime",
+          "status": "ok",
+          "detail": {
+            "label": "high_vol",
+            "confidence": 0.69
+          }
+        },
+        {
+          "stage": "route",
+          "status": "ok",
+          "detail": {
+            "leaders": [
+              "breakout_event",
+              "momentum"
+            ],
+            "low_confidence_mode": false
+          }
+        },
+        {
+          "stage": "specialist_research",
+          "status": "ok",
+          "detail": {
+            "fallback_modes": []
+          }
+        },
+        {
+          "stage": "leader_proposal",
+          "status": "ok",
+          "detail": {
+            "proposal_count": 2
+          }
+        },
+        {
+          "stage": "rank",
+          "status": "ok",
+          "detail": {
+            "ranked_count": 2
+          }
+        },
+        {
+          "stage": "risk",
+          "status": "ok",
+          "detail": {
+            "guardrail_status": "pass",
+            "warnings": []
+          }
+        },
+        {
+          "stage": "allocate",
+          "status": "ok",
+          "detail": {
+            "mode": "reduced_exposure",
+            "gross_exposure": 0.3
+          }
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "detail": {
+            "execution_ok": true,
+            "action_count": 2
+          }
+        },
+        {
+          "stage": "report",
+          "status": "ok",
+          "detail": {
+            "symbol": "AAPL",
+            "regime": "high_vol"
+          }
+        }
+      ]
+    }
+  },
+  "decision_trace_summary": {
+    "trace_id": "cycle_d625c4e233814156b451fca18e7b8047",
+    "regime": {
+      "label": "high_vol",
+      "confidence": 0.69,
+      "supporting_features": {
+        "trend_strength": 0.0,
+        "volatility": 0.06,
+        "correlation": 0.78,
+        "dispersion": 0.6,
+        "breadth": 0.55,
+        "volume_anomaly": 0.0,
+        "event_density": 0.3,
+        "macro_risk": 0.7
+      },
+      "alternatives": [
+        {
+          "label": "sideways",
+          "score": 0.62
+        },
+        {
+          "label": "panic",
+          "score": 0.55
+        }
+      ],
+      "smoothing_applied": false
+    },
+    "fallback_modes": [],
+    "specialist_contribution": {
+      "sentiment_score": 0.45,
+      "event_impact_score": 0.3,
+      "factor_score": 0.41
+    },
+    "routing": {
+      "selected_reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "skipped_reasons": {},
+      "low_confidence_mode": false
+    },
+    "leader_scores": [
+      {
+        "leader": "momentum",
+        "score": 0.5,
+        "rank_score": 0.65,
+        "risk_penalty": 0.0
+      },
+      {
+        "leader": "breakout_event",
+        "score": 0.4,
+        "rank_score": 0.59,
+        "risk_penalty": 0.0
+      }
+    ],
+    "risk_guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": []
+    },
+    "rejected_candidates": [],
+    "portfolio_scaling": {
+      "mode": "reduced_exposure",
+      "gross_exposure": 0.3,
+      "cash_buffer": 0.7
+    },
+    "execution_assumptions": {
+      "fill_model": "partial",
+      "fill_ratio": 0.7335,
+      "participation_rate": 0.014702,
+      "slippage_bps": 31.4754,
+      "is_open_session": true,
+      "gap_pct": 0.0,
+      "event_window": false
+    },
+    "state_machine": {
+      "terminated": false,
+      "termination_reason": "",
+      "stages": [
+        {
+          "stage": "ingest",
+          "status": "ok",
+          "detail": {
+            "symbol": "AAPL",
+            "has_market_packet": true
+          }
+        },
+        {
+          "stage": "regime",
+          "status": "ok",
+          "detail": {
+            "label": "high_vol",
+            "confidence": 0.69
+          }
+        },
+        {
+          "stage": "route",
+          "status": "ok",
+          "detail": {
+            "leaders": [
+              "breakout_event",
+              "momentum"
+            ],
+            "low_confidence_mode": false
+          }
+        },
+        {
+          "stage": "specialist_research",
+          "status": "ok",
+          "detail": {
+            "fallback_modes": []
+          }
+        },
+        {
+          "stage": "leader_proposal",
+          "status": "ok",
+          "detail": {
+            "proposal_count": 2
+          }
+        },
+        {
+          "stage": "rank",
+          "status": "ok",
+          "detail": {
+            "ranked_count": 2
+          }
+        },
+        {
+          "stage": "risk",
+          "status": "ok",
+          "detail": {
+            "guardrail_status": "pass",
+            "warnings": []
+          }
+        },
+        {
+          "stage": "allocate",
+          "status": "ok",
+          "detail": {
+            "mode": "reduced_exposure",
+            "gross_exposure": 0.3
+          }
+        },
+        {
+          "stage": "execute",
+          "status": "ok",
+          "detail": {
+            "execution_ok": true,
+            "action_count": 2
+          }
+        },
+        {
+          "stage": "report",
+          "status": "ok",
+          "detail": {
+            "symbol": "AAPL",
+            "regime": "high_vol"
+          }
+        }
+      ]
+    }
+  },
+  "markdown_summary": "# AAPL Research Cycle\n\n- Regime: `high_vol`\n- Regime confidence: `0.69`\n- Active leaders: breakout_event, momentum\n- Factor score: `0.41`\n\n## Market Summary\n- Price: 109.0\n- Change: 0.0\n- Volatility: 0.06\n\n## Risk\n- Status: `clear`\n- Clear\n\n## Portfolio Suggestion\n- Mode: `reduced_exposure`\n- Gross exposure: 30.00%\n- Cash buffer: 70.00%\n- AAPL via `momentum` at 15.00%\n- AAPL via `breakout_event` at 15.00%\n\n## Paper Trade Actions\n- AAPL partial at 109.343082\n- AAPL partial at 109.343082\n\n## One-Page Summary\n- leaders=breakout_event,momentum\n- factor_score=0.41\n- portfolio_mode=reduced_exposure\n- limitations=none\n\n## Evaluation\n- Signal count: 2\n- Execution reason: paper_mode_enabled\n- Routing mode: normal\n- Trace ID: cycle_d625c4e233814156b451fca18e7b8047\n- Rejected candidates: 0\n- Config fingerprint: n/a"
+}

@@ -1,4 +1,5 @@
 """Validate the repository configs used by the skill."""
+# ruff: noqa: E402
 
 from __future__ import annotations
 

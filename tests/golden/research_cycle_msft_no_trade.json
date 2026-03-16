@@ -1,0 +1,12 @@
+{
+  "symbol": "MSFT",
+  "active_regime": "high_vol",
+  "portfolio_suggestion": {
+    "mode": "no_trade"
+  },
+  "decision_trace_summary": {
+    "routing": {
+      "low_confidence_mode": false
+    }
+  }
+}

@@ -20,7 +20,7 @@ class RegimeAgent:
         event_density = float(market_state.get("event_density", 0.0))
         trend_strength = abs(avg_change)
 
-        candidates = {
+        candidates: dict[str, float] = {
             "panic": 0.35 * min(1.0, volatility / 0.06)
             + 0.25 * min(1.0, max(0.0, -avg_change) / 0.03)
             + 0.2 * macro_risk
@@ -82,4 +82,5 @@ class RegimeAgent:
         }
 
     def classify(self, market_state: dict, previous_regime: str | None = None) -> str:
-        return self.classify_detail(market_state, previous_regime=previous_regime)["label"]
+        result = self.classify_detail(market_state, previous_regime=previous_regime)
+        return str(result["label"])

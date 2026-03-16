@@ -7,9 +7,10 @@ import json
 from pathlib import Path
 from typing import Any
 
+from quanter_swarm.contracts import FinalReportContract
 from quanter_swarm.orchestrator.root_agent import RootAgent
 from quanter_swarm.reporting.markdown_report import render_markdown_report
-from quanter_swarm.utils.config import load_yaml
+from quanter_swarm.utils.config import load_yaml, validate_config_consistency
 
 REQUIRED_CONFIGS = (
     "app.yaml",
@@ -40,6 +41,7 @@ def render_report(report: dict[str, Any], output_format: str) -> str:
 
 def emit_report(symbol: str | None, output_format: str, output_path: str | None) -> str:
     report = RootAgent().run(symbol=symbol)
+    report = FinalReportContract.model_validate(report).model_dump()
     rendered = render_report(report, output_format)
     if output_path:
         destination = Path(output_path)
@@ -82,6 +84,10 @@ def validate_repo_configs(config_dir: Path | None = None) -> dict[str, Any]:
     allocation_mode = portfolio.get("allocation_mode", "simple")
     if allocation_mode not in {"simple", "volatility_aware", "correlation_aware"}:
         config_errors.append("portfolio.allocation_mode must be simple|volatility_aware|correlation_aware")
+    try:
+        validate_config_consistency(resolved_dir)
+    except ValueError as exc:
+        config_errors.append(str(exc))
     return {
         "ok": not missing and not invalid and not unknown_leaders and not config_errors,
         "missing": missing,

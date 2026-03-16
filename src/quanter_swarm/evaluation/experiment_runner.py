@@ -78,10 +78,13 @@ class ExperimentRunner:
 
     def run(self, experiment_type: str, symbol: str) -> dict[str, Any]:
         manager = CycleManager()
+        scenarios: list[tuple[str, dict[str, Any]]]
         if experiment_type == "router_ablation":
             scenarios = [
                 ("routed", {}),
                 ("always_on", {"always_on_leaders": True}),
+                ("routed_max_1", {"max_active_leaders": 1}),
+                ("routed_max_3", {"max_active_leaders": 3}),
             ]
         elif experiment_type == "specialist_ablation":
             scenarios = [
