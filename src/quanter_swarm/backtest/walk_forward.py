@@ -6,9 +6,9 @@ from pathlib import Path
 from time import time
 from typing import Any
 
+from quanter_swarm.backtest.metrics import summarize_backtest_metrics
 from quanter_swarm.backtest.replay_engine import replay_report
 from quanter_swarm.config.defaults import DEFAULT_BACKTEST_WINDOW
-from quanter_swarm.evaluation.metrics import summarize_metrics
 from quanter_swarm.orchestrator.cycle_manager import CycleManager
 from quanter_swarm.storage.file_store import write_json, write_text
 
@@ -21,6 +21,19 @@ def _scenario_for_step(step: int) -> dict[str, Any]:
     if step % 2 == 0:
         return {"disable_specialists": {"sentiment": True}}
     return {}
+
+
+def _window_assignment(step: int, train_window: int, test_window: int, rolling_window: int) -> dict[str, int | str]:
+    cycle_span = max(1, train_window + test_window)
+    window_index = step // cycle_span
+    cycle_offset = step % cycle_span
+    phase = "train" if cycle_offset < train_window else "test"
+    rolling_start = max(0, window_index * max(1, rolling_window))
+    return {
+        "window_index": window_index,
+        "phase": phase,
+        "rolling_start": rolling_start,
+    }
 
 
 def _merge_contributions(rows: list[dict[str, Any]], key: str) -> dict[str, float]:
@@ -38,6 +51,9 @@ def _render_markdown(payload: dict[str, Any]) -> str:
         "",
         f"- Symbols: {', '.join(payload['symbols'])}",
         f"- Steps: {payload['steps']}",
+        f"- Train window: {payload['train_window']}",
+        f"- Test window: {payload['test_window']}",
+        f"- Rolling window: {payload['rolling_window']}",
         f"- Capital: {payload['capital']}",
         "",
         "## Summary Metrics",
@@ -73,6 +89,9 @@ class WalkForwardBacktester:
         *,
         symbols: list[str],
         steps: int = DEFAULT_BACKTEST_WINDOW["steps"],
+        train_window: int = DEFAULT_BACKTEST_WINDOW["train_window"],
+        test_window: int = DEFAULT_BACKTEST_WINDOW["test_window"],
+        rolling_window: int = DEFAULT_BACKTEST_WINDOW["rolling_window"],
         capital: float = 100_000.0,
     ) -> dict[str, Any]:
         manager = CycleManager()
@@ -81,23 +100,29 @@ class WalkForwardBacktester:
         for step in range(steps):
             symbol = symbols[step % len(symbols)]
             scenario = _scenario_for_step(step)
+            assignment = _window_assignment(step, train_window, test_window, rolling_window)
             report = manager.run_cycle(symbol=symbol, scenario=scenario, persist_outputs=False)
             replay = replay_report(report, capital)
             returns.append(replay["realized_return"])
             step_results.append(
                 {
                     "step": step,
+                    "window_index": assignment["window_index"],
+                    "phase": assignment["phase"],
+                    "rolling_start": assignment["rolling_start"],
                     "symbol": symbol,
                     "regime": report.get("active_regime"),
                     "trace_id": report.get("decision_trace_summary", {}).get("trace_id"),
                     "scenario": scenario,
                     "realized_return": replay["realized_return"],
                     "leader_attribution": replay["leader_attribution"],
+                    "events": replay["events"],
+                    "event_count": len(replay["events"]),
                     "portfolio_attribution": replay["portfolio_attribution"],
                 }
             )
 
-        summary = summarize_metrics(returns)
+        summary = summarize_backtest_metrics(returns)
         leader_attr = _merge_contributions(step_results, "leader_attribution")
         mode_counts: dict[str, float] = {}
         for row in step_results:
@@ -113,6 +138,9 @@ class WalkForwardBacktester:
             "backtest_id": backtest_id,
             "symbols": symbols,
             "steps": steps,
+            "train_window": train_window,
+            "test_window": test_window,
+            "rolling_window": rolling_window,
             "capital": capital,
             "summary_metrics": summary,
             "leader_attribution": leader_attr,

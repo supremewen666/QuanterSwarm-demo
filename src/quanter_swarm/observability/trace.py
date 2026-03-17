@@ -17,6 +17,7 @@ def build_cycle_trace(
     agents_activated: dict[str, list[str]],
     runtime_ms: int,
     risk_result: dict[str, Any],
+    metrics: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     return {
         "trace_id": trace_id,
@@ -24,4 +25,5 @@ def build_cycle_trace(
         "agents_activated": agents_activated,
         "latency": {"runtime_ms": runtime_ms},
         "risk_result": risk_result,
+        "metrics": metrics or {},
     }

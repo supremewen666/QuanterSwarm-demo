@@ -12,6 +12,7 @@ from quanter_swarm.errors import QuanterSwarmError
 from quanter_swarm.orchestrator.root_agent import RootAgent
 from quanter_swarm.reporting.markdown_report import render_markdown_report
 from quanter_swarm.utils.config import load_yaml, validate_config_consistency
+from quanter_swarm.utils.logging import configure_logging
 
 REQUIRED_CONFIGS = (
     "app.yaml",
@@ -41,6 +42,7 @@ def render_report(report: dict[str, Any], output_format: str) -> str:
 
 
 def emit_report(symbol: str | None, output_format: str, output_path: str | None) -> str:
+    configure_logging()
     report = RootAgent().run_sync(symbol=symbol)
     report = FinalReportContract.model_validate(report).model_dump()
     rendered = render_report(report, output_format)

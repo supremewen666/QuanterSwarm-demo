@@ -26,6 +26,7 @@ from quanter_swarm.errors import AgentExecutionError
 from quanter_swarm.evaluation.metrics import summarize_metrics
 from quanter_swarm.execution.paper_executor import execute
 from quanter_swarm.market.data_quality import validate_snapshot
+from quanter_swarm.observability.metrics import build_cycle_metrics
 from quanter_swarm.observability.trace import build_cycle_trace, new_trace_id
 from quanter_swarm.orchestrator.agent_executor import AgentExecutor
 from quanter_swarm.orchestrator.ranking_engine import rank_candidates
@@ -34,6 +35,7 @@ from quanter_swarm.reporting.report_generator import generate_report
 from quanter_swarm.research.event_impact_analyzer import analyze_event_impact
 from quanter_swarm.research.factor_score_engine import compute_factor_score
 from quanter_swarm.research.fundamentals_parser import parse_fundamentals
+from quanter_swarm.risk.engine import evaluate_risk_rules
 from quanter_swarm.router import select_specialist_plan
 from quanter_swarm.storage.file_store import write_json
 from quanter_swarm.utils.config import (
@@ -43,6 +45,9 @@ from quanter_swarm.utils.config import (
     load_yaml,
     validate_config_consistency,
 )
+from quanter_swarm.utils.logging import get_logger
+
+logger = get_logger(__name__)
 
 if TYPE_CHECKING:
     from quanter_swarm.leaders.base_leader import BaseLeader
@@ -90,6 +95,13 @@ class CycleManager:
             return CycleState.FAILED.value
         return CycleState.DONE.value
 
+    @staticmethod
+    def _record_state_latency(context: dict[str, Any], state: CycleState, started_at: float) -> int:
+        state_latencies = cast(dict[str, int], context.setdefault("state_latencies", {}))
+        elapsed_ms = int((time() - started_at) * 1000)
+        state_latencies[state.value] = elapsed_ms
+        return elapsed_ms
+
     def _short_circuit_report(
         self,
         *,
@@ -103,7 +115,19 @@ class CycleManager:
         termination_reason: str,
         stage_records: list[StageRecord],
         state_sequence: list[str],
+        state_latencies: dict[str, int],
+        route: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
+        leaders = list(route.get("leader_selected", [])) if route else []
+        specialists = list(route.get("specialists_selected", [])) if route else []
+        metrics = build_cycle_metrics(
+            state_latencies=state_latencies,
+            runtime_ms=runtime_ms,
+            leaders=leaders,
+            specialists=specialists,
+            success=termination_reason != "no_data",
+            token_budget=str(route.get("token_budget")) if route else None,
+        )
         payload = {
             "symbol": symbol,
             "active_regime": regime,
@@ -151,10 +175,10 @@ class CycleManager:
                     router_decision={
                         "regime": regime,
                         "confidence": regime_confidence,
-                        "leader_selected": [],
-                        "specialists_selected": [],
+                        "leader_selected": leaders,
+                        "specialists_selected": specialists,
                     },
-                    agents_activated={"leaders": [], "specialists": []},
+                    agents_activated={"leaders": leaders, "specialists": specialists},
                     runtime_ms=runtime_ms,
                     risk_result={
                         "status": "blocked",
@@ -162,7 +186,9 @@ class CycleManager:
                         "reason": termination_reason,
                         "warnings": [termination_reason],
                     },
+                    metrics=metrics,
                 ),
+                "metrics": metrics,
                 "leader_scores": [],
                 "risk_guardrail": {"status": "blocked", "reason": termination_reason, "exposure_multiplier": 0.0},
                 "rejected_candidates": [],
@@ -191,6 +217,27 @@ class CycleManager:
         FinalReportContract.model_validate(validated.model_dump())
         return validated.model_dump()
 
+    def _log_cycle_event(
+        self,
+        *,
+        trace_id: str,
+        cycle_state: str,
+        agent_name: str,
+        latency: int,
+        status: str,
+        message: str,
+    ) -> None:
+        logger.info(
+            message,
+            extra={
+                "trace_id": trace_id,
+                "cycle_state": cycle_state,
+                "agent_name": agent_name,
+                "latency": latency,
+                "status": status,
+            },
+        )
+
     @staticmethod
     def _enter_state(context: dict[str, Any], state: CycleState) -> None:
         state_sequence = cast(list[str], context.setdefault("state_sequence", [CycleState.INIT.value]))
@@ -198,6 +245,7 @@ class CycleManager:
 
     def _state_data_fetch(self, context: dict[str, Any]) -> dict[str, Any] | None:
         self._enter_state(context, CycleState.DATA_FETCH)
+        state_started = time()
         scenario = cast(dict[str, Any], context["scenario"])
         target_symbol = str(context["target_symbol"])
         run_started = float(context["run_started"])
@@ -206,6 +254,14 @@ class CycleManager:
 
         data_fetch = cast("DataFetchSpecialist", get_specialist("data_fetch"))
         fetched = data_fetch.fetch(target_symbol)
+        self._log_cycle_event(
+            trace_id=trace_id,
+            cycle_state=CycleState.DATA_FETCH.value,
+            agent_name=data_fetch.name,
+            latency=int((time() - run_started) * 1000),
+            status="ok",
+            message="data_fetch_completed",
+        )
         stage_records.append(
             StageRecord(
                 stage=CycleStage.INGEST,
@@ -221,6 +277,7 @@ class CycleManager:
         context["fetched"] = fetched
         context["data_quality"] = data_quality
         if scenario.get("force_no_data") or not fetched.get("market_packet"):
+            self._record_state_latency(context, CycleState.DATA_FETCH, state_started)
             stage_records.append(
                 StageRecord(
                     stage=CycleStage.REPORT,
@@ -239,13 +296,18 @@ class CycleManager:
                 termination_reason="no_data",
                 stage_records=stage_records,
                 state_sequence=cast(list[str], context["state_sequence"]) + [CycleState.FAILED.value],
+                state_latencies=cast(dict[str, int], context.setdefault("state_latencies", {})),
             )
+        self._record_state_latency(context, CycleState.DATA_FETCH, state_started)
         return None
 
     def _state_regime_detect(self, context: dict[str, Any]) -> None:
         self._enter_state(context, CycleState.REGIME_DETECT)
+        state_started = time()
         fetched = cast(dict[str, Any], context["fetched"])
         stage_records = cast(list[StageRecord], context["stage_records"])
+        trace_id = str(context["trace_id"])
+        run_started = float(context["run_started"])
         market_packet = fetched["market_packet"]
         macro_inputs = fetched["macro_inputs"]
         market_state = {
@@ -260,6 +322,14 @@ class CycleManager:
         }
         regime_agent = cast("RegimeAgent", get_agent("regime"))
         regime_decision = regime_agent.classify_detail(market_state, previous_regime=self._last_regime)
+        self._log_cycle_event(
+            trace_id=trace_id,
+            cycle_state=CycleState.REGIME_DETECT.value,
+            agent_name=regime_agent.name,
+            latency=int((time() - run_started) * 1000),
+            status="ok",
+            message="regime_detect_completed",
+        )
         stage_records.append(
             StageRecord(
                 stage=CycleStage.REGIME,
@@ -277,13 +347,17 @@ class CycleManager:
         context["regime_decision"] = regime_decision
         context["regime"] = regime_decision["label"]
         self._last_regime = regime_decision["label"]
+        self._record_state_latency(context, CycleState.REGIME_DETECT, state_started)
 
     def _state_routing(self, context: dict[str, Any]) -> None:
         self._enter_state(context, CycleState.ROUTING)
+        state_started = time()
         stage_records = cast(list[StageRecord], context["stage_records"])
         scenario = cast(dict[str, Any], context["scenario"])
         regime = str(context["regime"])
         regime_decision = cast(dict[str, Any], context["regime_decision"])
+        trace_id = str(context["trace_id"])
+        run_started = float(context["run_started"])
 
         router_agent = cast("RouterAgent", get_agent("router"))
         route = router_agent.route(regime_decision, self.router_config, self.regimes_config)
@@ -335,10 +409,20 @@ class CycleManager:
                 },
             )
         )
+        self._log_cycle_event(
+            trace_id=trace_id,
+            cycle_state=CycleState.ROUTING.value,
+            agent_name=router_agent.name,
+            latency=int((time() - run_started) * 1000),
+            status="ok",
+            message="routing_completed",
+        )
         context["route"] = route
+        self._record_state_latency(context, CycleState.ROUTING, state_started)
 
     def _state_agent_execution(self, context: dict[str, Any]) -> None:
         self._enter_state(context, CycleState.AGENT_EXECUTION)
+        state_started = time()
         scenario = cast(dict[str, Any], context["scenario"])
         stage_records = cast(list[StageRecord], context["stage_records"])
         fetched = cast(dict[str, Any], context["fetched"])
@@ -347,6 +431,8 @@ class CycleManager:
         market_state = cast(dict[str, Any], context["market_state"])
         route = cast(dict[str, Any], context["route"])
         target_symbol = str(context["target_symbol"])
+        trace_id = str(context["trace_id"])
+        run_started = float(context["run_started"])
 
         memory_compression = cast("MemoryCompressionSpecialist", get_specialist("memory_compression"))
         disable_specialists = scenario.get("disable_specialists", {})
@@ -384,6 +470,11 @@ class CycleManager:
         else:
             fallback_modes.append("macro_event_fallback")
             event_signal = {"impact": "neutral", "confidence": 0.5, "event": macro_inputs}
+        if scenario.get("force_earnings_event"):
+            event_signal = {
+                **event_signal,
+                "event": {**cast(dict[str, Any], event_signal.get("event", {})), "event_type": "earnings"},
+            }
         stage_records.append(
             StageRecord(
                 stage=CycleStage.SPECIALIST_RESEARCH,
@@ -491,6 +582,14 @@ class CycleManager:
                 detail={"ranked_count": len(ranked_signals)},
             )
         )
+        self._log_cycle_event(
+            trace_id=trace_id,
+            cycle_state=CycleState.AGENT_EXECUTION.value,
+            agent_name="cycle_manager",
+            latency=int((time() - run_started) * 1000),
+            status="ok" if not specialist_batch.failures else "partial_failure",
+            message="agent_execution_completed",
+        )
         context["fallback_modes"] = fallback_modes
         context["compressed"] = compressed
         context["sentiment_score"] = sentiment_score
@@ -501,11 +600,15 @@ class CycleManager:
         context["features"] = features
         context["factor_score"] = factor_score
         context["ranked_signals"] = ranked_signals
+        self._record_state_latency(context, CycleState.AGENT_EXECUTION, state_started)
 
     def _state_risk_check(self, context: dict[str, Any]) -> None:
         self._enter_state(context, CycleState.RISK_CHECK)
+        state_started = time()
         stage_records = cast(list[StageRecord], context["stage_records"])
         risk_report = cast(dict[str, Any], context["risk_report"])
+        trace_id = str(context["trace_id"])
+        run_started = float(context["run_started"])
         guardrail = assess_guardrails(risk_report)
         stage_records.append(
             StageRecord(
@@ -514,10 +617,20 @@ class CycleManager:
                 detail={"guardrail_status": guardrail["status"], "warnings": risk_report["warnings"]},
             )
         )
+        self._log_cycle_event(
+            trace_id=trace_id,
+            cycle_state=CycleState.RISK_CHECK.value,
+            agent_name="risk_guardrail",
+            latency=int((time() - run_started) * 1000),
+            status=guardrail["status"],
+            message="risk_check_completed",
+        )
         context["guardrail"] = guardrail
+        self._record_state_latency(context, CycleState.RISK_CHECK, state_started)
 
     def _state_portfolio_build(self, context: dict[str, Any]) -> dict[str, Any] | None:
         self._enter_state(context, CycleState.PORTFOLIO_BUILD)
+        state_started = time()
         scenario = cast(dict[str, Any], context["scenario"])
         stage_records = cast(list[StageRecord], context["stage_records"])
         route = cast(dict[str, Any], context["route"])
@@ -582,7 +695,16 @@ class CycleManager:
                 detail={"mode": portfolio["mode"], "gross_exposure": portfolio["gross_exposure"]},
             )
         )
+        self._log_cycle_event(
+            trace_id=trace_id,
+            cycle_state=CycleState.PORTFOLIO_BUILD.value,
+            agent_name="portfolio_builder",
+            latency=int((time() - run_started) * 1000),
+            status=portfolio["mode"],
+            message="portfolio_build_completed",
+        )
         if route["low_confidence_mode"] and not route["leaders"]:
+            self._record_state_latency(context, CycleState.PORTFOLIO_BUILD, state_started)
             stage_records.append(
                 StageRecord(
                     stage=CycleStage.REPORT,
@@ -606,15 +728,55 @@ class CycleManager:
                 termination_reason="low_confidence_no_trade",
                 stage_records=stage_records,
                 state_sequence=cast(list[str], context["state_sequence"]) + [CycleState.DONE.value],
+                state_latencies=cast(dict[str, int], context.setdefault("state_latencies", {})),
+                route=route,
             )
         context["threshold"] = threshold
         context["passed_ideas"] = passed_ideas
         context["rejected_ideas"] = rejected_ideas
+        risk_engine_result = evaluate_risk_rules(
+            portfolio=portfolio,
+            market_packet=market_packet,
+            event_payload=cast(dict[str, Any], context["event_signal"]).get("event", {}),
+            daily_loss_pct=float(scenario.get("daily_loss_pct", 0.0)),
+            rules_config=self.risk_config.get("risk", {}),
+        )
+        combined_warnings = list(dict.fromkeys(guardrail.get("warnings", []) + risk_engine_result["warnings"]))
+        if risk_engine_result["status"] == "blocked":
+            guardrail = {
+                "status": "blocked",
+                "approved": False,
+                "exposure_multiplier": 0.0,
+                "reason": risk_engine_result["reason"],
+                "warnings": combined_warnings,
+                "triggered_rules": risk_engine_result["triggered_rules"],
+            }
+            portfolio = {
+                "positions": [],
+                "cash_buffer": 1.0,
+                "gross_exposure": 0.0,
+                "mode": "no_trade",
+                "allocation_mode": portfolio.get("allocation_mode", allocation_mode),
+                "rationale": f"blocked by risk engine: {risk_engine_result['reason']}",
+                "no_trade_reason": risk_engine_result["reason"],
+                "position_rationales": [],
+            }
+            fallback_modes.append("risk_engine_no_trade")
+        else:
+            guardrail = {
+                **guardrail,
+                "warnings": combined_warnings,
+                "triggered_rules": risk_engine_result["triggered_rules"],
+            }
+        cast(dict[str, Any], context["risk_report"])["warnings"] = combined_warnings
+        context["guardrail"] = guardrail
         context["portfolio"] = portfolio
+        self._record_state_latency(context, CycleState.PORTFOLIO_BUILD, state_started)
         return None
 
     def _state_report_generation(self, context: dict[str, Any], persist_outputs: bool) -> dict[str, Any]:
         self._enter_state(context, CycleState.REPORT_GENERATION)
+        state_started = time()
         stage_records = cast(list[StageRecord], context["stage_records"])
         market_packet = cast(dict[str, Any], context["market_packet"])
         market_state = cast(dict[str, Any], context["market_state"])
@@ -690,6 +852,16 @@ class CycleManager:
             if evolution_enabled
             else {"threshold": threshold, "action": "disabled"}
         )
+        self._record_state_latency(context, CycleState.REPORT_GENERATION, state_started)
+        runtime_ms = int((time() - run_started) * 1000)
+        metrics = build_cycle_metrics(
+            state_latencies=cast(dict[str, int], context.setdefault("state_latencies", {})),
+            runtime_ms=runtime_ms,
+            leaders=route["leader_selected"],
+            specialists=route["specialists_selected"],
+            success=True,
+            token_budget=str(route.get("token_budget")),
+        )
         report_payload = {
             "symbol": target_symbol,
             "active_regime": regime,
@@ -724,7 +896,7 @@ class CycleManager:
             "risk_check": guardrail,
             "decision_trace_summary": {
                 "trace_id": trace_id,
-                "runtime_ms": int((time() - run_started) * 1000),
+                "runtime_ms": runtime_ms,
                 "regime": regime_decision,
                 "fallback_modes": fallback_modes,
                 "trace": build_cycle_trace(
@@ -739,9 +911,11 @@ class CycleManager:
                         "leaders": route["leader_selected"],
                         "specialists": route["specialists_selected"],
                     },
-                    runtime_ms=int((time() - run_started) * 1000),
+                    runtime_ms=runtime_ms,
                     risk_result=guardrail,
+                    metrics=metrics,
                 ),
+                "metrics": metrics,
                 "specialist_contribution": {
                     "sentiment_score": round(float(context["sentiment_score"]), 4),
                     "event_impact_score": event_impact.get("impact_score", 0.0),
@@ -811,6 +985,14 @@ class CycleManager:
             state_sequence.append(CycleState.DONE.value)
         report["decision_trace_summary"]["state_machine"]["state_sequence"] = state_sequence
         report["decision_trace_summary"]["state_machine"]["current_state"] = CycleState.DONE.value
+        self._log_cycle_event(
+            trace_id=trace_id,
+            cycle_state=CycleState.REPORT_GENERATION.value,
+            agent_name="report_generator",
+            latency=int((time() - run_started) * 1000),
+            status="ok",
+            message="report_generation_completed",
+        )
         try:
             validated = CycleReport.model_validate(report)
             FinalReportContract.model_validate(validated.model_dump())
@@ -838,6 +1020,7 @@ class CycleManager:
             "run_started": time(),
             "trace_id": new_trace_id("cycle"),
             "stage_records": [],
+            "state_latencies": {},
             "target_symbol": symbol or self.settings.default_symbols[0],
             "state_sequence": [CycleState.INIT.value],
         }

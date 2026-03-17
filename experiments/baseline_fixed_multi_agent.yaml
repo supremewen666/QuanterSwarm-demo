@@ -1,0 +1,9 @@
+experiment:
+  name: baseline_fixed_multi_agent
+  mode: fixed_multi_agent
+  description: Fixed multi-agent baseline with shared specialists enabled and no dynamic leader cap.
+  symbols: [AAPL, MSFT, NVDA]
+  scenario:
+    always_on_leaders: true
+    disable_specialists: {}
+    allocation_mode: simple

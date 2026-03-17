@@ -241,6 +241,18 @@ Current capabilities (implemented):
 - explicit cycle state taxonomy for traceable orchestration progress
 - cycle manager state handlers with explicit per-state function boundaries
 - structured cycle traces for routing, activated agents, latency, and risk outcomes
+- data provider abstraction for market history, latest price, and news access
+- mock and file-backed data providers for tests and offline datasets
+- data snapshots now carry hash, source, and timestamp metadata
+- snapshot caching via memory and file cache backends
+- backtest event models for market, signal, order, fill, and portfolio updates
+- backtest domain models for orders, fills, positions, and portfolios
+- explicit backtest cost models for transaction fees and slippage
+- walk-forward runner now surfaces train, test, and rolling window parameters
+- backtest metrics now expose Sharpe, Sortino, max drawdown, turnover, and win rate
+- runtime logging now defaults to structured JSON with trace and cycle fields
+- observability metrics now expose router latency, agent latency, per-cycle success rate, and estimated token cost
+- pre-trade risk engine now enforces position size, leverage, daily loss, earnings, and volatility guardrails
 - schema-validated leader/ranked idea/portfolio/paper action/report contracts
 - portfolio construction in simple / volatility-aware / correlation-aware modes
 - paper execution with slippage, partial/delayed/unfilled fills, cost breakdown
@@ -368,6 +380,21 @@ Each experiment writes:
 
 - one JSON artifact with metrics and contribution breakdown
 - one markdown summary for quick review
+
+Baseline experiment presets now live under `experiments/`:
+
+- `experiments/baseline_single_agent.yaml`
+- `experiments/baseline_fixed_multi_agent.yaml`
+- `experiments/routed_multi_agent.yaml`
+- `experiments/routed_ephemeral.yaml`
+
+Preset-driven experiment execution now lives in `src/quanter_swarm/experiments/runner.py`.
+
+Each configured experiment now also writes:
+
+- `experiment_table.csv`
+- `equity_curve.png`
+- `drawdown_curve.png`
 
 ## Walk-Forward Backtest
 

@@ -1,0 +1,10 @@
+experiment:
+  name: routed_ephemeral
+  mode: routed_ephemeral
+  description: Routed ephemeral setup with capped leader activation and lightweight specialist usage.
+  symbols: [AAPL, MSFT, NVDA]
+  scenario:
+    max_active_leaders: 1
+    disable_specialists:
+      sentiment: true
+    allocation_mode: correlation_aware

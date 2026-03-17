@@ -1,0 +1,8 @@
+experiment:
+  name: routed_multi_agent
+  mode: routed_multi_agent
+  description: Routed multi-agent experiment that uses regime-aware leader activation and shared specialists.
+  symbols: [AAPL, MSFT, NVDA]
+  scenario:
+    disable_specialists: {}
+    allocation_mode: volatility_aware

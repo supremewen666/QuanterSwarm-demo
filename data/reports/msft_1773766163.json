@@ -1,0 +1,1081 @@
+{
+  "symbol": "MSFT",
+  "active_regime": "high_vol",
+  "regime_confidence": 0.89,
+  "active_strategy_teams": [
+    "breakout_event",
+    "momentum"
+  ],
+  "market_summary": {
+    "price": 118.0,
+    "change_pct": 0.1132,
+    "volatility": 0.1166,
+    "data_quality": {
+      "ok": true,
+      "issues": [],
+      "freshness_sec": 0
+    }
+  },
+  "fundamentals_summary": {
+    "valuation_score": 0.65,
+    "growth_score": 0.4,
+    "quality_score": 0.7,
+    "leverage_penalty": 0.2
+  },
+  "sentiment_summary": {
+    "score": 0.55,
+    "compressed_context": "MSFT new product cycle supports growth expectations; MSFT management commentary signals disciplined execution"
+  },
+  "event_impact_summary": {
+    "event": {
+      "event": {
+        "macro_risk": 0.8,
+        "macro_theme": "disinflation"
+      },
+      "impact": "negative",
+      "confidence": 0.8
+    },
+    "impact_score": 0.3,
+    "horizon": "1d-1w"
+  },
+  "factor_scorecard": {
+    "symbol": "MSFT",
+    "composite_score": 0.61
+  },
+  "risk_alerts": {
+    "warnings": [
+      "high_volatility",
+      "elevated_macro_risk",
+      "volatility_no_trade"
+    ],
+    "status": "alert"
+  },
+  "router_decision": {
+    "regime": "high_vol",
+    "confidence": 0.89,
+    "leader_selected": [
+      "breakout_event",
+      "momentum"
+    ],
+    "specialists_selected": [
+      "risk"
+    ],
+    "reasons": {
+      "breakout_event": "selected_by_regime_routing",
+      "momentum": "selected_by_regime_routing"
+    },
+    "rejected_candidates": {},
+    "budget_constraints": {
+      "token_budget": "low",
+      "latency_budget": "balanced",
+      "max_specialists_per_cycle": 3,
+      "token_budget_limit": 1,
+      "latency_budget_limit": 2
+    },
+    "specialist_rejections": {
+      "memory_compression": "dropped_by_token_budget",
+      "feature_engineering": "dropped_by_token_budget",
+      "macro_event": "dropped_by_token_budget",
+      "sentiment": "dropped_by_token_budget",
+      "data_fetch": "dropped_by_token_budget"
+    }
+  },
+  "risk_check": {
+    "status": "blocked",
+    "approved": false,
+    "exposure_multiplier": 0.0,
+    "reason": "volatility_no_trade",
+    "warnings": [
+      "high_volatility",
+      "elevated_macro_risk",
+      "volatility_no_trade"
+    ],
+    "triggered_rules": [
+      "volatility_no_trade"
+    ]
+  },
+  "portfolio_suggestion": {
+    "positions": [],
+    "cash_buffer": 1.0,
+    "gross_exposure": 0.0,
+    "mode": "no_trade",
+    "allocation_mode": "simple",
+    "rationale": "blocked by risk engine: volatility_no_trade",
+    "no_trade_reason": "volatility_no_trade",
+    "position_rationales": []
+  },
+  "paper_trade_actions": [],
+  "evaluation_summary": {
+    "top_signal": {
+      "leader": "momentum",
+      "symbol": "MSFT",
+      "score": 1.0,
+      "thesis": "trend_continuation",
+      "regime_fit": 0.8,
+      "risk_penalty": 0.4,
+      "leader_weight": 0.3,
+      "volatility": 0.1166,
+      "correlation": 1.0,
+      "event_risk": 0.3,
+      "confidence": 0.9780000000000001,
+      "composite_rank_score": 0.89
+    },
+    "signal_count": 2,
+    "metrics": {
+      "router_latency": {
+        "routing_ms": 0
+      },
+      "agent_latency": {
+        "data_fetch_ms": 0,
+        "regime_detect_ms": 0,
+        "agent_execution_ms": 0,
+        "risk_check_ms": 0,
+        "portfolio_build_ms": 0,
+        "report_generation_ms": 0,
+        "runtime_ms": 0
+      },
+      "cycle_success_rate": {
+        "value": 1.0,
+        "successful_cycles": 1,
+        "total_cycles": 1
+      },
+      "token_cost": {
+        "estimated_tokens": 5800,
+        "leaders": {
+          "breakout_event": 3200,
+          "momentum": 1800
+        },
+        "specialists": {
+          "risk": 800
+        },
+        "budget": "low"
+      }
+    },
+    "execution_reason": "paper_mode_enabled",
+    "guardrail": {
+      "status": "blocked",
+      "approved": false,
+      "exposure_multiplier": 0.0,
+      "reason": "volatility_no_trade",
+      "warnings": [
+        "high_volatility",
+        "elevated_macro_risk",
+        "volatility_no_trade"
+      ],
+      "triggered_rules": [
+        "volatility_no_trade"
+      ]
+    },
+    "evolution": {
+      "threshold": 0.48,
+      "action": "slightly_loosen"
+    }
+  },
+  "one_page_summary": {
+    "title": "MSFT high_vol research cycle",
+    "highlights": [
+      "leaders=breakout_event,momentum",
+      "factor_score=0.61",
+      "portfolio_mode=no_trade",
+      "limitations=risk_engine_no_trade"
+    ]
+  },
+  "config_provenance": {
+    "files": [
+      "app.yaml",
+      "evolution.yaml",
+      "execution.yaml",
+      "paper_broker.yaml",
+      "portfolio.yaml",
+      "ranking.yaml",
+      "regimes.yaml",
+      "risk.yaml",
+      "router.yaml"
+    ],
+    "fingerprint": "c8a7a42dacc6e92f",
+    "router": {
+      "max_active_leaders": 2,
+      "default_mode": "research",
+      "default_regime": "high_vol",
+      "token_budget": "low",
+      "latency_budget": "balanced",
+      "confidence_threshold": 0.5,
+      "low_confidence_policy": "fallback",
+      "routing": {
+        "trend_up": [
+          "momentum",
+          "breakout_event"
+        ],
+        "trend_down": [
+          "breakout_event"
+        ],
+        "sideways": [
+          "mean_reversion",
+          "stat_arb"
+        ],
+        "high_vol": [
+          "breakout_event",
+          "mean_reversion"
+        ],
+        "panic": []
+      },
+      "valve": {
+        "merge_similarity_threshold": 0.75,
+        "split_similarity_threshold": 0.4
+      }
+    },
+    "regimes": {
+      "regimes": {
+        "trend_up": {
+          "leaders": [
+            "momentum",
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "momentum"
+          ],
+          "weights": {
+            "momentum": 0.6,
+            "breakout_event": 0.4
+          }
+        },
+        "trend_down": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "mean_reversion"
+          ],
+          "weights": {
+            "mean_reversion": 0.55,
+            "stat_arb": 0.45
+          }
+        },
+        "sideways": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "stat_arb"
+          ],
+          "weights": {
+            "mean_reversion": 0.5,
+            "stat_arb": 0.5
+          }
+        },
+        "high_vol": {
+          "leaders": [
+            "breakout_event",
+            "momentum"
+          ],
+          "fallback_leaders": [
+            "breakout_event"
+          ],
+          "weights": {
+            "breakout_event": 0.7,
+            "momentum": 0.3
+          }
+        },
+        "panic": {
+          "leaders": [
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "breakout_event"
+          ],
+          "weights": {
+            "breakout_event": 1.0
+          }
+        },
+        "risk_on": {
+          "leaders": [
+            "momentum",
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "momentum"
+          ],
+          "weights": {
+            "momentum": 0.65,
+            "breakout_event": 0.35
+          }
+        },
+        "risk_off": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "mean_reversion"
+          ],
+          "weights": {
+            "mean_reversion": 0.6,
+            "stat_arb": 0.4
+          }
+        }
+      }
+    },
+    "risk": {
+      "risk": {
+        "max_single_weight": 0.15,
+        "max_position_size": 0.15,
+        "max_leverage": 1.0,
+        "max_daily_loss": 0.03,
+        "earnings_no_trade": true,
+        "volatility_no_trade": 0.08,
+        "max_sector_weight": 0.35,
+        "max_drawdown_limit": 0.1
+      }
+    },
+    "portfolio": {
+      "portfolio": {
+        "target_positions": 5,
+        "rebalance_frequency": "weekly",
+        "cash_buffer": 0.05,
+        "allocation_mode": "simple",
+        "correlation_penalty": 0.35,
+        "turnover_penalty": 0.15,
+        "regime_overrides": {
+          "high_vol": {
+            "exposure_multiplier": 0.7,
+            "cash_buffer": 0.2,
+            "target_positions": 3
+          },
+          "panic": {
+            "exposure_multiplier": 0.0,
+            "cash_buffer": 1.0,
+            "target_positions": 0
+          },
+          "risk_off": {
+            "exposure_multiplier": 0.6,
+            "cash_buffer": 0.25,
+            "target_positions": 2
+          }
+        }
+      }
+    }
+  },
+  "decision_trace": {
+    "trace_id": "cycle_cecac446a43842598d405a5f1720c815",
+    "runtime_ms": 0,
+    "regime": {
+      "label": "high_vol",
+      "family": "volatile",
+      "confidence": 0.89,
+      "supporting_features": {
+        "trend_strength": 0.1132,
+        "volatility": 0.1166,
+        "correlation": 1.0,
+        "dispersion": 1.0,
+        "breadth": 0.55,
+        "volume_anomaly": 1.0,
+        "event_density": 0.3,
+        "macro_risk": 0.8
+      },
+      "alternatives": [
+        {
+          "label": "trend_up",
+          "score": 0.6126,
+          "family": "bull"
+        },
+        {
+          "label": "risk_off",
+          "score": 0.61,
+          "family": "bear"
+        }
+      ],
+      "family_candidates": {
+        "volatile": 1.0,
+        "bull": 0.6126,
+        "bear": 0.61,
+        "sideways": 0.14
+      },
+      "smoothing_applied": false
+    },
+    "fallback_modes": [
+      "risk_engine_no_trade"
+    ],
+    "trace": {
+      "trace_id": "cycle_cecac446a43842598d405a5f1720c815",
+      "router_decision": {
+        "regime": "high_vol",
+        "confidence": 0.89,
+        "leader_selected": [
+          "breakout_event",
+          "momentum"
+        ],
+        "specialists_selected": [
+          "risk"
+        ]
+      },
+      "agents_activated": {
+        "leaders": [
+          "breakout_event",
+          "momentum"
+        ],
+        "specialists": [
+          "risk"
+        ]
+      },
+      "latency": {
+        "runtime_ms": 0
+      },
+      "risk_result": {
+        "status": "blocked",
+        "approved": false,
+        "exposure_multiplier": 0.0,
+        "reason": "volatility_no_trade",
+        "warnings": [
+          "high_volatility",
+          "elevated_macro_risk",
+          "volatility_no_trade"
+        ],
+        "triggered_rules": [
+          "volatility_no_trade"
+        ]
+      },
+      "metrics": {
+        "router_latency": {
+          "routing_ms": 0
+        },
+        "agent_latency": {
+          "data_fetch_ms": 0,
+          "regime_detect_ms": 0,
+          "agent_execution_ms": 0,
+          "risk_check_ms": 0,
+          "portfolio_build_ms": 0,
+          "report_generation_ms": 0,
+          "runtime_ms": 0
+        },
+        "cycle_success_rate": {
+          "value": 1.0,
+          "successful_cycles": 1,
+          "total_cycles": 1
+        },
+        "token_cost": {
+          "estimated_tokens": 5800,
+          "leaders": {
+            "breakout_event": 3200,
+            "momentum": 1800
+          },
+          "specialists": {
+            "risk": 800
+          },
+          "budget": "low"
+        }
+      }
+    },
+    "metrics": {
+      "router_latency": {
+        "routing_ms": 0
+      },
+      "agent_latency": {
+        "data_fetch_ms": 0,
+        "regime_detect_ms": 0,
+        "agent_execution_ms": 0,
+        "risk_check_ms": 0,
+        "portfolio_build_ms": 0,
+        "report_generation_ms": 0,
+        "runtime_ms": 0
+      },
+      "cycle_success_rate": {
+        "value": 1.0,
+        "successful_cycles": 1,
+        "total_cycles": 1
+      },
+      "token_cost": {
+        "estimated_tokens": 5800,
+        "leaders": {
+          "breakout_event": 3200,
+          "momentum": 1800
+        },
+        "specialists": {
+          "risk": 800
+        },
+        "budget": "low"
+      }
+    },
+    "specialist_contribution": {
+      "sentiment_score": 0.55,
+      "event_impact_score": 0.3,
+      "factor_score": 0.61
+    },
+    "routing": {
+      "regime": "high_vol",
+      "confidence": 0.89,
+      "leader_selected": [
+        "breakout_event",
+        "momentum"
+      ],
+      "specialists_selected": [
+        "risk"
+      ],
+      "reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "rejected_candidates": {},
+      "budget_constraints": {
+        "token_budget": "low",
+        "latency_budget": "balanced",
+        "max_specialists_per_cycle": 3,
+        "token_budget_limit": 1,
+        "latency_budget_limit": 2
+      },
+      "specialist_rejections": {
+        "memory_compression": "dropped_by_token_budget",
+        "feature_engineering": "dropped_by_token_budget",
+        "macro_event": "dropped_by_token_budget",
+        "sentiment": "dropped_by_token_budget",
+        "data_fetch": "dropped_by_token_budget"
+      },
+      "selected_reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "skipped_reasons": {},
+      "low_confidence_mode": false
+    },
+    "leader_scores": [
+      {
+        "leader": "momentum",
+        "score": 1.0,
+        "rank_score": 0.89,
+        "risk_penalty": 0.4
+      },
+      {
+        "leader": "breakout_event",
+        "score": 0.74,
+        "rank_score": 0.734,
+        "risk_penalty": 0.4
+      }
+    ],
+    "risk_guardrail": {
+      "status": "blocked",
+      "approved": false,
+      "exposure_multiplier": 0.0,
+      "reason": "volatility_no_trade",
+      "warnings": [
+        "high_volatility",
+        "elevated_macro_risk",
+        "volatility_no_trade"
+      ],
+      "triggered_rules": [
+        "volatility_no_trade"
+      ]
+    },
+    "rejected_candidates": [
+      {
+        "leader": "momentum",
+        "symbol": "MSFT",
+        "reason": "blocked_by_guardrail"
+      },
+      {
+        "leader": "breakout_event",
+        "symbol": "MSFT",
+        "reason": "blocked_by_guardrail"
+      }
+    ],
+    "portfolio_scaling": {
+      "mode": "no_trade",
+      "gross_exposure": 0.0,
+      "cash_buffer": 1.0
+    },
+    "execution_assumptions": {},
+    "state_machine": {
+      "current_state": "done",
+      "terminated": true,
+      "termination_reason": "no_trade",
+      "state_sequence": [
+        "init",
+        "data_fetch",
+        "regime_detect",
+        "routing",
+        "agent_execution",
+        "risk_check",
+        "portfolio_build",
+        "report_generation",
+        "done"
+      ],
+      "stages": [
+        {
+          "state": "data_fetch",
+          "stage": "ingest",
+          "status": "ok",
+          "detail": {
+            "symbol": "MSFT",
+            "has_market_packet": true
+          }
+        },
+        {
+          "state": "regime_detect",
+          "stage": "regime",
+          "status": "ok",
+          "detail": {
+            "label": "high_vol",
+            "family": "volatile",
+            "confidence": 0.89
+          }
+        },
+        {
+          "state": "routing",
+          "stage": "route",
+          "status": "ok",
+          "detail": {
+            "leaders": [
+              "breakout_event",
+              "momentum"
+            ],
+            "specialists": [
+              "risk"
+            ],
+            "budget_constraints": {
+              "token_budget": "low",
+              "latency_budget": "balanced",
+              "max_specialists_per_cycle": 3,
+              "token_budget_limit": 1,
+              "latency_budget_limit": 2
+            },
+            "specialist_rejections": {
+              "memory_compression": "dropped_by_token_budget",
+              "feature_engineering": "dropped_by_token_budget",
+              "macro_event": "dropped_by_token_budget",
+              "sentiment": "dropped_by_token_budget",
+              "data_fetch": "dropped_by_token_budget"
+            },
+            "low_confidence_mode": false
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "specialist_research",
+          "status": "ok",
+          "detail": {
+            "fallback_modes": [
+              "risk_engine_no_trade"
+            ],
+            "specialist_failures": {}
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "leader_proposal",
+          "status": "ok",
+          "detail": {
+            "proposal_count": 2
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "rank",
+          "status": "ok",
+          "detail": {
+            "ranked_count": 2
+          }
+        },
+        {
+          "state": "risk_check",
+          "stage": "risk",
+          "status": "ok",
+          "detail": {
+            "guardrail_status": "blocked",
+            "warnings": [
+              "high_volatility",
+              "elevated_macro_risk"
+            ]
+          }
+        },
+        {
+          "state": "portfolio_build",
+          "stage": "allocate",
+          "status": "ok",
+          "detail": {
+            "mode": "no_trade",
+            "gross_exposure": 0.0
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "execute",
+          "status": "ok",
+          "detail": {
+            "execution_ok": true,
+            "action_count": 0
+          }
+        },
+        {
+          "state": "report_generation",
+          "stage": "report",
+          "status": "ok",
+          "detail": {
+            "symbol": "MSFT",
+            "regime": "high_vol"
+          }
+        }
+      ]
+    }
+  },
+  "decision_trace_summary": {
+    "trace_id": "cycle_cecac446a43842598d405a5f1720c815",
+    "runtime_ms": 0,
+    "regime": {
+      "label": "high_vol",
+      "family": "volatile",
+      "confidence": 0.89,
+      "supporting_features": {
+        "trend_strength": 0.1132,
+        "volatility": 0.1166,
+        "correlation": 1.0,
+        "dispersion": 1.0,
+        "breadth": 0.55,
+        "volume_anomaly": 1.0,
+        "event_density": 0.3,
+        "macro_risk": 0.8
+      },
+      "alternatives": [
+        {
+          "label": "trend_up",
+          "score": 0.6126,
+          "family": "bull"
+        },
+        {
+          "label": "risk_off",
+          "score": 0.61,
+          "family": "bear"
+        }
+      ],
+      "family_candidates": {
+        "volatile": 1.0,
+        "bull": 0.6126,
+        "bear": 0.61,
+        "sideways": 0.14
+      },
+      "smoothing_applied": false
+    },
+    "fallback_modes": [
+      "risk_engine_no_trade"
+    ],
+    "trace": {
+      "trace_id": "cycle_cecac446a43842598d405a5f1720c815",
+      "router_decision": {
+        "regime": "high_vol",
+        "confidence": 0.89,
+        "leader_selected": [
+          "breakout_event",
+          "momentum"
+        ],
+        "specialists_selected": [
+          "risk"
+        ]
+      },
+      "agents_activated": {
+        "leaders": [
+          "breakout_event",
+          "momentum"
+        ],
+        "specialists": [
+          "risk"
+        ]
+      },
+      "latency": {
+        "runtime_ms": 0
+      },
+      "risk_result": {
+        "status": "blocked",
+        "approved": false,
+        "exposure_multiplier": 0.0,
+        "reason": "volatility_no_trade",
+        "warnings": [
+          "high_volatility",
+          "elevated_macro_risk",
+          "volatility_no_trade"
+        ],
+        "triggered_rules": [
+          "volatility_no_trade"
+        ]
+      },
+      "metrics": {
+        "router_latency": {
+          "routing_ms": 0
+        },
+        "agent_latency": {
+          "data_fetch_ms": 0,
+          "regime_detect_ms": 0,
+          "agent_execution_ms": 0,
+          "risk_check_ms": 0,
+          "portfolio_build_ms": 0,
+          "report_generation_ms": 0,
+          "runtime_ms": 0
+        },
+        "cycle_success_rate": {
+          "value": 1.0,
+          "successful_cycles": 1,
+          "total_cycles": 1
+        },
+        "token_cost": {
+          "estimated_tokens": 5800,
+          "leaders": {
+            "breakout_event": 3200,
+            "momentum": 1800
+          },
+          "specialists": {
+            "risk": 800
+          },
+          "budget": "low"
+        }
+      }
+    },
+    "metrics": {
+      "router_latency": {
+        "routing_ms": 0
+      },
+      "agent_latency": {
+        "data_fetch_ms": 0,
+        "regime_detect_ms": 0,
+        "agent_execution_ms": 0,
+        "risk_check_ms": 0,
+        "portfolio_build_ms": 0,
+        "report_generation_ms": 0,
+        "runtime_ms": 0
+      },
+      "cycle_success_rate": {
+        "value": 1.0,
+        "successful_cycles": 1,
+        "total_cycles": 1
+      },
+      "token_cost": {
+        "estimated_tokens": 5800,
+        "leaders": {
+          "breakout_event": 3200,
+          "momentum": 1800
+        },
+        "specialists": {
+          "risk": 800
+        },
+        "budget": "low"
+      }
+    },
+    "specialist_contribution": {
+      "sentiment_score": 0.55,
+      "event_impact_score": 0.3,
+      "factor_score": 0.61
+    },
+    "routing": {
+      "regime": "high_vol",
+      "confidence": 0.89,
+      "leader_selected": [
+        "breakout_event",
+        "momentum"
+      ],
+      "specialists_selected": [
+        "risk"
+      ],
+      "reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "rejected_candidates": {},
+      "budget_constraints": {
+        "token_budget": "low",
+        "latency_budget": "balanced",
+        "max_specialists_per_cycle": 3,
+        "token_budget_limit": 1,
+        "latency_budget_limit": 2
+      },
+      "specialist_rejections": {
+        "memory_compression": "dropped_by_token_budget",
+        "feature_engineering": "dropped_by_token_budget",
+        "macro_event": "dropped_by_token_budget",
+        "sentiment": "dropped_by_token_budget",
+        "data_fetch": "dropped_by_token_budget"
+      },
+      "selected_reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "skipped_reasons": {},
+      "low_confidence_mode": false
+    },
+    "leader_scores": [
+      {
+        "leader": "momentum",
+        "score": 1.0,
+        "rank_score": 0.89,
+        "risk_penalty": 0.4
+      },
+      {
+        "leader": "breakout_event",
+        "score": 0.74,
+        "rank_score": 0.734,
+        "risk_penalty": 0.4
+      }
+    ],
+    "risk_guardrail": {
+      "status": "blocked",
+      "approved": false,
+      "exposure_multiplier": 0.0,
+      "reason": "volatility_no_trade",
+      "warnings": [
+        "high_volatility",
+        "elevated_macro_risk",
+        "volatility_no_trade"
+      ],
+      "triggered_rules": [
+        "volatility_no_trade"
+      ]
+    },
+    "rejected_candidates": [
+      {
+        "leader": "momentum",
+        "symbol": "MSFT",
+        "reason": "blocked_by_guardrail"
+      },
+      {
+        "leader": "breakout_event",
+        "symbol": "MSFT",
+        "reason": "blocked_by_guardrail"
+      }
+    ],
+    "portfolio_scaling": {
+      "mode": "no_trade",
+      "gross_exposure": 0.0,
+      "cash_buffer": 1.0
+    },
+    "execution_assumptions": {},
+    "state_machine": {
+      "current_state": "done",
+      "terminated": true,
+      "termination_reason": "no_trade",
+      "state_sequence": [
+        "init",
+        "data_fetch",
+        "regime_detect",
+        "routing",
+        "agent_execution",
+        "risk_check",
+        "portfolio_build",
+        "report_generation",
+        "done"
+      ],
+      "stages": [
+        {
+          "state": "data_fetch",
+          "stage": "ingest",
+          "status": "ok",
+          "detail": {
+            "symbol": "MSFT",
+            "has_market_packet": true
+          }
+        },
+        {
+          "state": "regime_detect",
+          "stage": "regime",
+          "status": "ok",
+          "detail": {
+            "label": "high_vol",
+            "family": "volatile",
+            "confidence": 0.89
+          }
+        },
+        {
+          "state": "routing",
+          "stage": "route",
+          "status": "ok",
+          "detail": {
+            "leaders": [
+              "breakout_event",
+              "momentum"
+            ],
+            "specialists": [
+              "risk"
+            ],
+            "budget_constraints": {
+              "token_budget": "low",
+              "latency_budget": "balanced",
+              "max_specialists_per_cycle": 3,
+              "token_budget_limit": 1,
+              "latency_budget_limit": 2
+            },
+            "specialist_rejections": {
+              "memory_compression": "dropped_by_token_budget",
+              "feature_engineering": "dropped_by_token_budget",
+              "macro_event": "dropped_by_token_budget",
+              "sentiment": "dropped_by_token_budget",
+              "data_fetch": "dropped_by_token_budget"
+            },
+            "low_confidence_mode": false
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "specialist_research",
+          "status": "ok",
+          "detail": {
+            "fallback_modes": [
+              "risk_engine_no_trade"
+            ],
+            "specialist_failures": {}
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "leader_proposal",
+          "status": "ok",
+          "detail": {
+            "proposal_count": 2
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "rank",
+          "status": "ok",
+          "detail": {
+            "ranked_count": 2
+          }
+        },
+        {
+          "state": "risk_check",
+          "stage": "risk",
+          "status": "ok",
+          "detail": {
+            "guardrail_status": "blocked",
+            "warnings": [
+              "high_volatility",
+              "elevated_macro_risk"
+            ]
+          }
+        },
+        {
+          "state": "portfolio_build",
+          "stage": "allocate",
+          "status": "ok",
+          "detail": {
+            "mode": "no_trade",
+            "gross_exposure": 0.0
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "execute",
+          "status": "ok",
+          "detail": {
+            "execution_ok": true,
+            "action_count": 0
+          }
+        },
+        {
+          "state": "report_generation",
+          "stage": "report",
+          "status": "ok",
+          "detail": {
+            "symbol": "MSFT",
+            "regime": "high_vol"
+          }
+        }
+      ]
+    }
+  },
+  "markdown_summary": "# MSFT Research Cycle\n\n- Regime: `high_vol`\n- Regime confidence: `0.89`\n- Active leaders: breakout_event, momentum\n- Factor score: `0.61`\n\n## Market Summary\n- Price: 118.0\n- Change: 0.1132\n- Volatility: 0.1166\n\n## Risk\n- Status: `alert`\n- high_volatility\n- elevated_macro_risk\n- volatility_no_trade\n\n## Portfolio Suggestion\n- Mode: `no_trade`\n- Gross exposure: 0.00%\n- Cash buffer: 100.00%\n- No positions\n\n## Paper Trade Actions\n- No paper trades executed\n\n## One-Page Summary\n- leaders=breakout_event,momentum\n- factor_score=0.61\n- portfolio_mode=no_trade\n- limitations=risk_engine_no_trade\n\n## Evaluation\n- Signal count: 2\n- Execution reason: paper_mode_enabled\n- Routing mode: normal\n- Trace ID: cycle_cecac446a43842598d405a5f1720c815\n- Rejected candidates: 2\n- Config fingerprint: n/a"
+}

@@ -1,0 +1,9 @@
+experiment:
+  name: baseline_single_agent
+  mode: single_agent
+  description: Baseline using a single routed leader without shared specialist ablations.
+  symbols: [AAPL, MSFT, NVDA]
+  scenario:
+    max_active_leaders: 1
+    disable_specialists: {}
+    allocation_mode: simple

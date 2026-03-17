@@ -19,6 +19,10 @@ def test_root_agent_runs_cycle() -> None:
     assert "budget_constraints" in result["router_decision"]
     assert "specialist_rejections" in result["decision_trace_summary"]["routing"]
     assert result["decision_trace_summary"]["trace"]["risk_result"]["status"] == result["risk_check"]["status"]
+    assert result["decision_trace_summary"]["metrics"]["router_latency"]["routing_ms"] >= 0
+    assert result["decision_trace_summary"]["metrics"]["agent_latency"]["runtime_ms"] == result["decision_trace_summary"]["runtime_ms"]
+    assert result["decision_trace_summary"]["metrics"]["cycle_success_rate"]["value"] == 1.0
+    assert result["decision_trace_summary"]["metrics"]["token_cost"]["estimated_tokens"] >= 0
     assert result["decision_trace_summary"]["state_machine"]["current_state"] == "done"
     assert all("state" in stage for stage in result["decision_trace_summary"]["state_machine"]["stages"])
     state_sequence = result["decision_trace_summary"]["state_machine"]["state_sequence"]
@@ -31,3 +35,20 @@ def test_root_agent_runs_cycle() -> None:
     assert "portfolio_build" in state_sequence
     assert "report_generation" in state_sequence
     assert state_sequence[-1] == "done"
+
+
+def test_root_agent_blocks_trade_when_daily_loss_rule_triggers() -> None:
+    result = RootAgent().run_sync("AAPL", {"daily_loss_pct": 0.05})
+
+    assert result["portfolio_suggestion"]["mode"] == "no_trade"
+    assert result["risk_check"]["status"] == "blocked"
+    assert result["risk_check"]["reason"] == "max_daily_loss"
+    assert "max_daily_loss" in result["risk_check"]["warnings"]
+
+
+def test_root_agent_blocks_trade_when_earnings_rule_triggers() -> None:
+    result = RootAgent().run_sync("AAPL", {"force_earnings_event": True})
+
+    assert result["portfolio_suggestion"]["mode"] == "no_trade"
+    assert result["risk_check"]["status"] == "blocked"
+    assert result["risk_check"]["reason"] == "earnings_no_trade"
