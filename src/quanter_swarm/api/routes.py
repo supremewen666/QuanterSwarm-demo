@@ -21,7 +21,7 @@ def healthcheck() -> HealthResponse:
 @router.post("/research", response_model=ResearchResponse)
 def research(request: ResearchRequest) -> ResearchResponse:
     target_symbol = request.symbol or (request.symbols or ["AAPL"])[0]
-    result = RootAgent().run(symbol=target_symbol)
+    result = RootAgent().run_sync(symbol=target_symbol)
     result["regime"] = result["active_regime"]
     return ResearchResponse.model_validate(result)
 
@@ -31,7 +31,7 @@ def research_batch(request: ResearchRequest) -> BatchResearchResponse:
     symbols = request.symbols or ([request.symbol] if request.symbol else [])
     results = []
     for symbol in symbols:
-        result = RootAgent().run(symbol=symbol)
+        result = RootAgent().run_sync(symbol=symbol)
         result["regime"] = result["active_regime"]
         results.append(ResearchResponse.model_validate(result))
     return BatchResearchResponse(results=results)

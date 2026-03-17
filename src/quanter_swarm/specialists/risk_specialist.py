@@ -7,6 +7,9 @@ from quanter_swarm.specialists.base_specialist import BaseSpecialist
 
 class RiskSpecialist(BaseSpecialist):
     name = "risk"
+    supported_tasks = ("risk_assessment", "guardrail_check")
+    cost_hint = "low"
+    priority = 95
 
     def assess(self, proposal: dict) -> dict:
         warnings: list[str] = []
@@ -23,3 +26,6 @@ class RiskSpecialist(BaseSpecialist):
             "warnings": warnings,
             "proposal": proposal,
         }
+
+    def execute(self, payload: dict) -> dict:
+        return self.assess(payload)

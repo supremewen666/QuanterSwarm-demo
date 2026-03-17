@@ -5,6 +5,10 @@ from quanter_swarm.leaders.base_leader import BaseLeader
 
 class BreakoutEventLeader(BaseLeader):
     name = "breakout_event"
+    supported_regimes = ("trend_up", "high_vol", "panic", "risk_on")
+    supported_tasks = ("event_breakout", "catalyst_response")
+    cost_hint = "high"
+    priority = 95
 
     def propose(self, context: dict) -> dict:
         trend = context["features"]["trend"]

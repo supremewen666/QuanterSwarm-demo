@@ -2,12 +2,13 @@ from pathlib import Path
 
 import pytest
 
+from quanter_swarm.errors import RiskGuardrailError
 from quanter_swarm.orchestrator.root_agent import RootAgent
 from quanter_swarm.utils.config import validate_config_consistency
 
 
 def test_report_includes_config_provenance() -> None:
-    report = RootAgent().run(symbol="AAPL")
+    report = RootAgent().run_sync(symbol="AAPL")
     provenance = report["config_provenance"]
     assert provenance["fingerprint"]
     assert "router.yaml" in provenance["files"]
@@ -26,5 +27,5 @@ def test_validate_config_consistency_blocks_live_mode(tmp_path: Path) -> None:
     (tmp_path / "paper_broker.yaml").write_text("paper_broker:\n  slippage_bps: 5\n", encoding="utf-8")
     (tmp_path / "ranking.yaml").write_text("ranking:\n  signal_threshold: 0.5\n", encoding="utf-8")
     (tmp_path / "evolution.yaml").write_text("evolution:\n  enabled: true\n", encoding="utf-8")
-    with pytest.raises(ValueError, match="Dangerous config"):
+    with pytest.raises(RiskGuardrailError, match="Dangerous config"):
         validate_config_consistency(tmp_path)

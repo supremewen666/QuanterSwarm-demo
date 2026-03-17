@@ -5,6 +5,10 @@ from quanter_swarm.leaders.base_leader import BaseLeader
 
 class MeanReversionLeader(BaseLeader):
     name = "mean_reversion"
+    supported_regimes = ("trend_down", "sideways", "risk_off")
+    supported_tasks = ("mean_reversion", "defensive_rotation")
+    cost_hint = "medium"
+    priority = 80
 
     def propose(self, context: dict) -> dict:
         trend = context["features"]["trend"]

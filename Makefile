@@ -1,15 +1,23 @@
-PYTHONPATH=src
+PYTHON ?= .venv/bin/python
+PYTHONPATH ?= src
+MYPY_TARGETS = src/quanter_swarm/orchestrator src/quanter_swarm/decision src/quanter_swarm/execution src/quanter_swarm/api src/quanter_swarm/contracts.py
 
-.PHONY: run api test validate
+.PHONY: api lint run test typecheck validate
 
 run:
-	PYTHONPATH=$(PYTHONPATH) python3 -m quanter_swarm.main
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m quanter_swarm.main
 
 api:
-	PYTHONPATH=$(PYTHONPATH) uvicorn quanter_swarm.api.app:app --reload
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m uvicorn quanter_swarm.api.app:app --reload
+
+lint:
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m ruff check src tests
 
 test:
-	PYTHONPATH=$(PYTHONPATH) pytest
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m pytest
+
+typecheck:
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m mypy $(MYPY_TARGETS)
 
 validate:
-	PYTHONPATH=$(PYTHONPATH) python3 scripts/validate_configs.py
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) scripts/validate_configs.py

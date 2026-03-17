@@ -41,7 +41,7 @@ def run_skill_request(request: dict[str, Any], mode: SkillMode = "normal") -> di
     parsed = ResearchRequestContract.model_validate(request)
     symbols = parsed.symbols or ([parsed.symbol] if parsed.symbol else [])
     symbol = symbols[0]
-    report = RootAgent().run(symbol=symbol, scenario=_scenario_from_mode(mode))
+    report = RootAgent().run_sync(symbol=symbol, scenario=_scenario_from_mode(mode))
     response = SkillResponse(
         symbol=report["symbol"],
         regime=report["active_regime"],

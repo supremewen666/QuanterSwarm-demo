@@ -1,6 +1,6 @@
 """API dependency placeholders."""
 
-from quanter_swarm.settings import Settings
+from quanter_swarm.config.settings import Settings
 
 
 def get_settings() -> Settings:

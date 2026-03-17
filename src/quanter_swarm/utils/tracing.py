@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from uuid import uuid4
+from quanter_swarm.observability.trace import new_trace_id as _new_trace_id
 
 
 def new_trace_id(prefix: str = "trace") -> str:
-    return f"{prefix}_{uuid4().hex}"
+    return _new_trace_id(prefix)

@@ -5,6 +5,10 @@ from quanter_swarm.leaders.base_leader import BaseLeader
 
 class MomentumLeader(BaseLeader):
     name = "momentum"
+    supported_regimes = ("trend_up", "risk_on", "high_vol")
+    supported_tasks = ("trend_following", "breakout_confirmation")
+    cost_hint = "medium"
+    priority = 90
 
     def propose(self, context: dict) -> dict:
         trend = context["features"]["trend"]

@@ -6,6 +6,7 @@ from pathlib import Path
 from time import time
 from typing import Any
 
+from quanter_swarm.errors import BacktestError
 from quanter_swarm.orchestrator.cycle_manager import CycleManager
 from quanter_swarm.storage.file_store import write_json, write_text
 
@@ -99,7 +100,7 @@ class ExperimentRunner:
                 ("correlation_aware", {"allocation_mode": "correlation_aware"}),
             ]
         else:
-            raise ValueError(f"Unsupported experiment_type: {experiment_type}")
+            raise BacktestError(f"Unsupported experiment_type: {experiment_type}")
 
         rows = []
         for name, scenario in scenarios:

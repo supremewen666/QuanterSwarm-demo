@@ -2,6 +2,7 @@ max_active_leaders: 2
 default_mode: research
 default_regime: high_vol
 token_budget: low
+latency_budget: balanced
 confidence_threshold: 0.5
 low_confidence_policy: fallback
 

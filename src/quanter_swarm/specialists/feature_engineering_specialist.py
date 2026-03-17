@@ -5,6 +5,9 @@ from quanter_swarm.specialists.base_specialist import BaseSpecialist
 
 class FeatureEngineeringSpecialist(BaseSpecialist):
     name = "feature_engineering"
+    supported_tasks = ("feature_engineering", "signal_features")
+    cost_hint = "medium"
+    priority = 85
 
     def build(self, packet: dict) -> dict:
         market = packet.get("market_packet", {})
@@ -20,3 +23,6 @@ class FeatureEngineeringSpecialist(BaseSpecialist):
                 "volatility": market.get("volatility", 0.0),
             }
         }
+
+    def execute(self, payload: dict) -> dict:
+        return self.build(payload)

@@ -7,6 +7,7 @@ from time import time
 from typing import Any
 
 from quanter_swarm.backtest.replay_engine import replay_report
+from quanter_swarm.config.defaults import DEFAULT_BACKTEST_WINDOW
 from quanter_swarm.evaluation.metrics import summarize_metrics
 from quanter_swarm.orchestrator.cycle_manager import CycleManager
 from quanter_swarm.storage.file_store import write_json, write_text
@@ -71,7 +72,7 @@ class WalkForwardBacktester:
         self,
         *,
         symbols: list[str],
-        steps: int = 20,
+        steps: int = DEFAULT_BACKTEST_WINDOW["steps"],
         capital: float = 100_000.0,
     ) -> dict[str, Any]:
         manager = CycleManager()
@@ -124,4 +125,3 @@ class WalkForwardBacktester:
         write_json(self.data_dir / f"{backtest_id}.json", payload)
         write_text(str(self.data_dir / f"{backtest_id}.md"), _render_markdown(payload))
         return payload
-

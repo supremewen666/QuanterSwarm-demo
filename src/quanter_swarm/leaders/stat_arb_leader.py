@@ -5,6 +5,10 @@ from quanter_swarm.leaders.base_leader import BaseLeader
 
 class StatArbLeader(BaseLeader):
     name = "stat_arb"
+    supported_regimes = ("sideways", "risk_off", "trend_down")
+    supported_tasks = ("relative_value", "pair_selection")
+    cost_hint = "low"
+    priority = 70
 
     def propose(self, context: dict) -> dict:
         quality = context["features"]["quality"]

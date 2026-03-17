@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from quanter_swarm.contracts import FinalReportContract, ResearchRequestContract
+from quanter_swarm.contracts import CycleReport, ResearchRequestContract
 
 
 class HealthResponse(BaseModel):
@@ -13,7 +13,7 @@ class ResearchRequest(ResearchRequestContract):
     pass
 
 
-class ResearchResponse(FinalReportContract):
+class ResearchResponse(CycleReport):
     regime: str
 
 

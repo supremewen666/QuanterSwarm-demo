@@ -7,7 +7,15 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Any
 
-from quanter_swarm.settings import Settings
+from quanter_swarm.config.defaults import (
+    DEFAULT_BACKTEST_WINDOW,
+    DEFAULT_MAX_SPECIALISTS_PER_CYCLE,
+    DEFAULT_RISK_THRESHOLDS,
+    DEFAULT_SYMBOLS,
+    DEFAULT_TOKEN_BUDGET,
+)
+from quanter_swarm.config.settings import Settings
+from quanter_swarm.errors import DataProviderError, RiskGuardrailError, RouterError
 
 try:
     import yaml
@@ -70,20 +78,35 @@ def load_yaml(path: Path) -> dict[str, Any]:
     else:
         payload = _fallback_yaml_load(text)
     if not isinstance(payload, dict):
-        raise ValueError(f"Config at {path} must be a mapping.")
+        raise DataProviderError(f"Config at {path} must be a mapping.")
     return payload
 
 
 def load_settings() -> Settings:
     config_dir = Path(os.getenv("CONFIG_DIR", "configs"))
     app_config = load_yaml(config_dir / "app.yaml").get("app", {})
-    default_symbols = os.getenv("DEFAULT_SYMBOLS", "AAPL,MSFT,NVDA")
+    configured_symbols = app_config.get("default_symbols", DEFAULT_SYMBOLS)
+    default_symbols_raw = os.getenv(
+        "DEFAULT_SYMBOLS",
+        ",".join(configured_symbols if isinstance(configured_symbols, (list, tuple)) else DEFAULT_SYMBOLS),
+    )
+    configured_risk_thresholds = app_config.get("risk_thresholds", {})
+    configured_backtest_window = app_config.get("backtest_window", {})
     return Settings(
         environment=os.getenv("APP_ENV", app_config.get("environment", "dev")),
         execution_mode=os.getenv("EXECUTION_MODE", app_config.get("execution_mode", "paper")),
         data_dir=Path(os.getenv("DATA_DIR", "data")),
         config_dir=config_dir,
-        default_symbols=[symbol.strip() for symbol in default_symbols.split(",") if symbol.strip()],
+        default_symbols=[symbol.strip() for symbol in default_symbols_raw.split(",") if symbol.strip()],
+        token_budget=os.getenv("TOKEN_BUDGET", app_config.get("token_budget", DEFAULT_TOKEN_BUDGET)),
+        max_specialists_per_cycle=int(
+            os.getenv(
+                "MAX_SPECIALISTS_PER_CYCLE",
+                app_config.get("max_specialists_per_cycle", DEFAULT_MAX_SPECIALISTS_PER_CYCLE),
+            )
+        ),
+        risk_thresholds={**DEFAULT_RISK_THRESHOLDS, **configured_risk_thresholds},
+        backtest_window={**DEFAULT_BACKTEST_WINDOW, **configured_backtest_window},
     )
 
 
@@ -126,7 +149,7 @@ def validate_config_consistency(config_dir: Path) -> None:
 
     default_regime = router.get("default_regime", "sideways")
     if default_regime not in regimes:
-        raise ValueError(f"router.default_regime '{default_regime}' not found in regimes.yaml")
+        raise RouterError(f"router.default_regime '{default_regime}' not found in regimes.yaml")
 
     referenced = {
         leader
@@ -139,15 +162,15 @@ def validate_config_consistency(config_dir: Path) -> None:
     }
     unknown = sorted(referenced - known_leaders)
     if unknown:
-        raise ValueError(f"Unknown leaders referenced by config: {','.join(unknown)}")
+        raise RouterError(f"Unknown leaders referenced by config: {','.join(unknown)}")
 
     if execution.get("mode") == "live" or execution.get("allow_live") is True:
-        raise ValueError("Dangerous config: live execution is not allowed by default.")
+        raise RiskGuardrailError("Dangerous config: live execution is not allowed by default.")
 
     max_single = float(risk.get("max_single_weight", 0.0))
     if not (0.0 < max_single <= 0.35):
-        raise ValueError("risk.max_single_weight must be within (0, 0.35].")
+        raise RiskGuardrailError("risk.max_single_weight must be within (0, 0.35].")
 
     cash_buffer = float(portfolio.get("cash_buffer", 0.0))
     if not (0.0 <= cash_buffer <= 0.9):
-        raise ValueError("portfolio.cash_buffer must be within [0, 0.9].")
+        raise RiskGuardrailError("portfolio.cash_buffer must be within [0, 0.9].")

@@ -1,5 +1,19 @@
-"""Custom exceptions."""
+"""Backward-compatible exception exports."""
 
+from quanter_swarm.errors import (
+    AgentExecutionError,
+    BacktestError,
+    DataProviderError,
+    QuanterSwarmError,
+    RiskGuardrailError,
+    RouterError,
+)
 
-class QuanterSwarmError(Exception):
-    pass
+__all__ = [
+    "AgentExecutionError",
+    "BacktestError",
+    "DataProviderError",
+    "QuanterSwarmError",
+    "RiskGuardrailError",
+    "RouterError",
+]

@@ -34,6 +34,8 @@ def generate_report(payload: dict) -> dict:
         "event_impact_summary": payload["event_impact_summary"],
         "factor_scorecard": scorecard,
         "risk_alerts": risk_summary,
+        "router_decision": payload.get("router_decision", {}),
+        "risk_check": payload.get("risk_check", {}),
         "portfolio_suggestion": payload["portfolio_suggestion"],
         "paper_trade_actions": payload["paper_trade_actions"],
         "evaluation_summary": payload["evaluation_summary"],

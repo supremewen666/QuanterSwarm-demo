@@ -1,6 +1,6 @@
 import pytest
-from pydantic import ValidationError
 
+from quanter_swarm.errors import AgentExecutionError
 from quanter_swarm.orchestrator.cycle_manager import CycleManager
 
 
@@ -11,5 +11,5 @@ class _BrokenLeader:
 
 def test_cycle_fails_when_leader_output_breaks_contract(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("quanter_swarm.orchestrator.cycle_manager.get_leader", lambda name: _BrokenLeader())
-    with pytest.raises(ValidationError):
+    with pytest.raises(AgentExecutionError, match="produced invalid output"):
         CycleManager().run_cycle("AAPL", persist_outputs=False)

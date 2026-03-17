@@ -8,6 +8,8 @@ def test_router_agent_selects_route() -> None:
         {"regimes": {"trend_up": {"leaders": ["momentum", "breakout_event"]}}},
     )
     assert route["leaders"] == ["momentum", "breakout_event"]
+    assert route["leader_selected"] == ["momentum", "breakout_event"]
+    assert route["confidence"] == 1.0
 
 
 def test_router_agent_uses_flat_config_defaults() -> None:
@@ -27,6 +29,7 @@ def test_router_agent_uses_flat_config_defaults() -> None:
     )
     assert route["leaders"] == ["breakout_event"]
     assert route["token_budget"] == "low"
+    assert route["reasons"]["breakout_event"].startswith("fallback_from_")
 
 
 def test_router_agent_applies_low_confidence_policy() -> None:
@@ -49,3 +52,22 @@ def test_router_agent_applies_low_confidence_policy() -> None:
     assert route["leaders"] == ["momentum"]
     assert route["low_confidence_mode"] is True
     assert route["selected_reasons"]["momentum"] == "low_regime_confidence_fallback_leader"
+    assert route["reasons"]["momentum"] == "low_regime_confidence_fallback_leader"
+
+
+def test_router_agent_filters_leaders_by_capability() -> None:
+    route = RouterAgent().route(
+        "trend_down",
+        {"default_regime": "sideways"},
+        {
+            "regimes": {
+                "trend_down": {
+                    "leaders": ["momentum", "mean_reversion"],
+                    "weights": {"momentum": 0.5, "mean_reversion": 0.5},
+                }
+            }
+        },
+    )
+    assert route["leaders"] == ["mean_reversion"]
+    assert route["skipped_reasons"]["momentum"] == "unsupported_regime_capability"
+    assert route["rejected_candidates"]["momentum"] == "unsupported_regime_capability"

@@ -8,6 +8,7 @@ def test_regime_agent_classifies_market_state() -> None:
 def test_regime_agent_returns_detail_with_confidence() -> None:
     detail = RegimeAgent().classify_detail({"avg_change_pct": 0.01, "volatility": 0.03, "macro_risk": 0.4})
     assert detail["label"] in {"trend_up", "sideways", "risk_on", "high_vol"}
+    assert detail["family"] in {"bull", "bear", "sideways", "volatile"}
     assert 0.0 <= detail["confidence"] <= 1.0
     assert "supporting_features" in detail
 
@@ -19,4 +20,5 @@ def test_regime_agent_supports_hysteresis() -> None:
         hysteresis_margin=10.0,
     )
     assert detail["label"] == "risk_off"
+    assert detail["family"] == "bear"
     assert detail["smoothing_applied"] is True

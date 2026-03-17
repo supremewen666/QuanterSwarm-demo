@@ -236,7 +236,11 @@ Core design and policy documents live under `docs/`:
 
 Current capabilities (implemented):
 
-- regime classification with confidence/smoothing and explainable routing
+- regime classification with confidence/smoothing, stable bull/bear/sideways/volatile families, and explainable routing
+- cost-aware routing that constrains specialists with token, latency, and per-cycle caps
+- explicit cycle state taxonomy for traceable orchestration progress
+- cycle manager state handlers with explicit per-state function boundaries
+- structured cycle traces for routing, activated agents, latency, and risk outcomes
 - schema-validated leader/ranked idea/portfolio/paper action/report contracts
 - portfolio construction in simple / volatility-aware / correlation-aware modes
 - paper execution with slippage, partial/delayed/unfilled fills, cost breakdown
@@ -255,23 +259,100 @@ For exact docs-to-code mapping, see `docs/status-matrix.md`.
 1. Create a virtual environment.
 2. Install dependencies.
 3. Copy the example environment file.
-4. Run the test suite.
+4. Run the quality baseline.
 5. Run a local analysis cycle.
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -e ".[dev]"
 cp .env.example .env
-PYTHONPATH=src pytest tests -q
-PYTHONPATH=src python3 scripts/run_local_cycle.py
+make lint
+make test
+make typecheck
+PYTHONPATH=src .venv/bin/python scripts/run_local_cycle.py
 ```
 
 If you want the API locally, run:
 
 ```bash
-PYTHONPATH=src uvicorn quanter_swarm.api.app:app --reload
+make api
 ```
+
+The baseline quality commands are:
+
+- `make lint`
+- `make test`
+- `make typecheck`
+- `make validate`
+
+Runtime defaults now live under `src/quanter_swarm/config/`:
+
+- `defaults.py` defines stable project defaults such as `default_symbols`, `token_budget`, `risk_thresholds`, and `backtest_window`
+- `settings.py` defines the runtime settings object used by orchestration and backtests
+
+Core orchestration schemas now live in `src/quanter_swarm/contracts.py`, including:
+
+- `AgentContext`
+- `AgentResult`
+- `RouterDecision`
+- `PortfolioSuggestion`
+- `RiskCheckResult`
+- `CycleReport`
+
+Typed runtime errors now live in `src/quanter_swarm/errors.py`:
+
+- `RouterError`
+- `AgentExecutionError`
+- `DataProviderError`
+- `RiskGuardrailError`
+- `BacktestError`
+
+The shared agent interface now lives in `src/quanter_swarm/agents/base.py` and standardizes:
+
+- `name`
+- `role`
+- `async run(context) -> AgentResult`
+
+`RootAgent` now exposes:
+
+- `run_sync(...)` for the current synchronous orchestration path
+- `run(...)` for the shared async agent interface
+
+Built-in agent construction is now centralized in `src/quanter_swarm/agents/registry.py`, which provides:
+
+- `register_agent(...)`
+- `get_agent(...)`
+- `get_leader(...)`
+- `get_specialist(...)`
+
+Leaders and specialists now expose capability metadata:
+
+- `supported_regimes`
+- `supported_tasks`
+- `cost_hint`
+- `priority`
+
+Concurrent agent execution now lives in `src/quanter_swarm/orchestrator/agent_executor.py` and provides:
+
+- concurrent batch execution
+- per-agent timeout
+- partial failure handling with structured failure details
+
+Routing logic now lives under `src/quanter_swarm/router/` with:
+
+- `detect_regime(...)`
+- `select_leader(...)`
+- `select_specialists(...)`
+
+Cycle reports now include explicit routing explainability fields:
+
+- `regime`
+- `confidence`
+- `leader_selected`
+- `specialists_selected`
+- `reasons`
+- `rejected_candidates`
 
 ## Experiment and Ablation
 
