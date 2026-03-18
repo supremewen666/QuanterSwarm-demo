@@ -1,0 +1,64 @@
+{
+  "leaders": {
+    "breakout_event": [
+      {
+        "active": true,
+        "parameter_set": {
+          "breakout_window": 10,
+          "confirmation_volume_threshold": 1.1,
+          "event_impact_scaling": 1.0
+        },
+        "parent_version": null,
+        "promotion_reason": "bootstrap_default",
+        "supported_event_clusters": [],
+        "supported_regimes": [],
+        "version": "v1"
+      }
+    ],
+    "mean_reversion": [
+      {
+        "active": true,
+        "parameter_set": {
+          "overshoot_threshold": 0.55,
+          "reversal_window": 5,
+          "stop_distance": 0.04
+        },
+        "parent_version": null,
+        "promotion_reason": "bootstrap_default",
+        "supported_event_clusters": [],
+        "supported_regimes": [],
+        "version": "v1"
+      }
+    ],
+    "momentum": [
+      {
+        "active": true,
+        "parameter_set": {
+          "lookback_window": 20,
+          "trend_strength_scale": 5.0,
+          "volatility_penalty": 0.8
+        },
+        "parent_version": null,
+        "promotion_reason": "bootstrap_default",
+        "supported_event_clusters": [],
+        "supported_regimes": [],
+        "version": "v1"
+      }
+    ],
+    "stat_arb": [
+      {
+        "active": true,
+        "parameter_set": {
+          "max_holding_period": 5,
+          "pair_distance_threshold": 1.25,
+          "volatility_normalization": 1.0
+        },
+        "parent_version": null,
+        "promotion_reason": "bootstrap_default",
+        "supported_event_clusters": [],
+        "supported_regimes": [],
+        "version": "v1"
+      }
+    ]
+  }
+}

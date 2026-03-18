@@ -9,6 +9,7 @@ from quanter_swarm.data.base import BaseDataProvider
 
 class MockDataProvider(BaseDataProvider):
     data_source = "mock"
+    source_type = "mock"
 
     def __init__(
         self,

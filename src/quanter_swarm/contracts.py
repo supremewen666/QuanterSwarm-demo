@@ -15,6 +15,7 @@ class ResearchRequestContract(BaseModel):
     risk_tolerance: Literal["low", "medium", "high"] = "medium"
     output_format: Literal["json", "markdown"] = "json"
     data_freshness_preference: Literal["latest", "cached"] = "latest"
+    data_provider: str | None = None
 
     @model_validator(mode="after")
     def _validate_symbol_payload(self) -> ResearchRequestContract:
@@ -138,6 +139,8 @@ class CycleReport(BaseModel):
     paper_trade_actions: list[PaperTradeActionContract]
     evaluation_summary: dict[str, Any]
     one_page_summary: dict[str, Any]
+    evidence_summary: dict[str, Any] = Field(default_factory=dict)
+    provider_summary: dict[str, Any] = Field(default_factory=dict)
     config_provenance: dict[str, Any] = Field(default_factory=dict)
     decision_trace: dict[str, Any] | None = None
     decision_trace_summary: dict[str, Any]

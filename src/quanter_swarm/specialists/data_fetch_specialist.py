@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from quanter_swarm.data.base import BaseDataProvider, get_default_data_provider
 from quanter_swarm.data.cache import SnapshotCache
-from quanter_swarm.market.snapshot_builder import build_snapshot
+from quanter_swarm.market.snapshot_builder import build_snapshot, build_snapshots
 from quanter_swarm.specialists.base_specialist import BaseSpecialist
 
 
@@ -33,6 +33,25 @@ class DataFetchSpecialist(BaseSpecialist):
         if self.cache is not None:
             self.cache.set_snapshot(cache_key, snapshot)
         return snapshot
+
+    def fetch_many(self, symbols: list[str], use_cache: bool = True) -> dict[str, dict]:
+        snapshots: dict[str, dict] = {}
+        pending: list[str] = []
+        for symbol in [item.upper() for item in symbols]:
+            if use_cache and self.cache is not None:
+                cached = self.cache.get_snapshot(symbol)
+                if cached is not None:
+                    cached["cache_hit"] = True
+                    snapshots[symbol] = cached
+                    continue
+            pending.append(symbol)
+        if pending:
+            fresh = build_snapshots(pending, provider=self.provider)
+            snapshots.update(fresh)
+            if self.cache is not None:
+                for symbol, snapshot in fresh.items():
+                    self.cache.set_snapshot(symbol, snapshot)
+        return {symbol.upper(): snapshots[symbol.upper()] for symbol in symbols}
 
     def execute(self, payload: dict) -> dict:
         return self.fetch(str(payload["symbol"]))

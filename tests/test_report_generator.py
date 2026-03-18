@@ -29,9 +29,31 @@ def test_report_generator_returns_summary() -> None:
                 "reason": "approved",
                 "warnings": [],
             },
-            "portfolio_suggestion": {"positions": [], "mode": "paper"},
+            "portfolio_suggestion": {
+                "positions": [],
+                "mode": "paper",
+                "gross_exposure": 0.0,
+                "cash_buffer": 1.0,
+                "allocation_mode": "simple",
+                "rationale": "demo",
+            },
             "paper_trade_actions": [],
             "decision_trace_summary": {"routing": {"low_confidence_mode": False}},
+            "evidence_summary": {
+                "data_sources": {
+                    "market": {
+                        "source": "polygon",
+                        "available_at": "2026-03-18T09:30:00+00:00",
+                        "reliability_score": 0.96,
+                    }
+                },
+                "evolution": {
+                    "action": "proposal_logged",
+                    "top_posterior_leader": "momentum",
+                    "parameter_version": "v1",
+                    "prior_event_ids": ["evt-1"],
+                },
+            },
             "evaluation_summary": {"signal_count": 1},
         }
     )
@@ -40,3 +62,5 @@ def test_report_generator_returns_summary() -> None:
     assert report["regime_confidence"] == 0.72
     assert report["router_decision"]["regime"] == "trend_up"
     assert "# AAPL Research Cycle" in report["markdown_summary"]
+    assert "## Evidence" in report["markdown_summary"]
+    assert report["evidence_summary"]["evolution"]["top_posterior_leader"] == "momentum"

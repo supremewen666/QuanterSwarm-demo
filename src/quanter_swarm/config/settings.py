@@ -26,3 +26,4 @@ class Settings:
     max_specialists_per_cycle: int = DEFAULT_MAX_SPECIALISTS_PER_CYCLE
     risk_thresholds: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_RISK_THRESHOLDS))
     backtest_window: dict[str, int] = field(default_factory=lambda: dict(DEFAULT_BACKTEST_WINDOW))
+    data_provider: dict = field(default_factory=dict)

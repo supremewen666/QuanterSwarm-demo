@@ -6,16 +6,71 @@ from quanter_swarm.data.base import (
     get_default_data_provider,
 )
 from quanter_swarm.data.cache import FileSnapshotCache, MemorySnapshotCache, SnapshotCache
-from quanter_swarm.data.file_provider import FileDataProvider
 from quanter_swarm.data.mock_provider import MockDataProvider
+from quanter_swarm.data.registry import available_providers, create_provider, register_provider
+
+try:
+    from quanter_swarm.data.live_providers import (
+        AlfredVintageMacroProvider,
+        CompanyIRProvider,
+        CompositeMarketDataProvider,
+        FmpMarketDataProvider,
+        FmpSharesFloatProvider,
+        FredMacroProvider,
+        PolygonMarketDataProvider,
+        SecFilingsProvider,
+        SecXbrlFactsProvider,
+    )
+except ModuleNotFoundError:  # pragma: no cover - exercised in lightweight environments
+    AlfredVintageMacroProvider = None
+    CompanyIRProvider = None
+    FmpMarketDataProvider = None
+    FmpSharesFloatProvider = None
+    FredMacroProvider = None
+    PolygonMarketDataProvider = None
+    SecFilingsProvider = None
+    SecXbrlFactsProvider = None
+
+try:
+    from quanter_swarm.data.file_provider import FileDataProvider
+except ModuleNotFoundError:  # pragma: no cover - exercised in lightweight environments
+    FileDataProvider = None
 
 __all__ = [
     "BaseDataProvider",
     "DeterministicDataProvider",
     "FileSnapshotCache",
-    "FileDataProvider",
     "MemorySnapshotCache",
     "MockDataProvider",
     "SnapshotCache",
+    "available_providers",
+    "create_provider",
     "get_default_data_provider",
+    "register_provider",
 ]
+
+if FileDataProvider is not None:
+    __all__.append("FileDataProvider")
+
+if PolygonMarketDataProvider is not None:
+    __all__.extend(
+        [
+            "FredMacroProvider",
+            "FmpMarketDataProvider",
+            "FmpSharesFloatProvider",
+            "PolygonMarketDataProvider",
+            "SecFilingsProvider",
+            "SecXbrlFactsProvider",
+            "CompanyIRProvider",
+            "AlfredVintageMacroProvider",
+            "CompositeMarketDataProvider",
+        ]
+    )
+    register_provider("polygon_market_data", PolygonMarketDataProvider)
+    register_provider("fmp_market_data", FmpMarketDataProvider)
+    register_provider("sec_filings", SecFilingsProvider)
+    register_provider("sec_xbrl_facts", SecXbrlFactsProvider)
+    register_provider("company_ir", CompanyIRProvider)
+    register_provider("fmp_shares_float", FmpSharesFloatProvider)
+    register_provider("fred_macro", FredMacroProvider)
+    register_provider("alfred_vintage_macro", AlfredVintageMacroProvider)

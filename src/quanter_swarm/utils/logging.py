@@ -7,7 +7,10 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:  # pragma: no cover - exercised in lightweight environments
+    yaml = None
 
 _STRUCTURED_FIELDS = ("trace_id", "cycle_state", "agent_name", "latency", "status")
 
@@ -27,7 +30,7 @@ class JsonFormatter(logging.Formatter):
 def configure_logging(config_path: Path | str = "configs/logging.yaml") -> None:
     path = Path(config_path)
     config = {}
-    if path.exists():
+    if path.exists() and yaml is not None:
         config = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     logging_config = config.get("logging", {})
     level_name = str(logging_config.get("level", "INFO")).upper()

@@ -2,3 +2,36 @@ app:
   name: QuanterSwarm
   environment: dev
   execution_mode: paper
+  data_provider:
+    provider: deterministic
+    # Example composite wiring:
+    # provider: composite
+    # market_provider: polygon_market_data
+    # market_provider_kwargs:
+    #   api_key: ${POLYGON_API_KEY}
+    # auxiliary_providers:
+    #   filings:
+    #     enabled: true
+    #     provider: sec_filings
+    #     provider_kwargs:
+    #       user_agent: "QuanterSwarm research@example.com"
+    #   xbrl:
+    #     enabled: true
+    #     provider: sec_xbrl_facts
+    #     provider_kwargs:
+    #       user_agent: "QuanterSwarm research@example.com"
+    #   shares_float:
+    #     enabled: true
+    #     provider: fmp_shares_float
+    #     provider_kwargs:
+    #       api_key: ${FMP_API_KEY}
+    #   macro:
+    #     enabled: true
+    #     provider: fred_macro
+    #     provider_kwargs:
+    #       api_key: ${FRED_API_KEY}
+    #   macro_vintages:
+    #     enabled: true
+    #     provider: alfred_vintage_macro
+    #     provider_kwargs:
+    #       api_key: ${FRED_API_KEY}

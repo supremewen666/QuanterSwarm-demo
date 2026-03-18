@@ -3,6 +3,7 @@ from quanter_swarm.data.base import (
     DeterministicDataProvider,
     get_default_data_provider,
 )
+from quanter_swarm.data.reliability import compute_source_reliability
 from quanter_swarm.specialists.data_fetch_specialist import DataFetchSpecialist
 
 
@@ -27,3 +28,32 @@ def test_data_fetch_specialist_uses_provider_contract() -> None:
     assert snapshot["data_source"] == "deterministic_local"
     assert snapshot["timestamp"].endswith("+00:00")
     assert len(snapshot["snapshot_hash"]) == 64
+    assert snapshot["available_at"]
+    assert snapshot["reliability_score"] > 0
+    assert snapshot["market_packet"]["available_at"]
+    assert snapshot["fundamentals_packet"]["available_at"]
+    assert snapshot["macro_inputs"]["available_at"]
+    assert snapshot["evidence"]["market"]["reliability_score"] > 0
+
+
+def test_data_fetch_specialist_fetch_many_uses_batch_contract() -> None:
+    specialist = DataFetchSpecialist(provider=DeterministicDataProvider())
+    snapshots = specialist.fetch_many(["AAPL", "MSFT"])
+    assert set(snapshots) == {"AAPL", "MSFT"}
+    assert all(payload["market_packet"]["symbol"] in {"AAPL", "MSFT"} for payload in snapshots.values())
+    assert all("shares_float_packet" in payload for payload in snapshots.values())
+
+
+def test_compute_source_reliability_returns_breakdown() -> None:
+    result = compute_source_reliability(
+        {
+            "as_of_ts": 1_773_000_000,
+            "available_at": "2026-03-16T12:30:00+00:00",
+            "source": "deterministic_macro",
+            "source_type": "official",
+            "record_id": "macro-1",
+            "quality_flags": ["xbrl_normalized"],
+        }
+    )
+    assert result["reliability_score"] > 0.5
+    assert result["authority_score"] >= result["consistency_score"] - 0.2

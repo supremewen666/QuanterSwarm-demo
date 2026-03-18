@@ -24,6 +24,7 @@ def emit_replay_events(report: dict[str, Any], capital: float) -> list[dict[str,
     actions = report.get("paper_trade_actions", [])
     events: list[dict[str, Any]] = [
         MarketEvent(symbol=symbol, trace_id=trace_id, payload=market_summary).model_dump(),
+        MarketEvent(symbol=symbol, trace_id=trace_id, payload=report.get("evidence_summary", {})).model_dump(),
         SignalEvent(symbol=symbol, trace_id=trace_id, payload=top_signal).model_dump(),
         PortfolioUpdateEvent(
             symbol=symbol,

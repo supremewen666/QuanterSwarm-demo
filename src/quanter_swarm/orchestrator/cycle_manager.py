@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from statistics import mean
 from time import time
 from typing import TYPE_CHECKING, Any, cast
@@ -23,8 +24,10 @@ from quanter_swarm.decision.order_sizer import size_order
 from quanter_swarm.decision.portfolio_suggestion import build_portfolio
 from quanter_swarm.decision.risk_guardrail import assess_guardrails
 from quanter_swarm.errors import AgentExecutionError
+from quanter_swarm.evolution import EvolutionManager
 from quanter_swarm.evaluation.metrics import summarize_metrics
 from quanter_swarm.execution.paper_executor import execute
+from quanter_swarm.data.provider_factory import build_provider_from_config, describe_provider_config
 from quanter_swarm.market.data_quality import validate_snapshot
 from quanter_swarm.observability.metrics import build_cycle_metrics
 from quanter_swarm.observability.trace import build_cycle_trace, new_trace_id
@@ -65,7 +68,7 @@ if TYPE_CHECKING:
 
 
 class CycleManager:
-    def __init__(self) -> None:
+    def __init__(self, provider_override: dict[str, Any] | None = None) -> None:
         self.settings = load_settings()
         validate_config_consistency(self.settings.config_dir)
         self.router_config = load_yaml(self.settings.config_dir / "router.yaml")
@@ -76,6 +79,10 @@ class CycleManager:
         self.evolution_config = load_yaml(self.settings.config_dir / "evolution.yaml")
         self.config_snapshot = config_provenance(load_runtime_configs(self.settings.config_dir))
         self._last_regime: str | None = None
+        self.evolution_manager = EvolutionManager(root=self.settings.data_dir / "evolution", config=self.evolution_config)
+        self.provider_config = provider_override or self.settings.data_provider
+        self.data_provider = build_provider_from_config(self.provider_config)
+        self.provider_summary = describe_provider_config(self.provider_config, self.data_provider)
 
     @staticmethod
     def _serialize_stage_records(stage_records: list[StageRecord]) -> list[dict[str, Any]]:
@@ -203,6 +210,8 @@ class CycleManager:
                 },
             },
             "config_provenance": self.config_snapshot,
+            "evidence_summary": {},
+            "provider_summary": self.provider_summary,
             "evaluation_summary": {
                 "top_signal": None,
                 "signal_count": 0,
@@ -253,7 +262,9 @@ class CycleManager:
         stage_records = cast(list[StageRecord], context["stage_records"])
 
         data_fetch = cast("DataFetchSpecialist", get_specialist("data_fetch"))
-        fetched = data_fetch.fetch(target_symbol)
+        data_fetch.provider = self.data_provider
+        prefetched = cast(dict[str, Any] | None, context.get("prefetched_snapshots"))
+        fetched = prefetched.get(target_symbol, {}) if prefetched else data_fetch.fetch(target_symbol)
         self._log_cycle_event(
             trace_id=trace_id,
             cycle_state=CycleState.DATA_FETCH.value,
@@ -310,6 +321,12 @@ class CycleManager:
         run_started = float(context["run_started"])
         market_packet = fetched["market_packet"]
         macro_inputs = fetched["macro_inputs"]
+        vintage_macro_packet = fetched.get("vintage_macro_packet", [])
+        latest_vintage = vintage_macro_packet[-1] if vintage_macro_packet else {}
+        macro_release_lag_days = 0.0
+        if latest_vintage.get("available_at"):
+            available_at = datetime.fromisoformat(str(latest_vintage["available_at"]).replace("Z", "+00:00"))
+            macro_release_lag_days = max(0.0, (fetched["as_of_ts"] - int(available_at.timestamp())) / 86_400)
         market_state = {
             "avg_change_pct": market_packet["change_pct"],
             "volatility": market_packet["volatility"],
@@ -319,6 +336,8 @@ class CycleManager:
             "correlation": min(1.0, 0.3 + market_packet["volatility"] * 8),
             "dispersion": min(1.0, market_packet["volatility"] * 10),
             "event_density": 0.7 if macro_inputs["macro_theme"] == "policy_uncertainty" else 0.3,
+            "macro_release_lag_days": macro_release_lag_days,
+            "macro_vintage_available": 1.0 if vintage_macro_packet else 0.0,
         }
         regime_agent = cast("RegimeAgent", get_agent("regime"))
         regime_decision = regime_agent.classify_detail(market_state, previous_regime=self._last_regime)
@@ -507,6 +526,17 @@ class CycleManager:
             "event_impact": event_signal,
             "compressed_context": compressed["summary"],
         }
+        event_payload = {
+            "event_id": f"{target_symbol}-{int(run_started)}",
+            "symbol": target_symbol,
+            "event_type": cast(dict[str, Any], event_signal.get("event", {})).get("event_type", "macro"),
+            "impact": event_signal.get("impact", "neutral"),
+            "regime": str(context["regime"]),
+            "macro_risk": macro_inputs.get("macro_risk"),
+            "trend": features.get("trend"),
+            "volatility": features.get("volatility"),
+        }
+        weak_priors = self.evolution_manager.build_priors(event_payload)
         risk_specialist = cast("RiskSpecialist", get_specialist("risk"))
         risk_report = risk_specialist.assess(
             {
@@ -526,7 +556,13 @@ class CycleManager:
         signals = []
         for name in route["leaders"]:
             leader = cast("BaseLeader", get_leader(name))
-            proposal = leader.propose(leader_context)
+            active_parameters = self.evolution_manager.get_active_parameters(
+                name,
+                regime=str(context["regime"]),
+                event_cluster=event_payload["event_type"],
+            )
+            prior_payload = weak_priors.get(name, {})
+            proposal = leader.propose({**leader_context, "params": active_parameters.get("parameter_set", {})})
             try:
                 LeaderOutputContract.model_validate(proposal)
             except ValidationError as exc:
@@ -540,6 +576,21 @@ class CycleManager:
             proposal["volatility"] = features["volatility"]
             proposal["correlation"] = market_state["correlation"]
             proposal["event_risk"] = market_state["event_density"]
+            proposal["parameter_version"] = active_parameters.get("version", "v1")
+            proposal["parameter_set"] = active_parameters.get("parameter_set", {})
+            proposal["prior_score"] = float(prior_payload.get("prior_score", 0.0))
+            proposal["prior_sample_count"] = int(prior_payload.get("sample_count", 0))
+            proposal["prior_confidence"] = float(prior_payload.get("confidence", 0.0))
+            proposal["prior_event_ids"] = list(prior_payload.get("source_event_ids", []))
+            proposal["cost_penalty"] = {
+                "low": 0.02,
+                "medium": 0.05,
+                "high": 0.08,
+            }.get(str(getattr(leader, "cost_hint", "medium")), 0.05)
+            proposal["posterior_score"] = round(
+                proposal["score"] + proposal["prior_score"] - proposal["risk_penalty"] - proposal["cost_penalty"],
+                4,
+            )
             proposal["confidence"] = min(
                 1.0,
                 max(
@@ -595,6 +646,8 @@ class CycleManager:
         context["sentiment_score"] = sentiment_score
         context["risk_report"] = risk_report
         context["event_signal"] = event_signal
+        context["event_payload"] = event_payload
+        context["weak_priors"] = weak_priors
         context["event_impact"] = event_impact
         context["parsed_fundamentals"] = parsed_fundamentals
         context["features"] = features
@@ -846,9 +899,12 @@ class CycleManager:
         ]
         metrics = summarize_metrics(simulated_returns)
         evolution_enabled = self.evolution_config.get("evolution", {}).get("enabled", True)
-        evolution_agent = cast("EvolutionAgent", get_agent("evolution"))
         evolution_summary = (
-            evolution_agent.evolve(ranked_signals, threshold)
+            self.evolution_manager.evolve(
+                ranked_signals,
+                current_threshold=threshold,
+                event_payload=cast(dict[str, Any], context["event_payload"]),
+            )
             if evolution_enabled
             else {"threshold": threshold, "action": "disabled"}
         )
@@ -872,6 +928,7 @@ class CycleManager:
                 "change_pct": market_packet["change_pct"],
                 "volatility": market_packet["volatility"],
                 "data_quality": data_quality,
+                "macro_vintage_count": len(cast(dict[str, Any], context["fetched"]).get("vintage_macro_packet", [])),
             },
             "fundamentals_summary": parsed_fundamentals,
             "sentiment_summary": {
@@ -883,6 +940,18 @@ class CycleManager:
             "risk_alerts": risk_report["warnings"],
             "portfolio_suggestion": portfolio,
             "paper_trade_actions": paper_trade_actions,
+            "evidence_summary": {
+                "data_sources": cast(dict[str, Any], context["fetched"]).get("evidence", {}),
+                "quality_flags": cast(dict[str, Any], context["fetched"]).get("quality_flags", []),
+                "reliability_score": cast(dict[str, Any], context["fetched"]).get("reliability_score", 0.0),
+                "evolution": {
+                    "action": evolution_summary.get("action"),
+                    "top_posterior_leader": evolution_summary.get("top_posterior_leader"),
+                    "parameter_version": ranked_signals[0].get("parameter_version") if ranked_signals else "n/a",
+                    "prior_event_ids": ranked_signals[0].get("prior_event_ids", []) if ranked_signals else [],
+                },
+            },
+            "provider_summary": self.provider_summary,
             "router_decision": {
                 "regime": route["regime"],
                 "confidence": route["confidence"],
@@ -938,6 +1007,9 @@ class CycleManager:
                     {
                         "leader": signal["leader"],
                         "score": signal["score"],
+                        "posterior_score": signal.get("posterior_score", signal["score"]),
+                        "prior_score": signal.get("prior_score", 0.0),
+                        "parameter_version": signal.get("parameter_version", "v1"),
                         "rank_score": signal.get("composite_rank_score", 0.0),
                         "risk_penalty": signal.get("risk_penalty", 0.0),
                     }
@@ -1035,3 +1107,41 @@ class CycleManager:
         if short_circuit is not None:
             return short_circuit
         return self._state_report_generation(context, persist_outputs)
+
+    def run_cycle_batch(
+        self,
+        symbols: list[str],
+        scenario: dict[str, Any] | None = None,
+        persist_outputs: bool = True,
+    ) -> list[dict[str, Any]]:
+        normalized = [symbol.upper() for symbol in symbols]
+        data_fetch = cast("DataFetchSpecialist", get_specialist("data_fetch"))
+        data_fetch.provider = self.data_provider
+        prefetched = data_fetch.fetch_many(normalized)
+        results: list[dict[str, Any]] = []
+        for symbol in normalized:
+            context: dict[str, Any] = {
+                "scenario": scenario or {},
+                "started_at": int(time()),
+                "run_started": time(),
+                "trace_id": new_trace_id("cycle"),
+                "stage_records": [],
+                "state_latencies": {},
+                "target_symbol": symbol,
+                "state_sequence": [CycleState.INIT.value],
+                "prefetched_snapshots": prefetched,
+            }
+            short_circuit = self._state_data_fetch(context)
+            if short_circuit is not None:
+                results.append(short_circuit)
+                continue
+            self._state_regime_detect(context)
+            self._state_routing(context)
+            self._state_agent_execution(context)
+            self._state_risk_check(context)
+            short_circuit = self._state_portfolio_build(context)
+            if short_circuit is not None:
+                results.append(short_circuit)
+                continue
+            results.append(self._state_report_generation(context, persist_outputs))
+        return results

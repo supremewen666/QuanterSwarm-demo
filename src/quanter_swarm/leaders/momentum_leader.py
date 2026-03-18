@@ -12,5 +12,9 @@ class MomentumLeader(BaseLeader):
 
     def propose(self, context: dict) -> dict:
         trend = context["features"]["trend"]
-        score = round(max(0.0, min(1.0, 0.5 + trend * 5)), 2)
+        params = context.get("params", {})
+        trend_strength_scale = float(params.get("trend_strength_scale", 5.0))
+        volatility_penalty = float(params.get("volatility_penalty", 0.8))
+        volatility = float(context["features"].get("volatility", 0.0))
+        score = round(max(0.0, min(1.0, 0.5 + trend * trend_strength_scale - volatility * volatility_penalty)), 2)
         return {"leader": self.name, "symbol": context["symbol"], "score": score, "thesis": "trend_continuation"}

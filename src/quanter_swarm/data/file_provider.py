@@ -5,7 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-import pandas as pd
+try:
+    import pandas as pd
+except ModuleNotFoundError:  # pragma: no cover - exercised in lightweight environments
+    pd = None
 
 from quanter_swarm.data.base import BaseDataProvider
 from quanter_swarm.errors import DataProviderError
@@ -15,6 +18,7 @@ class FileDataProvider(BaseDataProvider):
     def __init__(self, root: str | Path) -> None:
         self.root = Path(root)
         self.data_source = f"file:{self.root}"
+        self.source_type = "file"
 
     def get_price_history(self, symbol: str, lookback: int = 5) -> list[dict[str, Any]]:
         frame = self._load_frame("price_history", symbol)
@@ -34,6 +38,8 @@ class FileDataProvider(BaseDataProvider):
         return [self._normalize_record(symbol, row) for row in rows]
 
     def _load_frame(self, dataset: str, symbol: str) -> pd.DataFrame:
+        if pd is None:
+            raise DataProviderError("FileDataProvider requires pandas to read CSV/parquet datasets.")
         symbol_upper = symbol.upper()
         csv_path = self.root / f"{dataset}_{symbol_upper}.csv"
         parquet_path = self.root / f"{dataset}_{symbol_upper}.parquet"

@@ -1,0 +1,67 @@
+"""Provider construction from app config and request overrides."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from quanter_swarm.data import create_provider
+from quanter_swarm.data.base import BaseDataProvider, DeterministicDataProvider
+from quanter_swarm.errors import DataProviderError
+
+
+def build_provider_from_config(config: dict[str, Any] | None) -> BaseDataProvider:
+    payload = dict(config or {})
+    provider_name = str(payload.get("provider", "deterministic")).strip().lower()
+    if provider_name in {"", "deterministic", "default"}:
+        return DeterministicDataProvider()
+    if provider_name in {"polygon_market_data", "fmp_market_data", "file"}:
+        kwargs = dict(payload.get("provider_kwargs", {}))
+        return create_provider(provider_name, **kwargs)
+    if provider_name == "composite":
+        from quanter_swarm.data import CompositeMarketDataProvider
+
+        market_name = str(payload.get("market_provider", "deterministic")).strip().lower()
+        market_kwargs = dict(payload.get("market_provider_kwargs", {}))
+        market_provider = (
+            DeterministicDataProvider()
+            if market_name in {"", "deterministic", "default"}
+            else create_provider(market_name, **market_kwargs)
+        )
+        auxiliary = payload.get("auxiliary_providers", {})
+
+        def _maybe(name: str):
+            item = auxiliary.get(name)
+            if not item or not item.get("enabled", False):
+                return None
+            provider = str(item.get("provider", "")).strip().lower()
+            if not provider:
+                return None
+            return create_provider(provider, **dict(item.get("provider_kwargs", {})))
+
+        return CompositeMarketDataProvider(
+            market_provider=market_provider,
+            filings_provider=_maybe("filings"),
+            xbrl_provider=_maybe("xbrl"),
+            shares_float_provider=_maybe("shares_float"),
+            macro_provider=_maybe("macro"),
+            vintage_macro_provider=_maybe("macro_vintages"),
+        )
+    raise DataProviderError(f"Unsupported configured data provider '{provider_name}'.")
+
+
+def describe_provider_config(config: dict[str, Any] | None, provider: BaseDataProvider | None = None) -> dict[str, Any]:
+    payload = dict(config or {})
+    summary = {
+        "provider": payload.get("provider", getattr(provider, "data_source", "deterministic")),
+        "provider_type": getattr(provider, "source_type", "derived") if provider is not None else "derived",
+    }
+    if payload.get("provider") == "composite":
+        summary["market_provider"] = payload.get("market_provider", "deterministic")
+        summary["auxiliary_providers"] = {
+            name: {
+                "enabled": bool(item.get("enabled", False)),
+                "provider": item.get("provider"),
+            }
+            for name, item in dict(payload.get("auxiliary_providers", {})).items()
+        }
+    return summary

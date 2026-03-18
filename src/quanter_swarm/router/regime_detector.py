@@ -36,6 +36,8 @@ def detect_regime(
     correlation = float(market_state.get("correlation", 0.5))
     volume_anomaly = float(market_state.get("volume_anomaly", 0.0))
     event_density = float(market_state.get("event_density", 0.0))
+    macro_release_lag_days = float(market_state.get("macro_release_lag_days", 0.0))
+    macro_vintage_available = float(market_state.get("macro_vintage_available", 0.0))
     trend_strength = abs(avg_change)
 
     candidates: dict[str, float] = {
@@ -50,11 +52,13 @@ def detect_regime(
         "risk_off": 0.4 * macro_risk
         + 0.2 * min(1.0, max(0.0, -avg_change) / 0.03)
         + 0.2 * correlation
-        + 0.2 * (1.0 - breadth),
+        + 0.2 * (1.0 - breadth)
+        + 0.05 * min(1.0, macro_release_lag_days / 30),
         "trend_up": 0.45 * min(1.0, max(0.0, avg_change) / 0.03)
         + 0.2 * trend_strength
         + 0.2 * breadth
-        + 0.15 * (1.0 - macro_risk),
+        + 0.15 * (1.0 - macro_risk)
+        + 0.05 * macro_vintage_available,
         "trend_down": 0.45 * min(1.0, max(0.0, -avg_change) / 0.03)
         + 0.2 * trend_strength
         + 0.2 * (1.0 - breadth)
@@ -111,6 +115,8 @@ def detect_regime(
             "volume_anomaly": round(volume_anomaly, 4),
             "event_density": round(event_density, 4),
             "macro_risk": round(macro_risk, 4),
+            "macro_release_lag_days": round(macro_release_lag_days, 4),
+            "macro_vintage_available": round(macro_vintage_available, 4),
         },
         "alternatives": [
             {"label": label, "score": round(score, 4), "family": regime_family_for(label)}

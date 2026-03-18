@@ -11,6 +11,7 @@ def validate_snapshot(snapshot: dict, staleness_sec: int = 3600) -> dict:
     as_of_ts = int(snapshot.get("as_of_ts", 0))
     market_packet = snapshot.get("market_packet", {})
     fundamentals_packet = snapshot.get("fundamentals_packet", {})
+    available_at = snapshot.get("available_at")
 
     if not symbol:
         issues.append("missing_symbol")
@@ -26,8 +27,11 @@ def validate_snapshot(snapshot: dict, staleness_sec: int = 3600) -> dict:
         issues.append("price_outlier")
     if len(snapshot.get("news_inputs", [])) == 0:
         issues.append("missing_news")
+    if not available_at:
+        issues.append("missing_available_at")
     return {
         "ok": len(issues) == 0,
         "issues": issues,
         "freshness_sec": max(0, int(time()) - as_of_ts) if as_of_ts else None,
+        "strict_backtest_eligible": available_at is not None and "missing_available_at" not in issues,
     }

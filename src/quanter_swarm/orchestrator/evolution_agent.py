@@ -1,28 +1,40 @@
-"""Bounded evolution updates."""
+"""Bounded evolution wrapper over the persistent evolution manager."""
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from quanter_swarm.agents.base import BaseAgent
 from quanter_swarm.contracts import AgentContext, AgentResult
+from quanter_swarm.evolution import EvolutionManager
 
 
 class EvolutionAgent(BaseAgent):
     name = "evolution"
     role = "orchestrator"
-    def evolve(self, ranked_signals: list[dict], current_threshold: float = 0.5) -> dict:
-        if not ranked_signals:
-            return {"threshold": current_threshold, "action": "hold"}
 
-        leader_score = ranked_signals[0].get("composite_rank_score", 0.0)
-        if leader_score > 0.65:
-            return {"threshold": round(max(0.45, current_threshold - 0.02), 4), "action": "slightly_loosen"}
-        if leader_score < 0.45:
-            return {"threshold": round(min(0.6, current_threshold + 0.02), 4), "action": "slightly_tighten"}
-        return {"threshold": current_threshold, "action": "hold"}
+    def __init__(self, *, manager: EvolutionManager | None = None, root: Path | None = None, config: dict[str, Any] | None = None) -> None:
+        self.manager = manager or EvolutionManager(root=root or Path("data") / "evolution", config=config or {})
+
+    def evolve(
+        self,
+        ranked_signals: list[dict],
+        current_threshold: float = 0.5,
+        *,
+        event_payload: dict[str, Any] | None = None,
+    ) -> dict:
+        return self.manager.evolve(
+            ranked_signals,
+            current_threshold=current_threshold,
+            event_payload=event_payload,
+        )
 
     async def run(self, context: AgentContext | dict[str, Any]) -> AgentResult:
         payload = self._context_to_dict(context)
-        result = self.evolve(payload.get("ranked_signals", []), float(payload.get("current_threshold", 0.5)))
+        result = self.evolve(
+            payload.get("ranked_signals", []),
+            float(payload.get("current_threshold", 0.5)),
+            event_payload=payload.get("event_payload"),
+        )
         return self._build_result(summary=str(result["action"]), payload=result)

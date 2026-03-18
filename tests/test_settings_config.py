@@ -23,6 +23,7 @@ def test_load_settings_uses_centralized_defaults(monkeypatch) -> None:
     assert settings.max_specialists_per_cycle == DEFAULT_MAX_SPECIALISTS_PER_CYCLE
     assert settings.risk_thresholds == DEFAULT_RISK_THRESHOLDS
     assert settings.backtest_window == DEFAULT_BACKTEST_WINDOW
+    assert settings.data_provider["provider"] == "deterministic"
 
 
 def test_load_settings_merges_yaml_and_env_overrides(tmp_path: Path, monkeypatch) -> None:
@@ -38,6 +39,8 @@ def test_load_settings_merges_yaml_and_env_overrides(tmp_path: Path, monkeypatch
                 "    max_risk_penalty: 0.4",
                 "  backtest_window:",
                 "    steps: 12",
+                "  data_provider:",
+                "    provider: deterministic",
             ]
         ),
         encoding="utf-8",
@@ -56,3 +59,4 @@ def test_load_settings_merges_yaml_and_env_overrides(tmp_path: Path, monkeypatch
     assert settings.risk_thresholds["event_window_density"] == DEFAULT_RISK_THRESHOLDS["event_window_density"]
     assert settings.backtest_window["steps"] == 12
     assert settings.backtest_window["train_window"] == DEFAULT_BACKTEST_WINDOW["train_window"]
+    assert settings.data_provider["provider"] == "deterministic"

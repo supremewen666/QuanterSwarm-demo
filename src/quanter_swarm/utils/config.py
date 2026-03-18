@@ -37,9 +37,10 @@ def _coerce_scalar(raw: str) -> Any:
 
 def _fallback_yaml_load(text: str) -> dict[str, Any]:
     root: dict[str, Any] = {}
-    stack: list[tuple[int, dict[str, Any]]] = [(-1, root)]
+    stack: list[tuple[int, Any]] = [(-1, root)]
+    lines = text.splitlines()
 
-    for line in text.splitlines():
+    for index, line in enumerate(lines):
         stripped = line.strip()
         if not stripped or stripped.startswith("#"):
             continue
@@ -49,6 +50,11 @@ def _fallback_yaml_load(text: str) -> dict[str, Any]:
             stack.pop()
 
         current = stack[-1][1]
+        if stripped.startswith("- "):
+            if not isinstance(current, list):
+                raise DataProviderError("Invalid fallback YAML list structure.")
+            current.append(_coerce_scalar(stripped[2:]))
+            continue
         key, _, remainder = stripped.partition(":")
         key = key.strip()
         remainder = remainder.strip()
@@ -62,7 +68,13 @@ def _fallback_yaml_load(text: str) -> dict[str, Any]:
             current[key] = _coerce_scalar(remainder)
             continue
 
-        current[key] = {}
+        next_meaningful = ""
+        for candidate in lines[index + 1 :]:
+            probe = candidate.strip()
+            if probe and not probe.startswith("#"):
+                next_meaningful = probe
+                break
+        current[key] = [] if next_meaningful.startswith("- ") else {}
         stack.append((indent, current[key]))
 
     return root
@@ -107,6 +119,7 @@ def load_settings() -> Settings:
         ),
         risk_thresholds={**DEFAULT_RISK_THRESHOLDS, **configured_risk_thresholds},
         backtest_window={**DEFAULT_BACKTEST_WINDOW, **configured_backtest_window},
+        data_provider=dict(app_config.get("data_provider", {})),
     )
 
 

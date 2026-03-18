@@ -31,7 +31,33 @@ def render_markdown_report(report: dict) -> str:
     warnings = "\n".join(f"- {warning}" for warning in risk_alerts.get("warnings", [])) or "- Clear"
     trace = report.get("decision_trace_summary", {})
     config_info = report.get("config_provenance", {})
+    evidence = report.get("evidence_summary", {})
+    provider_summary = report.get("provider_summary", {})
     rejected = trace.get("rejected_candidates", [])
+    evidence_lines = []
+    for name, payload in evidence.get("data_sources", {}).items():
+        if isinstance(payload, list):
+            for item in payload[:3]:
+                evidence_lines.append(
+                    f"- {name}: `{item.get('source', 'unknown')}` available `{item.get('available_at', 'n/a')}` reliability `{item.get('reliability_score', 'n/a')}`"
+                )
+        elif isinstance(payload, dict):
+            evidence_lines.append(
+                f"- {name}: `{payload.get('source', 'unknown')}` available `{payload.get('available_at', 'n/a')}` reliability `{payload.get('reliability_score', 'n/a')}`"
+            )
+        else:
+            evidence_lines.append(
+                f"- {name}: `{payload}`"
+            )
+    evolution_lines = []
+    evolution = evidence.get("evolution", {})
+    if evolution:
+        evolution_lines = [
+            f"- Prior-supported leader: `{evolution.get('top_posterior_leader', 'n/a')}`",
+            f"- Parameter version: `{evolution.get('parameter_version', 'n/a')}`",
+            f"- Evolution action: `{evolution.get('action', 'n/a')}`",
+            f"- Prior events: {', '.join(evolution.get('prior_event_ids', [])) or 'none'}",
+        ]
     return "\n".join(
         [
             f"# {report['symbol']} Research Cycle",
@@ -61,6 +87,15 @@ def render_markdown_report(report: dict) -> str:
             "",
             "## One-Page Summary",
             highlights,
+            "",
+            "## Evidence",
+            *(evidence_lines or ["- No evidence metadata"]),
+            "",
+            "## Provider Topology",
+            f"- Primary provider: `{provider_summary.get('provider', 'n/a')}`",
+            f"- Provider type: `{provider_summary.get('provider_type', 'n/a')}`",
+            *( [f"- Market provider: `{provider_summary.get('market_provider', 'n/a')}`"] if provider_summary.get("market_provider") else []),
+            *(["", "## Evolution Evidence", *evolution_lines] if evolution_lines else []),
             "",
             "## Evaluation",
             f"- Signal count: {evaluation.get('signal_count')}",

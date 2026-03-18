@@ -40,6 +40,8 @@ def generate_report(payload: dict) -> dict:
         "paper_trade_actions": payload["paper_trade_actions"],
         "evaluation_summary": payload["evaluation_summary"],
         "one_page_summary": one_page,
+        "evidence_summary": payload.get("evidence_summary", {}),
+        "provider_summary": payload.get("provider_summary", {}),
         "config_provenance": payload.get("config_provenance", {}),
         "decision_trace": payload.get("decision_trace_summary", {}),
         "decision_trace_summary": payload.get("decision_trace_summary", {}),
@@ -56,7 +58,10 @@ def generate_report(payload: dict) -> dict:
                 "paper_trade_actions": payload["paper_trade_actions"],
                 "evaluation_summary": payload["evaluation_summary"],
                 "one_page_summary": one_page,
+                "evidence_summary": payload.get("evidence_summary", {}),
+                "provider_summary": payload.get("provider_summary", {}),
                 "decision_trace_summary": payload.get("decision_trace_summary", {}),
+                "config_provenance": payload.get("config_provenance", {}),
             }
         ),
     }

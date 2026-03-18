@@ -13,5 +13,8 @@ class StatArbLeader(BaseLeader):
     def propose(self, context: dict) -> dict:
         quality = context["features"]["quality"]
         volatility = context["features"]["volatility"]
-        score = round(max(0.0, min(1.0, 0.4 + quality * 0.1 - volatility)), 2)
+        params = context.get("params", {})
+        normalization = float(params.get("volatility_normalization", 1.0))
+        distance_threshold = float(params.get("pair_distance_threshold", 1.25))
+        score = round(max(0.0, min(1.0, 0.4 + quality * 0.1 * distance_threshold - volatility * normalization)), 2)
         return {"leader": self.name, "symbol": context["symbol"], "score": score, "thesis": "relative_value"}
