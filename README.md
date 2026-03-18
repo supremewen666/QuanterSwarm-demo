@@ -1,10 +1,10 @@
 # QuanterSwarm
 
-An architecture-first multi-agent equity research and paper-trading system.
+An architecture-driven multi-agent research system for equities, built to be both a standalone paper-trading platform and a packageable OpenClaw skill.
 
-QuanterSwarm routes market context into a bounded swarm of specialists and strategy leaders, builds point-in-time snapshots, scores ideas with weak priors, applies risk guardrails, and produces structured research reports and paper-trade actions.
+QuanterSwarm is not centered on “more agents”. Its innovation is the architecture itself: routed activation, shared specialists, ephemeral leaders, persistent meta-learning, point-in-time evidence, and bounded execution all working as one coherent system.
 
-It is designed to feel like a compact quant research platform, not a prompt demo.
+It is designed to feel like a compact quant research operating system, not a prompt demo with market flavor.
 
 ## Why QuanterSwarm
 
@@ -21,9 +21,89 @@ QuanterSwarm takes the opposite path.
 - It uses routed activation instead of always-on agent chatter.
 - It keeps leaders ephemeral and pushes persistent learning into registries and audit stores.
 - It treats data freshness, `available_at`, provenance, and reliability as first-class concerns.
-- It stays paper-trading only by default.
+- It separates research architecture from execution policy.
+- It is designed so the same system can run as an application and as an OpenClaw skill package.
+
+The architectural idea is simple but important:
+
+- specialists are shared capabilities, not duplicated sub-agents
+- leaders are disposable inference units, not stateful personalities
+- memory and evolution live outside the leaders
+- routing is a systems problem, not a prompt trick
+- evidence is part of the output contract, not an afterthought
+- skill packaging is treated as a first-class deployment target
 
 The result is a system that is easier to reason about, easier to test, and much closer to research infrastructure than to a generic agent sandbox.
+
+## Architectural Innovation
+
+The main contribution of QuanterSwarm is not a single model or a single strategy. It is the composition pattern.
+
+### 1. Routed multi-agent execution
+
+Instead of activating every agent on every cycle, QuanterSwarm first detects market regime and then activates only the subset of specialists and leaders that fit the current state, task, and budget.
+
+This reduces:
+
+- wasted token and latency budget
+- duplicated reasoning
+- noisy inter-agent interactions
+- unstable output composition
+
+### 2. Shared specialists + ephemeral leaders
+
+This is the core design move.
+
+- Specialists are reusable capability nodes
+- Leaders are short-lived strategy nodes
+
+That gives the system a strong division of labor:
+
+- specialists gather, compress, and structure information
+- leaders turn structured context into strategy hypotheses
+
+This is more scalable than copying full agent stacks per strategy, and more controllable than letting every strategy own its own memory and tools.
+
+### 3. Persistent learning outside the agent loop
+
+QuanterSwarm does not let ephemeral leaders accumulate hidden state.
+
+Persistent learning is externalized into:
+
+- `LeaderRegistry`
+- `EventMemoryStore`
+- `EvolutionAuditLog`
+- `PromotionGate`
+- `EvolutionManager`
+
+That means the runtime swarm stays lightweight while the system still improves over time.
+
+### 4. Point-in-time evidence as a systems primitive
+
+The architecture assumes that a research agent system is only as credible as its data discipline.
+
+So snapshots are designed to carry:
+
+- provenance
+- `available_at`
+- reliability score
+- quality flags
+- evidence sections for reporting and replay
+
+This is what lets the same architecture support research, monitoring, replay, and later stricter backtesting.
+
+### 5. Skill-native packaging
+
+QuanterSwarm is not only a repo. It is intentionally structured to be exported as a skill under [skill/quanter-swarm](skill/quanter-swarm/).
+
+That matters because the architecture is portable:
+
+- the swarm topology can be packaged
+- operating rules can travel with the skill
+- prompts, schemas, and scripts can stay aligned
+- OpenClaw can reuse the same orchestration contract instead of wrapping an unrelated script
+
+This makes QuanterSwarm useful both as a local system and as a deployable agent capability.
 
 ## What It Does
 
@@ -83,6 +163,24 @@ RootAgent
      -> Paper Executor
      -> Report Generator
 ```
+
+### What makes this graph different
+
+The graph is intentionally asymmetric.
+
+- The system has one orchestration spine
+- many reusable specialists
+- a bounded leader set
+- externalized persistence for learning
+
+This avoids the common multi-agent anti-pattern where every agent owns too much:
+
+- too much context
+- too much memory
+- too many tools
+- too many overlapping responsibilities
+
+QuanterSwarm instead pushes the system toward explicit coordination boundaries.
 
 ### Shared specialists
 
@@ -190,19 +288,27 @@ posterior = base + prior - risk - cost
 
 ## Project Highlights
 
-### 1. Routed swarm, not agent spam
+### 1. Architecture is the product
+
+The primary innovation is not “AI for trading”. It is a multi-agent architecture that turns routing, evidence, replayability, and bounded evolution into explicit system components.
+
+### 2. Routed swarm, not agent spam
 
 The router decides which specialists and leaders should be active for the current regime and budget.
 
-### 2. Data discipline before intelligence theater
+### 3. Data discipline before intelligence theater
 
 Snapshots carry timestamps, provenance, quality flags, and reliability scores. The system is being shaped toward point-in-time correctness instead of retrospective convenience.
 
-### 3. Ephemeral leaders, persistent learning
+### 4. Ephemeral leaders, persistent learning
 
 Leaders remain lightweight. Persistent learning lives in the registry, event memory, and audit trail.
 
-### 4. Batch-ready research
+### 5. OpenClaw skill-ready by design
+
+The repository structure, shared prompts, schemas, scripts, and `skill/quanter-swarm/` package layout make this system directly suitable for OpenClaw integration.
+
+### 6. Batch-ready research
 
 The system can run:
 
@@ -212,7 +318,7 @@ The system can run:
 - batch fundamentals queries
 - batch macro queries
 
-### 5. Report-first outputs
+### 7. Report-first outputs
 
 Every cycle is designed to produce something reviewable:
 
@@ -235,7 +341,7 @@ Every cycle is designed to produce something reviewable:
 ├── experiments/              # Experiment presets
 ├── scripts/                  # Local runners and utilities
 ├── shared/                   # Schemas, templates, prompts, constants
-├── skill/quanter-swarm/      # Skill packaging assets
+├── skill/quanter-swarm/      # OpenClaw skill packaging assets
 ├── src/quanter_swarm/
 │   ├── agents/
 │   ├── api/
@@ -293,6 +399,26 @@ PYTHONPATH=src .venv/bin/python scripts/run_local_cycle.py
 ```bash
 make api
 ```
+
+## OpenClaw Skill Packaging
+
+QuanterSwarm is structured so the architecture can be exported into OpenClaw with minimal translation.
+
+The packaging layer lives in [skill/quanter-swarm/](skill/quanter-swarm/), including:
+
+- `agents/openai.yaml`
+- `references/`
+- `scripts/`
+- `assets/`
+
+This matters because the system is intended to preserve the same architectural identity across two modes:
+
+- repository mode
+  - local development, testing, experiments, API, backtests
+- skill mode
+  - packaged capability with stable prompts, policies, schemas, and operating rules
+
+In other words, the skill is not an afterthought wrapper. It is another deployment target for the same architecture.
 
 ## Provider Configuration
 
@@ -396,6 +522,7 @@ Returns:
 
 - currently available provider names
 - configured provider topology
+- the active architecture-level provider shape exposed to the runtime
 
 ## Reporting
 
@@ -504,6 +631,14 @@ The next frontier is deeper integration quality:
 - better promotion and rollback evidence
 - richer monitoring dashboards
 
+But the architectural foundation is already the point:
+
+- routed multi-agent coordination
+- persistent meta-learning outside ephemeral leaders
+- point-in-time data contracts
+- OpenClaw-ready packaging
+- reportable and replayable outputs
+
 ## Documentation Map
 
 See:
@@ -530,5 +665,6 @@ Its edge comes from architecture:
 - reproducible evidence
 - conservative execution
 - explicit evolution
+- portable skill packaging
 
 That is the right foundation for a system that wants to become credible over time.
