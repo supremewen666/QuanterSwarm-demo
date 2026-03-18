@@ -1,432 +1,407 @@
 # QuanterSwarm
 
-QuanterSwarm is a routed multi-agent stock analysis and paper-trading system with shared specialists, ephemeral strategy leaders, and OpenClaw skill integration.
+An architecture-first multi-agent equity research and paper-trading system.
 
-## Overview
+QuanterSwarm routes market context into a bounded swarm of specialists and strategy leaders, builds point-in-time snapshots, scores ideas with weak priors, applies risk guardrails, and produces structured research reports and paper-trade actions.
 
-QuanterSwarm is designed for medium-frequency equity research and paper trading.
+It is designed to feel like a compact quant research platform, not a prompt demo.
 
-It combines:
+## Why QuanterSwarm
 
-- Root orchestration
-- Market regime routing
-- Shared specialist pool
-- Ephemeral strategy leaders
-- Multi-strategy portfolio suggestion
-- Risk-aware paper trading
-- Structured report generation
-- OpenClaw skill packaging
+Most multi-agent trading projects stop at orchestration theater:
 
-Default mode is research and paper trading only.
+- too many agents
+- too little data discipline
+- no replayable evidence
+- no bounded evolution
+- no real separation between research and execution
 
-## Core Architecture
+QuanterSwarm takes the opposite path.
 
-### External product flow
+- It uses routed activation instead of always-on agent chatter.
+- It keeps leaders ephemeral and pushes persistent learning into registries and audit stores.
+- It treats data freshness, `available_at`, provenance, and reliability as first-class concerns.
+- It stays paper-trading only by default.
 
-Input:
-- market data
-- fundamentals
-- news
-- macro data
+The result is a system that is easier to reason about, easier to test, and much closer to research infrastructure than to a generic agent sandbox.
 
-Data layer:
-- market-data-fetch
-- fundamentals-parser
+## What It Does
 
-Research layer:
-- news-sentiment-scan
-- factor-score-engine
-- event-impact-analyzer
+QuanterSwarm runs a full research cycle for one symbol or a batch of symbols:
 
-Decision layer:
-- risk-guardrail
-- portfolio-suggestion
-- paper-broker
+1. Fetch market, fundamentals, news, macro, and auxiliary evidence
+2. Build a point-in-time snapshot with metadata and reliability scores
+3. Detect the active regime
+4. Route the right specialists and leaders
+5. Engineer features and score candidate strategies
+6. Apply weak-prior evolution and posterior ranking
+7. Enforce risk and portfolio guardrails
+8. Produce paper-trade actions
+9. Export a structured report with evidence, trace, and provider topology
 
-Output layer:
-- report-generator
+## System Character
 
-### Internal agent architecture
+QuanterSwarm is opinionated in a few important ways:
 
-- RootAgent
-- RouterAgent
-- MarketRegimeAgent
-- Shared Specialist Pool
-  - DataFetchSpecialist
-  - MemoryCompressionSpecialist
-  - RiskSpecialist
-  - SentimentSpecialist
-  - MacroEventSpecialist
-  - FeatureEngineeringSpecialist
-- Ephemeral Strategy Leaders
-  - MomentumLeader
-  - MeanReversionLeader
-  - StatArbLeader
-  - BreakoutEventLeader
-- Research Engines
-  - FundamentalsParser
-  - FactorScoreEngine
-  - EventImpactAnalyzer
-- Decision Engines
-  - RiskGuardrail
-  - PortfolioSuggestion
-  - PaperBroker
-  - ExecutionGate
-- RankingEngine
-- EvolutionAgent
-- ReportGenerator
+- Research first: outputs are research artifacts and paper-trade suggestions
+- Bounded by design: no unrestricted strategy mutation
+- Replayable: backtests and reports can carry evidence and event traces
+- Configurable: providers, routing, risk, ranking, and evolution all live behind config or typed abstractions
+- Auditable: evolution proposals and event memory are stored outside ephemeral leaders
 
-## Why this architecture
+## Architecture
 
-QuanterSwarm is designed to balance:
-
-- product clarity
-- token efficiency
-- research quality
-- extensibility
-- OpenClaw compatibility
-
-Key design choices:
-
-- routed strategy activation instead of always-on execution
-- shared specialist pool instead of duplicated sub-agents
-- ephemeral leaders instead of persistent leader agents
-- memory compression before leader reasoning
-- portfolio allocation across strategies instead of winner-take-all
-- risk-adjusted ranking instead of raw pnl selection
-- bounded evolution instead of unrestricted strategy invention
-
-## Shared Specialist Pool
-
-### DataFetchSpecialist
-Fetch and normalize:
-
-- latest or real-time market data
-- ohlcv bars
-- sector and benchmark data
-- raw fundamentals
-- news feed inputs
-- macro inputs
-
-### MemoryCompressionSpecialist
-Compress:
-
-- long news sets
-- prior logs
-- historical summaries
-- large context windows
-
-### RiskSpecialist
-Compute:
-
-- exposure limits
-- drawdown checks
-- volatility-aware scaling
-- event risk flags
-- cooldown logic
-
-### SentimentSpecialist
-Analyze:
-
-- news direction
-- uncertainty
-- key topics
-- sentiment drift
-
-### MacroEventSpecialist
-Analyze:
-
-- earnings
-- macro releases
-- policy events
-- short and medium horizon impact
-
-### FeatureEngineeringSpecialist
-Compute:
-
-- indicators
-- factor features
-- correlation matrices
-- regime support features
-
-## Strategy Leaders
-
-Only active leaders are created for each cycle.
-
-Supported leaders:
-
-- momentum
-- mean reversion
-- stat arb
-- breakout and event
-
-Leaders are stateless and ephemeral:
-
-- created on demand
-- consume compressed context
-- emit structured strategy outputs
-- destroyed after execution
-
-## Ranking and Evolution
-
-Ranking is based on risk-adjusted metrics rather than raw profit.
-
-Suggested metrics:
-
-- sharpe
-- return
-- max drawdown
-- win rate
-- stability
-- turnover penalty
-
-Evolution is bounded to approved parameters such as:
-
-- rsi thresholds
-- breakout windows
-- momentum lookback
-- stop thresholds
-- allocation weights
-- regime thresholds
-
-## Repository Structure
+### End-to-end flow
 
 ```text
-quanter-swarm/
-├── docs/
-├── configs/
-├── data/
-├── shared/
-├── src/quanter_swarm/
-├── scripts/
-├── tests/
-├── examples/
-└── skill/quanter-swarm/
+External Data
+  -> Snapshot Builder
+  -> Regime Detection
+  -> Specialist Research
+  -> Leader Proposal
+  -> Posterior Ranking
+  -> Risk Guardrails
+  -> Portfolio Construction
+  -> Paper Execution
+  -> Reporting / Replay / Monitoring
 ```
 
-The repository is split into six practical layers:
+### Core runtime graph
 
-- `docs/` for architecture and operating rules
-- `configs/` for runtime behavior and policy defaults
-- `data/` for local caches, snapshots, reports, and paper trades
-- `shared/` for schemas, prompts, templates, and constants
-- `src/quanter_swarm/` for the application package
-- `skill/quanter-swarm/` for skill packaging assets
+```text
+RootAgent
+  -> CycleManager
+     -> DataFetchSpecialist
+     -> RegimeAgent
+     -> RouterAgent
+     -> Shared Specialists
+     -> Ephemeral Leaders
+     -> RankingEngine
+     -> EvolutionManager
+     -> Risk Engine
+     -> Portfolio Builder
+     -> Paper Executor
+     -> Report Generator
+```
 
-## Documentation Map
+### Shared specialists
 
-Core design and policy documents live under `docs/`:
+- `DataFetchSpecialist`
+- `MemoryCompressionSpecialist`
+- `RiskSpecialist`
+- `SentimentSpecialist`
+- `MacroEventSpecialist`
+- `FeatureEngineeringSpecialist`
 
-- `docs/architecture.md`
-- `docs/agent-graph.md`
-- `docs/routing-rules.md`
-- `docs/regime-policy.md`
-- `docs/risk-policy.md`
-- `docs/portfolio-policy.md`
-- `docs/paper-trading-policy.md`
-- `docs/evolution-policy.md`
-- `docs/token-latency-budget.md`
-- `docs/output-format.md`
-- `docs/openclaw-integration.md`
-- `docs/status-matrix.md`
-- `docs/ablation-plan.md`
-- `docs/monitoring.md`
+These specialists are shared across cycles and only activated when routing says they are useful.
 
-## Implementation Status
+### Ephemeral strategy leaders
 
-Current capabilities (implemented):
+- `MomentumLeader`
+- `MeanReversionLeader`
+- `StatArbLeader`
+- `BreakoutEventLeader`
 
-- regime classification with confidence/smoothing, stable bull/bear/sideways/volatile families, and explainable routing
-- cost-aware routing that constrains specialists with token, latency, and per-cycle caps
-- explicit cycle state taxonomy for traceable orchestration progress
-- cycle manager state handlers with explicit per-state function boundaries
-- structured cycle traces for routing, activated agents, latency, and risk outcomes
-- data provider abstraction for market history, latest price, and news access
-- mock and file-backed data providers for tests and offline datasets
-- data snapshots now carry hash, source, and timestamp metadata
-- snapshot caching via memory and file cache backends
-- backtest event models for market, signal, order, fill, and portfolio updates
-- backtest domain models for orders, fills, positions, and portfolios
-- explicit backtest cost models for transaction fees and slippage
-- walk-forward runner now surfaces train, test, and rolling window parameters
-- backtest metrics now expose Sharpe, Sortino, max drawdown, turnover, and win rate
-- runtime logging now defaults to structured JSON with trace and cycle fields
-- observability metrics now expose router latency, agent latency, per-cycle success rate, and estimated token cost
-- pre-trade risk engine now enforces position size, leverage, daily loss, earnings, and volatility guardrails
-- schema-validated leader/ranked idea/portfolio/paper action/report contracts
-- portfolio construction in simple / volatility-aware / correlation-aware modes
-- paper execution with slippage, partial/delayed/unfilled fills, cost breakdown
-- decision trace with trace id and rejected-candidate reasons
-- ablation runner and golden/e2e regression tests
-- leaderboard/regime monitoring with drift and output-quality detection
+Leaders do not carry long-term state. They read current parameters, priors, and constraints from external stores, propose a strategy view, and disappear after the cycle.
 
-Planned extensions:
+## Data Layer
 
-- explicit orchestration state machine hardening (stage-specific failure handling refinements)
+The data stack is built around a provider abstraction plus point-in-time snapshot assembly.
 
-For exact docs-to-code mapping, see `docs/status-matrix.md`.
+### Snapshot properties
+
+Each snapshot can carry:
+
+- `as_of_ts`
+- `available_at`
+- `ingested_at`
+- `snapshot_hash`
+- `source`
+- `source_type`
+- `record_id`
+- `schema_version`
+- `quality_flags`
+- `reliability_score`
+
+This makes the same abstraction usable for research, replay, reporting, and future stricter backtesting.
+
+### Built-in provider modes
+
+Current repository support includes:
+
+- `deterministic`
+  - synthetic local feeds for prices, news, fundamentals, and macro
+- `file`
+  - CSV / Parquet-backed offline datasets
+- `polygon_market_data`
+- `fmp_market_data`
+- `sec_filings`
+- `sec_xbrl_facts`
+- `company_ir`
+- `fmp_shares_float`
+- `fred_macro`
+- `alfred_vintage_macro`
+- `composite`
+  - combine market, filings, XBRL, float, macro, and vintage macro providers
+
+### Point-in-time and evidence upgrades
+
+The current implementation already wires:
+
+- market snapshots with provenance and reliability
+- fundamentals payloads enriched with SEC filings and XBRL facts
+- macro payloads with release timing and vintage-aware fields
+- news payloads with event metadata
+- evidence sections in reports
+
+## Evolution Layer
+
+QuanterSwarm does not treat evolution as “change one threshold and call it learning”.
+
+It separates:
+
+- ephemeral inference
+- persistent parameter state
+- event memory
+- weak priors
+- promotion gates
+- audit logging
+
+### Current evolution components
+
+- `LeaderRegistry`
+- `EventMemoryStore`
+- `PromotionGate`
+- `EvolutionAuditLog`
+- `EvolutionManager`
+
+### Current evolution behavior
+
+- leader parameters are externalized
+- similar historical events can add a weak prior
+- ranking uses posterior score:
+
+```text
+posterior = base + prior - risk - cost
+```
+
+- evolution proposals are logged
+- manual review remains the safe default
+
+## Project Highlights
+
+### 1. Routed swarm, not agent spam
+
+The router decides which specialists and leaders should be active for the current regime and budget.
+
+### 2. Data discipline before intelligence theater
+
+Snapshots carry timestamps, provenance, quality flags, and reliability scores. The system is being shaped toward point-in-time correctness instead of retrospective convenience.
+
+### 3. Ephemeral leaders, persistent learning
+
+Leaders remain lightweight. Persistent learning lives in the registry, event memory, and audit trail.
+
+### 4. Batch-ready research
+
+The system can run:
+
+- single-symbol research cycles
+- batch research cycles
+- batch snapshot assembly
+- batch fundamentals queries
+- batch macro queries
+
+### 5. Report-first outputs
+
+Every cycle is designed to produce something reviewable:
+
+- strategy scores
+- routing trace
+- risk status
+- portfolio suggestion
+- execution assumptions
+- evidence summary
+- provider topology
+
+## Repository Layout
+
+```text
+.
+├── configs/                  # Runtime configs and policies
+├── data/                     # Reports, paper trades, experiments, backtests
+├── docs/                     # Architecture and design notes
+├── examples/                 # Sample payloads
+├── experiments/              # Experiment presets
+├── scripts/                  # Local runners and utilities
+├── shared/                   # Schemas, templates, prompts, constants
+├── skill/quanter-swarm/      # Skill packaging assets
+├── src/quanter_swarm/
+│   ├── agents/
+│   ├── api/
+│   ├── backtest/
+│   ├── data/
+│   ├── decision/
+│   ├── evaluation/
+│   ├── evolution/
+│   ├── execution/
+│   ├── leaders/
+│   ├── market/
+│   ├── orchestrator/
+│   ├── reporting/
+│   ├── research/
+│   ├── risk/
+│   └── router/
+└── tests/
+```
 
 ## Quick Start
 
-1. Create a virtual environment.
-2. Install dependencies.
-3. Copy the example environment file.
-4. Run the quality baseline.
-5. Run a local analysis cycle.
+### 1. Install
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"
+pip install -r requirements.txt
+```
+
+### 2. Configure
+
+```bash
 cp .env.example .env
+```
+
+Default config is paper-only and deterministic.
+
+### 3. Run quality checks
+
+```bash
 make lint
 make test
 make typecheck
+make validate
+```
+
+### 4. Run a local cycle
+
+```bash
 PYTHONPATH=src .venv/bin/python scripts/run_local_cycle.py
 ```
 
-If you want the API locally, run:
+### 5. Run the API
 
 ```bash
 make api
 ```
 
-The baseline quality commands are:
+## Provider Configuration
 
-- `make lint`
-- `make test`
-- `make typecheck`
-- `make validate`
+Provider wiring now supports both config-based and request-level selection.
 
-Runtime defaults now live under `src/quanter_swarm/config/`:
+### Default app config
 
-- `defaults.py` defines stable project defaults such as `default_symbols`, `token_budget`, `risk_thresholds`, and `backtest_window`
-- `settings.py` defines the runtime settings object used by orchestration and backtests
+See [configs/app.yaml](configs/app.yaml).
 
-Core orchestration schemas now live in `src/quanter_swarm/contracts.py`, including:
+The default is:
 
-- `AgentContext`
-- `AgentResult`
-- `RouterDecision`
-- `PortfolioSuggestion`
-- `RiskCheckResult`
-- `CycleReport`
-
-Typed runtime errors now live in `src/quanter_swarm/errors.py`:
-
-- `RouterError`
-- `AgentExecutionError`
-- `DataProviderError`
-- `RiskGuardrailError`
-- `BacktestError`
-
-The shared agent interface now lives in `src/quanter_swarm/agents/base.py` and standardizes:
-
-- `name`
-- `role`
-- `async run(context) -> AgentResult`
-
-`RootAgent` now exposes:
-
-- `run_sync(...)` for the current synchronous orchestration path
-- `run(...)` for the shared async agent interface
-
-Built-in agent construction is now centralized in `src/quanter_swarm/agents/registry.py`, which provides:
-
-- `register_agent(...)`
-- `get_agent(...)`
-- `get_leader(...)`
-- `get_specialist(...)`
-
-Leaders and specialists now expose capability metadata:
-
-- `supported_regimes`
-- `supported_tasks`
-- `cost_hint`
-- `priority`
-
-Concurrent agent execution now lives in `src/quanter_swarm/orchestrator/agent_executor.py` and provides:
-
-- concurrent batch execution
-- per-agent timeout
-- partial failure handling with structured failure details
-
-Routing logic now lives under `src/quanter_swarm/router/` with:
-
-- `detect_regime(...)`
-- `select_leader(...)`
-- `select_specialists(...)`
-
-Cycle reports now include explicit routing explainability fields:
-
-- `regime`
-- `confidence`
-- `leader_selected`
-- `specialists_selected`
-- `reasons`
-- `rejected_candidates`
-
-## Experiment and Ablation
-
-Run structured ablation experiments and save comparable outputs under `data/experiments/`:
-
-```bash
-python scripts/run_ablation.py router_ablation AAPL
-python scripts/run_ablation.py specialist_ablation MSFT
-python scripts/run_ablation.py allocation_ablation NVDA
+```yaml
+app:
+  data_provider:
+    provider: deterministic
 ```
 
-Each experiment writes:
+### Composite provider example
 
-- one JSON artifact with metrics and contribution breakdown
-- one markdown summary for quick review
-
-Baseline experiment presets now live under `experiments/`:
-
-- `experiments/baseline_single_agent.yaml`
-- `experiments/baseline_fixed_multi_agent.yaml`
-- `experiments/routed_multi_agent.yaml`
-- `experiments/routed_ephemeral.yaml`
-
-Preset-driven experiment execution now lives in `src/quanter_swarm/experiments/runner.py`.
-
-Each configured experiment now also writes:
-
-- `experiment_table.csv`
-- `equity_curve.png`
-- `drawdown_curve.png`
-
-## Walk-Forward Backtest
-
-Run the replay-enabled walk-forward backtest:
-
-```bash
-python scripts/run_backtest.py --symbols AAPL,MSFT,NVDA --steps 20 --capital 100000
+```yaml
+app:
+  data_provider:
+    provider: composite
+    market_provider: polygon_market_data
+    market_provider_kwargs:
+      api_key: ${POLYGON_API_KEY}
+    auxiliary_providers:
+      filings:
+        enabled: true
+        provider: sec_filings
+        provider_kwargs:
+          user_agent: "QuanterSwarm research@example.com"
+      xbrl:
+        enabled: true
+        provider: sec_xbrl_facts
+        provider_kwargs:
+          user_agent: "QuanterSwarm research@example.com"
+      shares_float:
+        enabled: true
+        provider: fmp_shares_float
+        provider_kwargs:
+          api_key: ${FMP_API_KEY}
+      macro:
+        enabled: true
+        provider: fred_macro
+        provider_kwargs:
+          api_key: ${FRED_API_KEY}
+      macro_vintages:
+        enabled: true
+        provider: alfred_vintage_macro
+        provider_kwargs:
+          api_key: ${FRED_API_KEY}
 ```
 
-Outputs are written to `data/backtests/` as JSON and markdown, including:
+### Environment variables
 
-- step-level replay returns
-- leader-level attribution
-- portfolio-level attribution
-- aggregated risk/return metrics
+See [.env.example](.env.example) for:
 
-## API Contract
+- `POLYGON_API_KEY`
+- `FMP_API_KEY`
+- `FRED_API_KEY`
+- `SEC_USER_AGENT`
+- optional `QUANTER_DATA_PROVIDER`
 
-`POST /research` accepts:
+## API
 
-- `symbol` or `symbols`
-- `horizon` (`1d|1w|2w|1m`)
-- `portfolio_mode` (`single|multi`)
-- `risk_tolerance` (`low|medium|high`)
-- `output_format` (`json|markdown`)
-- `data_freshness_preference` (`latest|cached`)
+### Research
 
-`POST /research/batch` accepts `symbols` and returns a list of structured results.
+`POST /research`
 
-Core response fields include:
+Run one research cycle.
 
-- `regime` / `active_regime`
+Request fields include:
+
+- `symbol`
+- `symbols`
+- `horizon`
+- `portfolio_mode`
+- `risk_tolerance`
+- `output_format`
+- `data_freshness_preference`
+- `data_provider`
+
+### Batch research
+
+`POST /research/batch`
+
+Run multiple research cycles with batch-prefetched snapshots.
+
+### Batch data interfaces
+
+`POST /data/fundamentals/batch`
+
+`POST /data/macro/batch`
+
+### Provider discovery
+
+`GET /data/providers`
+
+Returns:
+
+- currently available provider names
+- configured provider topology
+
+## Reporting
+
+Cycle reports include:
+
+- `active_regime`
 - `regime_confidence`
 - `active_strategy_teams`
 - `factor_scorecard`
@@ -435,73 +410,125 @@ Core response fields include:
 - `paper_trade_actions`
 - `evaluation_summary`
 - `decision_trace_summary`
+- `evidence_summary`
+- `provider_summary`
+- `config_provenance`
 
-The report also contains `decision_trace` (full trace object) with a stable `trace_id`.
-Each report includes `config_provenance` with a config fingerprint and effective config summary.
+Markdown reports also expose:
 
-## Golden and E2E tests
+- evidence section
+- evolution evidence
+- provider topology
 
-Golden fixtures and end-to-end behavior tests live under:
+## Backtest and Replay
 
-- `tests/e2e/test_research_cycle.py`
-- `tests/golden/research_cycle_aapl.json`
-- `tests/golden/research_cycle_msft_no_trade.json`
-- `tests/golden/research_cycle_outline.md`
+Walk-forward and replay tools live in:
 
-These tests assert stable system-level behavior for:
+- `scripts/run_backtest.py`
+- `src/quanter_swarm/backtest/`
 
-- normal routed run
-- no-trade run
-- markdown report outline
+Replay artifacts can now include:
 
-## Recommended MVP
+- market summary
+- evidence summary
+- signal events
+- portfolio updates
+- order and fill events
 
-Phase 1 should prioritize the shortest end-to-end paper-trading loop:
+## Experiments
 
-- `RootAgent`
-- `RouterAgent`
-- `RegimeAgent`
-- `DataFetchSpecialist`
-- `MemoryCompressionSpecialist`
-- `RiskSpecialist`
-- `FeatureEngineeringSpecialist`
-- `MomentumLeader`
-- `MeanReversionLeader`
-- `PortfolioSuggestion`
-- `PaperBroker`
-- `ReportGenerator`
+Experiment presets live under [experiments/](experiments/).
 
-This gives you one complete path from market input to ranked ideas, guarded allocation, paper execution, and reporting.
+Run examples:
 
-## Skill Packaging
+```bash
+python scripts/run_ablation.py router_ablation AAPL
+python scripts/run_ablation.py specialist_ablation MSFT
+python scripts/run_ablation.py allocation_ablation NVDA
+```
 
-The packaged skill lives at `skill/quanter-swarm/`.
+## Tests
 
-Its purpose is to mirror the repo-level orchestration flow for OpenClaw-compatible execution:
+The repo includes:
 
-- `agents/openai.yaml` defines the skill entrypoint
-- `references/` keeps policy and architecture notes close to the packaged skill
-- `scripts/` provides analysis, paper-cycle, export, and validation helpers
-- `assets/` stores the packaged icon and future visual assets
+- unit tests
+- schema tests
+- API tests
+- routing tests
+- backtest tests
+- golden and e2e regression tests
 
-If you use the local skill packaging workflow, package from the repository root against `skill/quanter-swarm/`.
+Run:
+
+```bash
+make test
+```
+
+or
+
+```bash
+.venv/bin/python -m pytest
+```
 
 ## Safety Boundaries
 
-The repository is intentionally conservative:
+QuanterSwarm is intentionally conservative.
 
-- default mode is research and paper trading
-- live trading must stay disabled unless explicitly enabled
-- all suggestions must pass risk guardrails before execution
-- event-sensitive conditions should prefer reduced exposure or no-trade output
-- outputs are research artifacts, not investment advice
+- Paper trading is the default mode.
+- Live execution is not the default operating path.
+- Risk guardrails run before portfolio and execution outputs matter.
+- Event-sensitive conditions should degrade exposure or return no-trade.
+- This repository is for research infrastructure and simulation, not investment advice.
 
-## Planned Extensions
+## Current Status
 
-Reasonable next steps after the MVP:
+This repository already contains the bones of a serious system:
 
-- connector-backed live and historical data feeds
-- stronger event-driven routing and catalyst awareness
-- richer strategy leaderboard and evaluation dashboards
-- tighter bounded evolution loops with better rollback logic
-- support for more markets beyond the current equity-first scope
+- routed orchestration
+- specialist pool
+- ephemeral leaders
+- posterior ranking
+- bounded evolution
+- point-in-time snapshot metadata
+- provider abstraction
+- batch research
+- structured reports
+- replay events
+- experiment runners
+
+The next frontier is deeper integration quality:
+
+- stronger live provider wiring
+- richer point-in-time market storage
+- stricter vintage-aware backtesting
+- better promotion and rollback evidence
+- richer monitoring dashboards
+
+## Documentation Map
+
+See:
+
+- [docs/architecture.md](docs/architecture.md)
+- [docs/agent-graph.md](docs/agent-graph.md)
+- [docs/routing-rules.md](docs/routing-rules.md)
+- [docs/regime-policy.md](docs/regime-policy.md)
+- [docs/risk-policy.md](docs/risk-policy.md)
+- [docs/portfolio-policy.md](docs/portfolio-policy.md)
+- [docs/paper-trading-policy.md](docs/paper-trading-policy.md)
+- [docs/evolution-policy.md](docs/evolution-policy.md)
+- [docs/monitoring.md](docs/monitoring.md)
+- [docs/status-matrix.md](docs/status-matrix.md)
+
+## Final Note
+
+QuanterSwarm is not trying to look more intelligent by adding more agents.
+
+Its edge comes from architecture:
+
+- disciplined routing
+- bounded specialization
+- reproducible evidence
+- conservative execution
+- explicit evolution
+
+That is the right foundation for a system that wants to become credible over time.
