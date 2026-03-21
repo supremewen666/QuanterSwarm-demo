@@ -2,9 +2,17 @@
 
 from __future__ import annotations
 
+from enum import Enum
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+
+class Status(str, Enum):
+    OK = "ok"
+    DEGRADED = "degraded"
+    NO_TRADE = "no_trade"
+    ERROR = "error"
 
 
 class ResearchRequestContract(BaseModel):
@@ -43,6 +51,10 @@ class AgentResult(BaseModel):
 
     agent_name: str
     role: str
+    status: Status = Status.OK
+    reason: str = ""
+    fallback_flags: list[str] = Field(default_factory=list)
+    confidence: float = Field(default=1.0, ge=0.0, le=1.0)
     summary: str = ""
     payload: dict[str, Any] = Field(default_factory=dict)
 

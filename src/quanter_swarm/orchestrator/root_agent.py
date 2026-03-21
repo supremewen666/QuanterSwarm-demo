@@ -8,11 +8,15 @@ from typing import Any
 from quanter_swarm.agents.base import BaseAgent
 from quanter_swarm.contracts import AgentContext, AgentResult, CycleReport
 from quanter_swarm.orchestrator.cycle_manager import CycleManager
+from quanter_swarm.orchestrator.runtime import RuntimeContext
 
 
 class RootAgent(BaseAgent):
     name = "root"
     role = "orchestrator"
+
+    def __init__(self, runtime: RuntimeContext | None = None) -> None:
+        self.runtime = runtime
 
     def run_sync(
         self,
@@ -20,7 +24,10 @@ class RootAgent(BaseAgent):
         scenario: dict[str, Any] | None = None,
         provider_override: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        result = CycleManager(provider_override=provider_override).run_cycle(symbol=symbol, scenario=scenario)
+        result = CycleManager(provider_override=provider_override, runtime=self.runtime).run_cycle(
+            symbol=symbol,
+            scenario=scenario,
+        )
         return CycleReport.model_validate(result).model_dump()
 
     def run_batch_sync(
@@ -31,7 +38,10 @@ class RootAgent(BaseAgent):
     ) -> list[dict[str, Any]]:
         return [
             CycleReport.model_validate(result).model_dump()
-            for result in CycleManager(provider_override=provider_override).run_cycle_batch(symbols=symbols, scenario=scenario)
+            for result in CycleManager(provider_override=provider_override, runtime=self.runtime).run_cycle_batch(
+                symbols=symbols,
+                scenario=scenario,
+            )
         ]
 
     async def run(self, context: AgentContext | dict[str, Any]) -> AgentResult:

@@ -8,6 +8,7 @@ from typing import Any
 
 from quanter_swarm.backtest.metrics import summarize_backtest_metrics
 from quanter_swarm.backtest.replay_engine import replay_report
+from quanter_swarm.backtest.validator import BacktestValidator
 from quanter_swarm.config.defaults import DEFAULT_BACKTEST_WINDOW
 from quanter_swarm.orchestrator.cycle_manager import CycleManager
 from quanter_swarm.storage.file_store import write_json, write_text
@@ -94,6 +95,17 @@ class WalkForwardBacktester:
         rolling_window: int = DEFAULT_BACKTEST_WINDOW["rolling_window"],
         capital: float = 100_000.0,
     ) -> dict[str, Any]:
+        validator = BacktestValidator()
+        validator.validate_run(
+            {
+                "symbols": symbols,
+                "steps": steps,
+                "train_window": train_window,
+                "test_window": test_window,
+                "rolling_window": rolling_window,
+                "capital": capital,
+            }
+        )
         manager = CycleManager()
         returns: list[float] = []
         step_results: list[dict[str, Any]] = []
@@ -102,6 +114,7 @@ class WalkForwardBacktester:
             scenario = _scenario_for_step(step)
             assignment = _window_assignment(step, train_window, test_window, rolling_window)
             report = manager.run_cycle(symbol=symbol, scenario=scenario, persist_outputs=False)
+            validator.validate_report(report)
             replay = replay_report(report, capital)
             returns.append(replay["realized_return"])
             step_results.append(
@@ -118,6 +131,7 @@ class WalkForwardBacktester:
                     "leader_attribution": replay["leader_attribution"],
                     "events": replay["events"],
                     "event_count": len(replay["events"]),
+                    "execution_summary": replay["execution_summary"],
                     "portfolio_attribution": replay["portfolio_attribution"],
                 }
             )

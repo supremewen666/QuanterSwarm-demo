@@ -27,3 +27,9 @@ class Settings:
     risk_thresholds: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_RISK_THRESHOLDS))
     backtest_window: dict[str, int] = field(default_factory=lambda: dict(DEFAULT_BACKTEST_WINDOW))
     data_provider: dict = field(default_factory=dict)
+    llm_provider: str = "mock"
+    llm_model: str = "mock-echo"
+    llm_temperature: float = 0.0
+    tool_timeout: int = 2
+    tool_budget: int = 16
+    allowed_tools: list[str] = field(default_factory=list)

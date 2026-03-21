@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from quanter_swarm.data.base import BaseDataProvider, get_default_data_provider
 from quanter_swarm.data.cache import SnapshotCache
-from quanter_swarm.market.snapshot_builder import build_snapshot, build_snapshots
 from quanter_swarm.specialists.base_specialist import BaseSpecialist
+from quanter_swarm.tools.builtin import build_default_tool_registry
+from quanter_swarm.tools.executor import ToolExecutor
 
 
 class DataFetchSpecialist(BaseSpecialist):
@@ -18,39 +19,18 @@ class DataFetchSpecialist(BaseSpecialist):
         self,
         provider: BaseDataProvider | None = None,
         cache: SnapshotCache | None = None,
+        tool_executor: ToolExecutor | None = None,
     ) -> None:
+        provider = provider or get_default_data_provider()
+        super().__init__(tool_executor or ToolExecutor(build_default_tool_registry(provider=provider, cache=cache)))
         self.provider = provider or get_default_data_provider()
         self.cache = cache
 
     def fetch(self, symbol: str, use_cache: bool = True) -> dict:
-        cache_key = symbol.upper()
-        if use_cache and self.cache is not None:
-            cached = self.cache.get_snapshot(cache_key)
-            if cached is not None:
-                cached["cache_hit"] = True
-                return cached
-        snapshot = build_snapshot(symbol, provider=self.provider)
-        if self.cache is not None:
-            self.cache.set_snapshot(cache_key, snapshot)
-        return snapshot
+        return self._run_tool("market_data", {"symbol": symbol, "use_cache": use_cache})
 
     def fetch_many(self, symbols: list[str], use_cache: bool = True) -> dict[str, dict]:
-        snapshots: dict[str, dict] = {}
-        pending: list[str] = []
-        for symbol in [item.upper() for item in symbols]:
-            if use_cache and self.cache is not None:
-                cached = self.cache.get_snapshot(symbol)
-                if cached is not None:
-                    cached["cache_hit"] = True
-                    snapshots[symbol] = cached
-                    continue
-            pending.append(symbol)
-        if pending:
-            fresh = build_snapshots(pending, provider=self.provider)
-            snapshots.update(fresh)
-            if self.cache is not None:
-                for symbol, snapshot in fresh.items():
-                    self.cache.set_snapshot(symbol, snapshot)
+        snapshots = self._run_tool("market_data_batch", {"symbols": symbols, "use_cache": use_cache})
         return {symbol.upper(): snapshots[symbol.upper()] for symbol in symbols}
 
     def execute(self, payload: dict) -> dict:

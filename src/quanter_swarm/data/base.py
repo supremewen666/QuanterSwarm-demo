@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import os
 from abc import ABC, abstractmethod
 from datetime import UTC, datetime
-import os
 from typing import Any
 
 from quanter_swarm.market.news_feed import fetch_news

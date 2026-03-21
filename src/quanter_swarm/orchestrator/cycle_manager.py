@@ -19,20 +19,21 @@ from quanter_swarm.contracts import (
     PortfolioSuggestionContract,
     RankedIdeaContract,
 )
+from quanter_swarm.data.provider_factory import build_provider_from_config, describe_provider_config
 from quanter_swarm.decision.execution_gate import execution_allowed
 from quanter_swarm.decision.order_sizer import size_order
 from quanter_swarm.decision.portfolio_suggestion import build_portfolio
 from quanter_swarm.decision.risk_guardrail import assess_guardrails
 from quanter_swarm.errors import AgentExecutionError
-from quanter_swarm.evolution import EvolutionManager
 from quanter_swarm.evaluation.metrics import summarize_metrics
+from quanter_swarm.evolution import EvolutionManager
 from quanter_swarm.execution.paper_executor import execute
-from quanter_swarm.data.provider_factory import build_provider_from_config, describe_provider_config
 from quanter_swarm.market.data_quality import validate_snapshot
 from quanter_swarm.observability.metrics import build_cycle_metrics
 from quanter_swarm.observability.trace import build_cycle_trace, new_trace_id
 from quanter_swarm.orchestrator.agent_executor import AgentExecutor
 from quanter_swarm.orchestrator.ranking_engine import rank_candidates
+from quanter_swarm.orchestrator.runtime import RuntimeContext
 from quanter_swarm.orchestrator.states import CycleStage, CycleState, StageRecord
 from quanter_swarm.reporting.report_generator import generate_report
 from quanter_swarm.research.event_impact_analyzer import analyze_event_impact
@@ -49,12 +50,12 @@ from quanter_swarm.utils.config import (
     validate_config_consistency,
 )
 from quanter_swarm.utils.logging import get_logger
+from quanter_swarm.validation.pit_validator import PITValidator
 
 logger = get_logger(__name__)
 
 if TYPE_CHECKING:
     from quanter_swarm.leaders.base_leader import BaseLeader
-    from quanter_swarm.orchestrator.evolution_agent import EvolutionAgent
     from quanter_swarm.orchestrator.regime_agent import RegimeAgent
     from quanter_swarm.orchestrator.router_agent import RouterAgent
     from quanter_swarm.specialists.data_fetch_specialist import DataFetchSpecialist
@@ -68,8 +69,12 @@ if TYPE_CHECKING:
 
 
 class CycleManager:
-    def __init__(self, provider_override: dict[str, Any] | None = None) -> None:
-        self.settings = load_settings()
+    def __init__(
+        self,
+        provider_override: dict[str, Any] | None = None,
+        runtime: RuntimeContext | None = None,
+    ) -> None:
+        self.settings = runtime.settings if runtime is not None else load_settings()
         validate_config_consistency(self.settings.config_dir)
         self.router_config = load_yaml(self.settings.config_dir / "router.yaml")
         self.regimes_config = load_yaml(self.settings.config_dir / "regimes.yaml")
@@ -82,6 +87,7 @@ class CycleManager:
         self.evolution_manager = EvolutionManager(root=self.settings.data_dir / "evolution", config=self.evolution_config)
         self.provider_config = provider_override or self.settings.data_provider
         self.data_provider = build_provider_from_config(self.provider_config)
+        self.runtime = runtime or RuntimeContext.build(settings=self.settings, provider=self.data_provider)
         self.provider_summary = describe_provider_config(self.provider_config, self.data_provider)
 
     @staticmethod
@@ -261,8 +267,10 @@ class CycleManager:
         trace_id = str(context["trace_id"])
         stage_records = cast(list[StageRecord], context["stage_records"])
 
-        data_fetch = cast("DataFetchSpecialist", get_specialist("data_fetch"))
-        data_fetch.provider = self.data_provider
+        data_fetch = cast(
+            "DataFetchSpecialist",
+            get_specialist("data_fetch", provider=self.data_provider),
+        )
         prefetched = cast(dict[str, Any] | None, context.get("prefetched_snapshots"))
         fetched = prefetched.get(target_symbol, {}) if prefetched else data_fetch.fetch(target_symbol)
         self._log_cycle_event(
@@ -285,6 +293,30 @@ class CycleManager:
         if scenario.get("drop_fundamentals"):
             fetched["fundamentals_packet"] = {"symbol": target_symbol}
         data_quality = validate_snapshot(fetched)
+        try:
+            PITValidator().validate(fetched)
+        except DataProviderError:
+            self._record_state_latency(context, CycleState.DATA_FETCH, state_started)
+            stage_records.append(
+                StageRecord(
+                    stage=CycleStage.REPORT,
+                    status="short_circuit",
+                    detail={"reason": "pit_validation_failed"},
+                )
+            )
+            return self._short_circuit_report(
+                symbol=target_symbol,
+                trace_id=trace_id,
+                runtime_ms=int((time() - run_started) * 1000),
+                regime="sideways",
+                regime_confidence=0.0,
+                market_summary={"data_quality": data_quality},
+                fallback_modes=["pit_validation_failed"],
+                termination_reason="pit_validation_failed",
+                stage_records=stage_records,
+                state_sequence=cast(list[str], context["state_sequence"]) + [CycleState.FAILED.value],
+                state_latencies=cast(dict[str, int], context.setdefault("state_latencies", {})),
+            )
         context["fetched"] = fetched
         context["data_quality"] = data_quality
         if scenario.get("force_no_data") or not fetched.get("market_packet"):
@@ -453,12 +485,18 @@ class CycleManager:
         trace_id = str(context["trace_id"])
         run_started = float(context["run_started"])
 
-        memory_compression = cast("MemoryCompressionSpecialist", get_specialist("memory_compression"))
+        memory_compression = cast(
+            "MemoryCompressionSpecialist",
+            get_specialist("memory_compression", tool_executor=self.runtime.tools),
+        )
         disable_specialists = scenario.get("disable_specialists", {})
         fallback_modes: list[str] = []
         if scenario.get("drop_fundamentals"):
             fallback_modes.append("fundamentals_fallback")
-        macro_event_specialist = cast("MacroEventSpecialist", get_specialist("macro_event"))
+        macro_event_specialist = cast(
+            "MacroEventSpecialist",
+            get_specialist("macro_event", tool_executor=self.runtime.tools),
+        )
         specialist_executor = AgentExecutor(timeout_seconds=1.0, allow_partial_failures=True)
         specialist_jobs: dict[str, tuple[Any, dict[str, Any]]] = {
             "memory_compression": (memory_compression, fetched),
@@ -479,7 +517,10 @@ class CycleManager:
             sentiment_score = 0.5
             fallback_modes.append("sentiment_fallback")
         else:
-            sentiment_specialist = cast("SentimentSpecialist", get_specialist("sentiment"))
+            sentiment_specialist = cast(
+                "SentimentSpecialist",
+                get_specialist("sentiment", tool_executor=self.runtime.tools),
+            )
             sentiment_score = mean(sentiment_specialist.score(item) for item in fetched["news_inputs"])
         if disable_specialists.get("macro_event"):
             fallback_modes.append("macro_event_fallback")
@@ -509,7 +550,10 @@ class CycleManager:
         )
         event_impact = analyze_event_impact(event_signal)
         parsed_fundamentals = parse_fundamentals(fetched["fundamentals_packet"])
-        feature_engineering = cast("FeatureEngineeringSpecialist", get_specialist("feature_engineering"))
+        feature_engineering = cast(
+            "FeatureEngineeringSpecialist",
+            get_specialist("feature_engineering", tool_executor=self.runtime.tools),
+        )
         features = feature_engineering.build(fetched)["features"]
         factor_score = compute_factor_score(
             {
@@ -537,7 +581,7 @@ class CycleManager:
             "volatility": features.get("volatility"),
         }
         weak_priors = self.evolution_manager.build_priors(event_payload)
-        risk_specialist = cast("RiskSpecialist", get_specialist("risk"))
+        risk_specialist = cast("RiskSpecialist", get_specialist("risk", tool_executor=self.runtime.tools))
         risk_report = risk_specialist.assess(
             {
                 "volatility": features["volatility"],
@@ -1115,8 +1159,10 @@ class CycleManager:
         persist_outputs: bool = True,
     ) -> list[dict[str, Any]]:
         normalized = [symbol.upper() for symbol in symbols]
-        data_fetch = cast("DataFetchSpecialist", get_specialist("data_fetch"))
-        data_fetch.provider = self.data_provider
+        data_fetch = cast(
+            "DataFetchSpecialist",
+            get_specialist("data_fetch", provider=self.data_provider),
+        )
         prefetched = data_fetch.fetch_many(normalized)
         results: list[dict[str, Any]] = []
         for symbol in normalized:

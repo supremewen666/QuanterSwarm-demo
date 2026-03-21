@@ -13,8 +13,8 @@ from quanter_swarm.api.schemas import (
 )
 from quanter_swarm.data import available_providers
 from quanter_swarm.data.provider_factory import build_provider_from_config, describe_provider_config
-from quanter_swarm.utils.config import load_settings
 from quanter_swarm.orchestrator.root_agent import RootAgent
+from quanter_swarm.utils.config import load_settings
 
 router = APIRouter()
 

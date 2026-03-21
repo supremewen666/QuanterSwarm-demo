@@ -1,0 +1,15 @@
+"""Base tool interfaces."""
+
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from typing import Any
+
+
+class Tool(ABC):
+    name: str
+    timeout_seconds: float = 1.0
+
+    @abstractmethod
+    def run(self, **kwargs: Any) -> dict[str, Any]:
+        """Run the tool and return a structured payload."""

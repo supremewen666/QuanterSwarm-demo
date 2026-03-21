@@ -33,21 +33,21 @@ class AgentRegistry:
             raise RouterError(f"Cannot register unnamed agent class: {agent_cls!r}")
         self._agents[name] = agent_cls
 
-    def create(self, name: str) -> BaseAgent:
+    def create(self, name: str, **kwargs: object) -> BaseAgent:
         try:
             agent_cls = self._agents[name]
         except KeyError as exc:
             raise RouterError(f"Unknown agent '{name}'") from exc
-        return agent_cls()
+        return agent_cls(**kwargs)
 
-    def get_leader(self, name: str) -> BaseAgent:
-        agent = self.create(name)
+    def get_leader(self, name: str, **kwargs: object) -> BaseAgent:
+        agent = self.create(name, **kwargs)
         if agent.role != "leader":
             raise RouterError(f"Agent '{name}' is not a leader.")
         return agent
 
-    def get_specialist(self, name: str) -> BaseAgent:
-        agent = self.create(name)
+    def get_specialist(self, name: str, **kwargs: object) -> BaseAgent:
+        agent = self.create(name, **kwargs)
         if agent.role != "specialist":
             raise RouterError(f"Agent '{name}' is not a specialist.")
         return agent
@@ -79,13 +79,13 @@ def register_agent(agent_cls: type[BaseAgent]) -> None:
     registry.register(agent_cls)
 
 
-def get_agent(name: str) -> BaseAgent:
-    return registry.create(name)
+def get_agent(name: str, **kwargs: object) -> BaseAgent:
+    return registry.create(name, **kwargs)
 
 
-def get_leader(name: str) -> BaseAgent:
-    return registry.get_leader(name)
+def get_leader(name: str, **kwargs: object) -> BaseAgent:
+    return registry.get_leader(name, **kwargs)
 
 
-def get_specialist(name: str) -> BaseAgent:
-    return registry.get_specialist(name)
+def get_specialist(name: str, **kwargs: object) -> BaseAgent:
+    return registry.get_specialist(name, **kwargs)

@@ -10,12 +10,7 @@ class MemoryCompressionSpecialist(BaseSpecialist):
     priority = 75
 
     def compress(self, payload: dict) -> dict:
-        news = payload.get("news_inputs", [])
-        return {
-            "compressed": True,
-            "summary": "; ".join(news[:2]),
-            "payload": payload,
-        }
+        return self._run_tool("memory_compression", payload)
 
     def execute(self, payload: dict) -> dict:
         return self.compress(payload)

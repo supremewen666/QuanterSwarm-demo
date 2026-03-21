@@ -120,6 +120,21 @@ def load_settings() -> Settings:
         risk_thresholds={**DEFAULT_RISK_THRESHOLDS, **configured_risk_thresholds},
         backtest_window={**DEFAULT_BACKTEST_WINDOW, **configured_backtest_window},
         data_provider=dict(app_config.get("data_provider", {})),
+        llm_provider=str(os.getenv("LLM_PROVIDER", app_config.get("llm_provider", "mock"))),
+        llm_model=str(os.getenv("LLM_MODEL", app_config.get("llm_model", "mock-echo"))),
+        llm_temperature=float(os.getenv("LLM_TEMPERATURE", app_config.get("llm_temperature", 0.0))),
+        tool_timeout=int(os.getenv("TOOL_TIMEOUT", app_config.get("tool_timeout", 2))),
+        tool_budget=int(os.getenv("TOOL_BUDGET", app_config.get("tool_budget", 16))),
+        allowed_tools=[
+            item.strip()
+            for item in str(
+                os.getenv(
+                    "ALLOWED_TOOLS",
+                    ",".join(app_config.get("allowed_tools", [])),
+                )
+            ).split(",")
+            if item.strip()
+        ],
     )
 
 

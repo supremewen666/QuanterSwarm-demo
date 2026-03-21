@@ -42,7 +42,7 @@ def compute_weak_priors(
         bucket["confidence"] = max(bucket["confidence"], prior_confidence)
         if row.get("event_id"):
             bucket["source_event_ids"].append(row["event_id"])
-    for leader, payload in priors.items():
+    for payload in priors.values():
         payload["prior_score"] = round(payload["prior_score"], 4)
         payload["confidence"] = round(min(1.0, payload["confidence"]), 4)
         payload["source_event_ids"] = payload["source_event_ids"][:5]

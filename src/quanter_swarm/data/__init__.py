@@ -24,6 +24,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - exercised in lightweight environments
     AlfredVintageMacroProvider = None
     CompanyIRProvider = None
+    CompositeMarketDataProvider = None
     FmpMarketDataProvider = None
     FmpSharesFloatProvider = None
     FredMacroProvider = None

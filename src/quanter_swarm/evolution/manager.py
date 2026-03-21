@@ -24,6 +24,11 @@ class EvolutionManager:
         self.promotion_gate = PromotionGate(
             min_observations=int(resolved.get("min_observations", 20)),
             manual_approval_only=bool(resolved.get("manual_approval_only", True)),
+            min_posterior_lift=float(resolved.get("min_posterior_lift", 0.02)),
+            min_confidence=float(resolved.get("min_confidence", 0.55)),
+            max_drawdown_for_promotion=float(resolved.get("max_drawdown_for_promotion", 0.2)),
+            rollback_drawdown_threshold=float(resolved.get("rollback_drawdown_threshold", 0.25)),
+            rollback_sharpe_delta=float(resolved.get("rollback_sharpe_delta", -0.5)),
         )
 
     def get_active_parameters(self, leader_name: str, *, regime: str | None = None, event_cluster: str | None = None) -> dict[str, Any]:
@@ -61,9 +66,17 @@ class EvolutionManager:
                 "posterior_lift": posterior_lift,
                 "sample_count": int(top.get("prior_sample_count", 0)),
                 "regime_robust": float(top.get("prior_confidence", 0.0)) >= 0.5,
+                "confidence": float(top.get("confidence", top.get("prior_confidence", 0.0))),
+                "drawdown": abs(float(top.get("drawdown", 0.0))),
             },
         }
         gate = self.promotion_gate.evaluate(proposal)
+        rollback = self.promotion_gate.evaluate_rollback(
+            {
+                "drawdown": float(top.get("drawdown", 0.0)),
+                "sharpe_delta": float(top.get("sharpe_delta", 0.0)),
+            }
+        )
         if float(top.get("composite_rank_score", 0.0)) > 0.65:
             threshold = round(max(0.45, current_threshold - 0.02), 4)
             action = "slightly_loosen"
@@ -73,6 +86,9 @@ class EvolutionManager:
         else:
             threshold = current_threshold
             action = "hold"
+        if rollback["should_rollback"]:
+            action = "rollback"
+            threshold = round(min(0.6, current_threshold + 0.03), 4)
         audit_payload = {
             "recorded_at": datetime.now(tz=UTC).isoformat(),
             "action": action if gate["approved"] else "proposal_logged",
@@ -80,6 +96,7 @@ class EvolutionManager:
             "threshold_after": threshold,
             "proposal": proposal,
             "gate": gate,
+            "rollback": rollback,
         }
         self.audit_log.write(audit_payload)
         if event_payload:
@@ -97,6 +114,7 @@ class EvolutionManager:
             "threshold": threshold,
             "action": action,
             "gate": gate,
+            "rollback": rollback,
             "proposal": proposal,
             "top_posterior_leader": top.get("leader"),
         }

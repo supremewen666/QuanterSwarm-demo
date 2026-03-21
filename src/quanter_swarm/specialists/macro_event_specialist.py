@@ -10,9 +10,7 @@ class MacroEventSpecialist(BaseSpecialist):
     priority = 80
 
     def analyze(self, event: dict) -> dict:
-        macro_risk = float(event.get("macro_risk", 0.0))
-        direction = "negative" if macro_risk > 0.6 else "positive"
-        return {"event": event, "impact": direction, "confidence": round(abs(0.5 - macro_risk) + 0.5, 2)}
+        return self._run_tool("macro_event_analysis", event)
 
     def execute(self, payload: dict) -> dict:
         return self.analyze(payload)

@@ -24,6 +24,11 @@ def test_load_settings_uses_centralized_defaults(monkeypatch) -> None:
     assert settings.risk_thresholds == DEFAULT_RISK_THRESHOLDS
     assert settings.backtest_window == DEFAULT_BACKTEST_WINDOW
     assert settings.data_provider["provider"] == "deterministic"
+    assert settings.llm_provider == "mock"
+    assert settings.llm_model == "mock-echo"
+    assert settings.tool_timeout == 2
+    assert settings.tool_budget == 16
+    assert settings.allowed_tools == []
 
 
 def test_load_settings_merges_yaml_and_env_overrides(tmp_path: Path, monkeypatch) -> None:
@@ -41,6 +46,12 @@ def test_load_settings_merges_yaml_and_env_overrides(tmp_path: Path, monkeypatch
                 "    steps: 12",
                 "  data_provider:",
                 "    provider: deterministic",
+                "  llm_provider: openai",
+                "  llm_model: gpt-4.1-mini",
+                "  llm_temperature: 0.2",
+                "  tool_timeout: 5",
+                "  tool_budget: 10",
+                "  allowed_tools: [market_data, sentiment_analysis]",
             ]
         ),
         encoding="utf-8",
@@ -48,6 +59,7 @@ def test_load_settings_merges_yaml_and_env_overrides(tmp_path: Path, monkeypatch
     monkeypatch.setenv("CONFIG_DIR", str(tmp_path))
     monkeypatch.setenv("DEFAULT_SYMBOLS", "QQQ,SPY")
     monkeypatch.setenv("TOKEN_BUDGET", "high")
+    monkeypatch.setenv("ALLOWED_TOOLS", "market_data,feature_engineering")
 
     settings = load_settings()
 
@@ -60,3 +72,9 @@ def test_load_settings_merges_yaml_and_env_overrides(tmp_path: Path, monkeypatch
     assert settings.backtest_window["steps"] == 12
     assert settings.backtest_window["train_window"] == DEFAULT_BACKTEST_WINDOW["train_window"]
     assert settings.data_provider["provider"] == "deterministic"
+    assert settings.llm_provider == "openai"
+    assert settings.llm_model == "gpt-4.1-mini"
+    assert settings.llm_temperature == 0.2
+    assert settings.tool_timeout == 5
+    assert settings.tool_budget == 10
+    assert settings.allowed_tools == ["market_data", "feature_engineering"]

@@ -20,6 +20,9 @@ def build_provider_from_config(config: dict[str, Any] | None) -> BaseDataProvide
     if provider_name == "composite":
         from quanter_swarm.data import CompositeMarketDataProvider
 
+        if CompositeMarketDataProvider is None:
+            raise DataProviderError("Composite provider is unavailable because live provider dependencies are missing.")
+
         market_name = str(payload.get("market_provider", "deterministic")).strip().lower()
         market_kwargs = dict(payload.get("market_provider_kwargs", {}))
         market_provider = (

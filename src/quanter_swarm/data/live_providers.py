@@ -248,7 +248,7 @@ class FmpSharesFloatProvider(HttpProviderMixin):
         self.__post_init__()
 
     def get_shares_float(self, symbol: str) -> dict[str, Any]:
-        payload = self._get(f"/v4/shares_float", params={"symbol": symbol.upper(), "apikey": self.api_key})
+        payload = self._get("/v4/shares_float", params={"symbol": symbol.upper(), "apikey": self.api_key})
         row = payload[0]
         return {
             "symbol": symbol.upper(),
