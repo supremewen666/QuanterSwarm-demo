@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
-class Status(str, Enum):
+class Status(StrEnum):
     OK = "ok"
     DEGRADED = "degraded"
     NO_TRADE = "no_trade"

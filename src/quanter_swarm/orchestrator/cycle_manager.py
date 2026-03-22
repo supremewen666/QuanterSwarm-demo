@@ -24,7 +24,7 @@ from quanter_swarm.decision.execution_gate import execution_allowed
 from quanter_swarm.decision.order_sizer import size_order
 from quanter_swarm.decision.portfolio_suggestion import build_portfolio
 from quanter_swarm.decision.risk_guardrail import assess_guardrails
-from quanter_swarm.errors import AgentExecutionError
+from quanter_swarm.errors import AgentExecutionError, DataProviderError
 from quanter_swarm.evaluation.metrics import summarize_metrics
 from quanter_swarm.evolution import EvolutionManager
 from quanter_swarm.execution.paper_executor import execute

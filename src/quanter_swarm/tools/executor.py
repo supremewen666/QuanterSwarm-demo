@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeoutError
 from time import perf_counter
 from typing import Any
 
@@ -44,7 +45,7 @@ class ToolExecutor:
                 )
                 logger.info("tool_execution_succeeded", extra=result.model_dump(mode="json"))
                 return result.model_dump(mode="json")
-            except FutureTimeoutError as exc:
+            except FutureTimeoutError:
                 error_type = "timeout"
                 error_message = f"Tool '{tool_name}' timed out"
             except Exception as exc:  # pragma: no cover - covered via caller behavior
