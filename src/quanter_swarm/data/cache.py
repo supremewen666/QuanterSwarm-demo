@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 class SnapshotCache(ABC):
@@ -39,7 +39,7 @@ class FileSnapshotCache(SnapshotCache):
         path = self.root / f"{key.lower()}.json"
         if not path.exists():
             return None
-        return json.loads(path.read_text(encoding="utf-8"))
+        return cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
 
     def set_snapshot(self, key: str, snapshot: dict[str, Any]) -> None:
         path = self.root / f"{key.lower()}.json"

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
 from typing import Any
@@ -38,6 +38,7 @@ class HttpProviderMixin:
     timeout: float = 15.0
     headers: dict[str, str] | None = None
     client: httpx.Client | None = None
+    _client: httpx.Client = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
         self._client = self.client or httpx.Client(
@@ -270,7 +271,7 @@ class SecFilingsProvider(HttpProviderMixin):
     source_type = "official"
 
     def __init__(self, user_agent: str | None = None, client: httpx.Client | None = None) -> None:
-        agent = user_agent or os.getenv("SEC_USER_AGENT", "QuanterSwarm research@example.com")
+        agent = str(user_agent or os.getenv("SEC_USER_AGENT", "QuanterSwarm research@example.com"))
         HttpProviderMixin.__init__(
             self,
             base_url="https://data.sec.gov",
@@ -330,7 +331,7 @@ class SecXbrlFactsProvider(HttpProviderMixin):
     source_type = "official"
 
     def __init__(self, user_agent: str | None = None, client: httpx.Client | None = None) -> None:
-        agent = user_agent or os.getenv("SEC_USER_AGENT", "QuanterSwarm research@example.com")
+        agent = str(user_agent or os.getenv("SEC_USER_AGENT", "QuanterSwarm research@example.com"))
         HttpProviderMixin.__init__(
             self,
             base_url="https://data.sec.gov",
@@ -567,7 +568,7 @@ class CompositeMarketDataProvider(BaseDataProvider):
         rows = self.macro_provider.get_series("DFF")
         latest = rows[-1] if rows else {}
         value = latest.get("value")
-        numeric_value = 0.0 if value in {None, "."} else float(value)
+        numeric_value = 0.0 if value in {None, "."} else float(str(value))
         return {
             "macro_risk": min(1.0, max(0.0, numeric_value / 10)),
             "macro_theme": "rates_high" if numeric_value > 3 else "disinflation",

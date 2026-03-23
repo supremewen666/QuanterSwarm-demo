@@ -7,7 +7,7 @@ import struct
 import zlib
 from pathlib import Path
 from time import time
-from typing import Any
+from typing import Any, cast
 
 from quanter_swarm.errors import BacktestError
 from quanter_swarm.orchestrator.cycle_manager import CycleManager
@@ -188,7 +188,7 @@ class ConfiguredExperimentRunner:
         if not path.exists():
             raise BacktestError(f"Unknown experiment config: {config_name}")
         payload = load_yaml(path)
-        experiment = payload.get("experiment", {})
+        experiment = cast(dict[str, Any], payload.get("experiment", {}))
         mode = experiment.get("mode")
         if mode not in _SUPPORTED_MODES:
             raise BacktestError(f"Unsupported experiment mode: {mode}")

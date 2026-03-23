@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 _DEFAULT_PARAMETERS = {
     "momentum": {"lookback_window": 20, "trend_strength_scale": 5.0, "volatility_penalty": 0.8},
@@ -20,8 +20,8 @@ class LeaderRegistry:
 
     def _ensure(self) -> dict[str, Any]:
         if self.path.exists():
-            return json.loads(self.path.read_text(encoding="utf-8"))
-        payload = {
+            return cast(dict[str, Any], json.loads(self.path.read_text(encoding="utf-8")))
+        payload: dict[str, Any] = {
             "leaders": {
                 name: [
                     {
@@ -43,7 +43,8 @@ class LeaderRegistry:
 
     def get_active(self, leader_name: str, *, regime: str | None = None, event_cluster: str | None = None) -> dict[str, Any]:
         payload = self._ensure()
-        versions = payload.get("leaders", {}).get(leader_name, [])
+        leaders_payload = cast(dict[str, list[dict[str, Any]]], payload.get("leaders", {}))
+        versions = leaders_payload.get(leader_name, [])
         for item in versions:
             if not item.get("active"):
                 continue
@@ -53,7 +54,7 @@ class LeaderRegistry:
                 continue
             if supported_clusters and event_cluster and event_cluster not in supported_clusters:
                 continue
-            return item
+            return dict(item)
         return {
             "version": "v1",
             "parameter_set": dict(_DEFAULT_PARAMETERS.get(leader_name, {})),

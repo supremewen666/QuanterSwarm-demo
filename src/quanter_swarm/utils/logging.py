@@ -29,7 +29,7 @@ class JsonFormatter(logging.Formatter):
 
 def configure_logging(config_path: Path | str = "configs/logging.yaml") -> None:
     path = Path(config_path)
-    config = {}
+    config: dict[str, Any] = {}
     if path.exists() and yaml is not None:
         config = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     logging_config = config.get("logging", {})

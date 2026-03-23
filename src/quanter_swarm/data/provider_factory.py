@@ -2,11 +2,21 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any, cast
 
 from quanter_swarm.data import create_provider
 from quanter_swarm.data.base import BaseDataProvider, DeterministicDataProvider
 from quanter_swarm.errors import DataProviderError
+
+if TYPE_CHECKING:
+    from quanter_swarm.data.live_providers import (
+        AlfredVintageMacroProvider,
+        CompositeMarketDataProvider,
+        FmpSharesFloatProvider,
+        FredMacroProvider,
+        SecFilingsProvider,
+        SecXbrlFactsProvider,
+    )
 
 
 def build_provider_from_config(config: dict[str, Any] | None) -> BaseDataProvider:
@@ -16,12 +26,13 @@ def build_provider_from_config(config: dict[str, Any] | None) -> BaseDataProvide
         return DeterministicDataProvider()
     if provider_name in {"polygon_market_data", "fmp_market_data", "file"}:
         kwargs = dict(payload.get("provider_kwargs", {}))
-        return create_provider(provider_name, **kwargs)
+        return cast(BaseDataProvider, create_provider(provider_name, **kwargs))
     if provider_name == "composite":
         from quanter_swarm.data import CompositeMarketDataProvider
 
         if CompositeMarketDataProvider is None:
             raise DataProviderError("Composite provider is unavailable because live provider dependencies are missing.")
+        composite_provider_cls = cast(type["CompositeMarketDataProvider"], CompositeMarketDataProvider)
 
         market_name = str(payload.get("market_provider", "deterministic")).strip().lower()
         market_kwargs = dict(payload.get("market_provider_kwargs", {}))
@@ -32,23 +43,24 @@ def build_provider_from_config(config: dict[str, Any] | None) -> BaseDataProvide
         )
         auxiliary = payload.get("auxiliary_providers", {})
 
-        def _maybe(name: str):
+        def _maybe(name: str) -> BaseDataProvider | None:
             item = auxiliary.get(name)
             if not item or not item.get("enabled", False):
                 return None
             provider = str(item.get("provider", "")).strip().lower()
             if not provider:
                 return None
-            return create_provider(provider, **dict(item.get("provider_kwargs", {})))
+            return cast(BaseDataProvider, create_provider(provider, **dict(item.get("provider_kwargs", {}))))
 
-        return CompositeMarketDataProvider(
+        composite_provider = composite_provider_cls(
             market_provider=market_provider,
-            filings_provider=_maybe("filings"),
-            xbrl_provider=_maybe("xbrl"),
-            shares_float_provider=_maybe("shares_float"),
-            macro_provider=_maybe("macro"),
-            vintage_macro_provider=_maybe("macro_vintages"),
+            filings_provider=cast("SecFilingsProvider | None", _maybe("filings")),
+            xbrl_provider=cast("SecXbrlFactsProvider | None", _maybe("xbrl")),
+            shares_float_provider=cast("FmpSharesFloatProvider | None", _maybe("shares_float")),
+            macro_provider=cast("FredMacroProvider | None", _maybe("macro")),
+            vintage_macro_provider=cast("AlfredVintageMacroProvider | None", _maybe("macro_vintages")),
         )
+        return cast(BaseDataProvider, composite_provider)
     raise DataProviderError(f"Unsupported configured data provider '{provider_name}'.")
 
 

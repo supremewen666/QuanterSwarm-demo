@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Protocol, cast
 
 from quanter_swarm.config.defaults import DEFAULT_MAX_SPECIALISTS_PER_CYCLE, DEFAULT_TOKEN_BUDGET
 
@@ -16,6 +16,10 @@ _LATENCY_BUDGET_LIMITS = {
     "high": 4,
     "relaxed": 4,
 }
+
+
+class SupportsRegime(Protocol):
+    def supports_regime(self, regime: str) -> bool: ...
 
 
 def _resolved_config(router_config: dict[str, Any]) -> dict[str, Any]:
@@ -34,7 +38,7 @@ def _filter_capable_leaders(
 
     capable: list[str] = []
     for leader_name in leaders:
-        leader = get_leader(leader_name)
+        leader = cast(SupportsRegime, get_leader(leader_name))
         if leader.supports_regime(regime_label):
             capable.append(leader_name)
         else:
@@ -216,4 +220,4 @@ def select_specialists(
     task: str | None = None,
     router_config: dict[str, Any] | None = None,
 ) -> list[str]:
-    return select_specialist_plan(regime, task=task, router_config=router_config)["selected"]
+    return cast(list[str], select_specialist_plan(regime, task=task, router_config=router_config)["selected"])

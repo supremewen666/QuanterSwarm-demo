@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 from abc import ABC, abstractmethod
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, cast
 
 from quanter_swarm.market.news_feed import fetch_news
 from quanter_swarm.market.price_feed import get_latest_price as fetch_latest_price
@@ -113,5 +113,5 @@ def get_default_data_provider() -> BaseDataProvider:
             for key, value in os.environ.items()
             if key.startswith("QUANTER_PROVIDER_")
         }
-        return create_provider(provider_name, **kwargs)
+        return cast(BaseDataProvider, create_provider(provider_name, **kwargs))
     return DeterministicDataProvider()

@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 from quanter_swarm.config.settings import Settings
 from quanter_swarm.data.base import BaseDataProvider
+from quanter_swarm.llm.base import BaseLLMProvider
 from quanter_swarm.llm.client import LLMClient
 from quanter_swarm.llm.providers.mock_provider import MockLLMProvider
 from quanter_swarm.llm.router import LLMRouter
@@ -23,6 +24,7 @@ class RuntimeContext:
     def build(cls, *, settings: Settings, provider: BaseDataProvider | None = None) -> RuntimeContext:
         tool_registry = build_default_tool_registry(provider=provider, allowed_tools=settings.allowed_tools)
         llm_provider_name = settings.llm_provider.strip().lower()
+        llm_provider: BaseLLMProvider
         if llm_provider_name == "openai":
             try:
                 from quanter_swarm.llm.providers.openai_provider import OpenAIProvider
