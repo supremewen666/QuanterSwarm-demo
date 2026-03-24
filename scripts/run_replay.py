@@ -1,0 +1,18 @@
+"""Script wrapper for the task-oriented replay CLI."""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+
+def main() -> None:
+    root = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(root / "src"))
+    from app.cli.run_replay import main as cli_main
+
+    cli_main()
+
+
+if __name__ == "__main__":
+    main()

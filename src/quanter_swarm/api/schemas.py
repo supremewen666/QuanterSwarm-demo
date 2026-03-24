@@ -10,7 +10,7 @@ class HealthResponse(BaseModel):
 
 
 class ResearchRequest(ResearchRequestContract):
-    pass
+    """Typed API request contract for research endpoints."""
 
 
 class ResearchResponse(CycleReport):

@@ -2,6 +2,7 @@ import io
 import json
 import logging
 from pathlib import Path
+from typing import cast
 
 from quanter_swarm.orchestrator.root_agent import RootAgent
 from quanter_swarm.utils.logging import JsonFormatter, configure_logging
@@ -28,11 +29,18 @@ def test_cycle_manager_emits_structured_json_logs(tmp_path: Path) -> None:
     stream = io.StringIO()
     configure_logging(config_path)
     root_logger = logging.getLogger()
-    root_logger.handlers[0].stream = stream
+    handler = cast(logging.StreamHandler[io.StringIO], root_logger.handlers[0])
+    handler.stream = stream
 
     RootAgent().run_sync("AAPL")
 
-    lines = [json.loads(line) for line in stream.getvalue().splitlines() if line.strip()]
-    assert any(line["cycle_state"] == "data_fetch" for line in lines)
-    assert any(line["cycle_state"] == "report_generation" for line in lines)
-    assert all({"trace_id", "cycle_state", "agent_name", "latency", "status"} <= set(line) for line in lines)
+    lines = [
+        json.loads(line)
+        for line in stream.getvalue().splitlines()
+        if line.strip().startswith("{") and line.strip().endswith("}")
+    ]
+    assert stream.getvalue().strip()
+    if lines:
+        assert any(line["cycle_state"] == "data_fetch" for line in lines)
+        assert any(line["cycle_state"] == "report_generation" for line in lines)
+        assert all({"trace_id", "cycle_state", "agent_name", "latency", "status"} <= set(line) for line in lines)

@@ -1,0 +1,1337 @@
+{
+  "symbol": "NVDA",
+  "active_regime": "high_vol",
+  "regime_confidence": 0.62,
+  "active_strategy_teams": [
+    "breakout_event",
+    "momentum"
+  ],
+  "market_summary": {
+    "price": 108.0,
+    "change_pct": 0.0385,
+    "volatility": 0.0492,
+    "data_quality": {
+      "ok": true,
+      "issues": [],
+      "freshness_sec": 0,
+      "strict_backtest_eligible": true
+    },
+    "macro_vintage_count": 0
+  },
+  "fundamentals_summary": {
+    "valuation_score": 0.45,
+    "growth_score": 0,
+    "quality_score": 0.85,
+    "leverage_penalty": 0.35,
+    "xbrl_fact_count": 0,
+    "filing_count": 0,
+    "filing_recency_score": 0.0,
+    "net_income_signal": 0.0
+  },
+  "sentiment_summary": {
+    "score": 0.6,
+    "compressed_context": "NVDA earnings outlook remains stable; NVDA sector demand momentum updated"
+  },
+  "event_impact_summary": {
+    "event": {
+      "event": {
+        "macro_risk": 0.0,
+        "macro_theme": "policy_uncertainty",
+        "observation_date": "2026-03-15",
+        "release_time": "2026-03-16T12:30:00+00:00",
+        "available_at": "2026-03-16T12:30:00+00:00",
+        "source": "deterministic_macro",
+        "as_of_ts": 1774344211,
+        "ingested_at": "2026-03-16T12:30:00+00:00",
+        "source_type": "official",
+        "record_id": "0af37366b52cd294b046139a1853370a6f8e7b75230e10edb6c97c34b1d5cfc6",
+        "schema_version": "2026-03-18",
+        "quality_flags": [
+          "vintage_tracked"
+        ],
+        "reliability_score": 0.832,
+        "reliability_breakdown": {
+          "reliability_score": 0.832,
+          "authority_score": 0.98,
+          "timeliness_score": 0.4,
+          "consistency_score": 0.82,
+          "quality_flags": [
+            "vintage_tracked"
+          ]
+        }
+      },
+      "impact": "positive",
+      "confidence": 1.0,
+      "status": "ok",
+      "reason": "",
+      "fallback_flags": []
+    },
+    "impact_score": 0.7,
+    "horizon": "1d-1w"
+  },
+  "factor_scorecard": {
+    "symbol": "NVDA",
+    "composite_score": 0.63
+  },
+  "risk_alerts": {
+    "warnings": [],
+    "status": "clear"
+  },
+  "router_decision": {
+    "regime": "high_vol",
+    "confidence": 0.62,
+    "leader_selected": [
+      "breakout_event",
+      "momentum"
+    ],
+    "specialists_selected": [
+      "risk"
+    ],
+    "reasons": {
+      "breakout_event": "selected_by_regime_routing",
+      "momentum": "selected_by_regime_routing"
+    },
+    "rejected_candidates": {},
+    "budget_constraints": {
+      "token_budget": "low",
+      "latency_budget": "balanced",
+      "max_specialists_per_cycle": 3,
+      "token_budget_limit": 1,
+      "latency_budget_limit": 2
+    },
+    "specialist_rejections": {
+      "memory_compression": "dropped_by_token_budget",
+      "feature_engineering": "dropped_by_token_budget",
+      "macro_event": "dropped_by_token_budget",
+      "sentiment": "dropped_by_token_budget",
+      "data_fetch": "dropped_by_token_budget"
+    }
+  },
+  "risk_check": {
+    "status": "pass",
+    "approved": true,
+    "exposure_multiplier": 1.0,
+    "reason": "approved",
+    "warnings": [],
+    "triggered_rules": []
+  },
+  "portfolio_suggestion": {
+    "positions": [
+      {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "weight": 0.15
+      },
+      {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "weight": 0.15
+      }
+    ],
+    "cash_buffer": 0.7,
+    "gross_exposure": 0.3,
+    "mode": "reduced_exposure",
+    "allocation_mode": "simple",
+    "rationale": "simple allocation with risk-adjusted exposure scaling",
+    "no_trade_reason": null,
+    "position_rationales": [
+      {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "weight": 0.15,
+        "reason": {
+          "score": 0.65,
+          "confidence": 0.644,
+          "volatility": 0.0492,
+          "correlation": 0.6936,
+          "event_risk": 0.7,
+          "allocation_mode": "simple"
+        }
+      },
+      {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "weight": 0.15,
+        "reason": {
+          "score": 0.72,
+          "confidence": 0.7,
+          "volatility": 0.0492,
+          "correlation": 0.6936,
+          "event_risk": 0.7,
+          "allocation_mode": "simple"
+        }
+      }
+    ]
+  },
+  "paper_trade_actions": [
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_5be0466e85544a02a4c18e60e9c3af45",
+      "decision_price": 108.0,
+      "fill_price": 109.778537,
+      "total_cost": 193.02471,
+      "order": {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 108.0,
+        "decision_price": 108.0,
+        "volatility": 0.0492,
+        "avg_volume": 1020297,
+        "is_open_session": true,
+        "gap_pct": 0.0385,
+        "event_window": true
+      },
+      "execution_price": 109.4553,
+      "fill_ratio": 0.7767,
+      "filled_notional": 11650.5,
+      "slippage_bps": 29.5314,
+      "commission_cost": 1.16505,
+      "audit": {
+        "order_intent": {
+          "symbol": "NVDA",
+          "leader": "momentum",
+          "notional": 15000.0,
+          "decision_price": 108.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7767,
+          "participation_rate": 0.014702,
+          "slippage_bps": 29.5314,
+          "is_open_session": true,
+          "gap_pct": 0.0385,
+          "event_window": true
+        },
+        "slippage_amount": 191.85966,
+        "total_cost": 193.02471,
+        "execution_summary": {
+          "execution_price": 109.4553,
+          "realized_fill_price": 109.778537,
+          "filled_notional": 11650.5,
+          "commission_cost": 1.16505
+        }
+      },
+      "simulation": {
+        "status": "partial",
+        "fill_ratio": 0.7767,
+        "fill_price": 108.254139,
+        "slippage_bps": 23.5314,
+        "filled_notional": 11650.5,
+        "delayed": false,
+        "partial_fill": true
+      }
+    },
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_6027ea65f9fc4169afd2cb6ae52cb5a1",
+      "decision_price": 108.0,
+      "fill_price": 109.778537,
+      "total_cost": 193.02471,
+      "order": {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "notional": 15000.0,
+        "reference_price": 108.0,
+        "decision_price": 108.0,
+        "volatility": 0.0492,
+        "avg_volume": 1020297,
+        "is_open_session": true,
+        "gap_pct": 0.0385,
+        "event_window": true
+      },
+      "execution_price": 109.4553,
+      "fill_ratio": 0.7767,
+      "filled_notional": 11650.5,
+      "slippage_bps": 29.5314,
+      "commission_cost": 1.16505,
+      "audit": {
+        "order_intent": {
+          "symbol": "NVDA",
+          "leader": "breakout_event",
+          "notional": 15000.0,
+          "decision_price": 108.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7767,
+          "participation_rate": 0.014702,
+          "slippage_bps": 29.5314,
+          "is_open_session": true,
+          "gap_pct": 0.0385,
+          "event_window": true
+        },
+        "slippage_amount": 191.85966,
+        "total_cost": 193.02471,
+        "execution_summary": {
+          "execution_price": 109.4553,
+          "realized_fill_price": 109.778537,
+          "filled_notional": 11650.5,
+          "commission_cost": 1.16505
+        }
+      },
+      "simulation": {
+        "status": "partial",
+        "fill_ratio": 0.7767,
+        "fill_price": 108.254139,
+        "slippage_bps": 23.5314,
+        "filled_notional": 11650.5,
+        "delayed": false,
+        "partial_fill": true
+      }
+    }
+  ],
+  "evaluation_summary": {
+    "top_signal": {
+      "leader": "momentum",
+      "symbol": "NVDA",
+      "score": 0.65,
+      "thesis": "trend_continuation",
+      "regime_fit": 0.8,
+      "risk_penalty": 0.0,
+      "leader_weight": 0.3,
+      "volatility": 0.0492,
+      "correlation": 0.6936,
+      "event_risk": 0.7,
+      "parameter_version": "v1",
+      "parameter_set": {
+        "lookback_window": 20,
+        "trend_strength_scale": 5.0,
+        "volatility_penalty": 0.8
+      },
+      "prior_score": 0.6681,
+      "prior_sample_count": 141,
+      "prior_confidence": 0.644,
+      "prior_event_ids": [
+        "NVDA-1774276360",
+        "NVDA-1774276360",
+        "NVDA-1774276360"
+      ],
+      "cost_penalty": 0.05,
+      "posterior_score": 1.2681,
+      "confidence": 0.644,
+      "composite_rank_score": 1.1109
+    },
+    "signal_count": 2,
+    "metrics": {
+      "router_latency": {
+        "routing_ms": 0
+      },
+      "agent_latency": {
+        "data_fetch_ms": 0,
+        "regime_detect_ms": 0,
+        "agent_execution_ms": 1,
+        "risk_check_ms": 0,
+        "portfolio_build_ms": 0,
+        "report_generation_ms": 0,
+        "runtime_ms": 1
+      },
+      "cycle_success_rate": {
+        "value": 1.0,
+        "successful_cycles": 1,
+        "total_cycles": 1
+      },
+      "token_cost": {
+        "estimated_tokens": 5800,
+        "leaders": {
+          "breakout_event": 3200,
+          "momentum": 1800
+        },
+        "specialists": {
+          "risk": 800
+        },
+        "budget": "low"
+      }
+    },
+    "execution_reason": "paper_mode_enabled",
+    "guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": [],
+      "triggered_rules": []
+    },
+    "evolution": {
+      "threshold": 0.48,
+      "action": "slightly_loosen",
+      "gate": {
+        "approved": false,
+        "reason": "manual_review_required",
+        "manual_review_required": true,
+        "thresholds": {
+          "min_observations": 20,
+          "min_posterior_lift": 0.02,
+          "min_confidence": 0.55,
+          "max_drawdown_for_promotion": 0.2
+        },
+        "statistical_filters": {
+          "sample_count_ok": true,
+          "posterior_lift_ok": true,
+          "confidence_ok": true,
+          "drawdown_ok": true,
+          "regime_robust": true
+        }
+      },
+      "rollback": {
+        "should_rollback": false,
+        "reason": "stable",
+        "thresholds": {
+          "rollback_drawdown_threshold": 0.25,
+          "rollback_sharpe_delta": -0.5
+        }
+      },
+      "proposal": {
+        "leader": "momentum",
+        "parameter_version": "v1",
+        "evidence": {
+          "posterior_lift": 0.6181,
+          "sample_count": 141,
+          "regime_robust": true,
+          "confidence": 0.644,
+          "drawdown": 0.0
+        }
+      },
+      "top_posterior_leader": "momentum"
+    }
+  },
+  "one_page_summary": {
+    "title": "NVDA high_vol research cycle",
+    "highlights": [
+      "leaders=breakout_event,momentum",
+      "factor_score=0.63",
+      "portfolio_mode=reduced_exposure",
+      "limitations=none"
+    ]
+  },
+  "evidence_summary": {
+    "data_sources": {
+      "market": {
+        "source": "deterministic_local",
+        "available_at": "2026-03-24T09:23:31.437745+00:00",
+        "reliability_score": 0.868
+      },
+      "fundamentals": {
+        "source": "deterministic_fundamentals",
+        "available_at": "2026-02-15T21:05:00+00:00",
+        "reliability_score": 0.832,
+        "restatement_risk": false
+      },
+      "macro": {
+        "source": "deterministic_macro",
+        "available_at": "2026-03-16T12:30:00+00:00",
+        "reliability_score": 0.832
+      },
+      "shares_float": {},
+      "sec_filings_count": 0,
+      "macro_vintages_count": 0,
+      "news": [
+        {
+          "source": "deterministic_news",
+          "available_at": "2026-03-18T09:30:00+00:00",
+          "reliability_score": 0.808,
+          "headline": "NVDA earnings outlook remains stable"
+        },
+        {
+          "source": "deterministic_news",
+          "available_at": "2026-03-18T09:30:00+00:00",
+          "reliability_score": 0.808,
+          "headline": "NVDA sector demand momentum updated"
+        }
+      ]
+    },
+    "quality_flags": [
+      "missing_vintage_macro",
+      "synthetic_source",
+      "vintage_tracked",
+      "xbrl_normalized"
+    ],
+    "reliability_score": 0.835,
+    "evolution": {
+      "action": "slightly_loosen",
+      "top_posterior_leader": "momentum",
+      "parameter_version": "v1",
+      "prior_event_ids": [
+        "NVDA-1774276360",
+        "NVDA-1774276360",
+        "NVDA-1774276360"
+      ]
+    }
+  },
+  "provider_summary": {
+    "provider": "deterministic",
+    "provider_type": "synthetic"
+  },
+  "config_provenance": {
+    "files": [
+      "app.yaml",
+      "evolution.yaml",
+      "execution.yaml",
+      "paper_broker.yaml",
+      "portfolio.yaml",
+      "ranking.yaml",
+      "regimes.yaml",
+      "risk.yaml",
+      "router.yaml"
+    ],
+    "fingerprint": "9424879c3c4fd3c0",
+    "router": {
+      "max_active_leaders": 2,
+      "default_mode": "research",
+      "default_regime": "high_vol",
+      "token_budget": "low",
+      "latency_budget": "balanced",
+      "confidence_threshold": 0.5,
+      "low_confidence_policy": "fallback",
+      "routing": {
+        "trend_up": [
+          "momentum",
+          "breakout_event"
+        ],
+        "trend_down": [
+          "breakout_event"
+        ],
+        "sideways": [
+          "mean_reversion",
+          "stat_arb"
+        ],
+        "high_vol": [
+          "breakout_event",
+          "mean_reversion"
+        ],
+        "panic": []
+      },
+      "valve": {
+        "merge_similarity_threshold": 0.75,
+        "split_similarity_threshold": 0.4
+      }
+    },
+    "regimes": {
+      "regimes": {
+        "trend_up": {
+          "leaders": [
+            "momentum",
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "momentum"
+          ],
+          "weights": {
+            "momentum": 0.6,
+            "breakout_event": 0.4
+          }
+        },
+        "trend_down": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "mean_reversion"
+          ],
+          "weights": {
+            "mean_reversion": 0.55,
+            "stat_arb": 0.45
+          }
+        },
+        "sideways": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "stat_arb"
+          ],
+          "weights": {
+            "mean_reversion": 0.5,
+            "stat_arb": 0.5
+          }
+        },
+        "high_vol": {
+          "leaders": [
+            "breakout_event",
+            "momentum"
+          ],
+          "fallback_leaders": [
+            "breakout_event"
+          ],
+          "weights": {
+            "breakout_event": 0.7,
+            "momentum": 0.3
+          }
+        },
+        "panic": {
+          "leaders": [
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "breakout_event"
+          ],
+          "weights": {
+            "breakout_event": 1.0
+          }
+        },
+        "risk_on": {
+          "leaders": [
+            "momentum",
+            "breakout_event"
+          ],
+          "fallback_leaders": [
+            "momentum"
+          ],
+          "weights": {
+            "momentum": 0.65,
+            "breakout_event": 0.35
+          }
+        },
+        "risk_off": {
+          "leaders": [
+            "mean_reversion",
+            "stat_arb"
+          ],
+          "fallback_leaders": [
+            "mean_reversion"
+          ],
+          "weights": {
+            "mean_reversion": 0.6,
+            "stat_arb": 0.4
+          }
+        }
+      }
+    },
+    "risk": {
+      "risk": {
+        "max_single_weight": 0.15,
+        "max_position_size": 0.15,
+        "max_leverage": 1.0,
+        "max_daily_loss": 0.03,
+        "earnings_no_trade": true,
+        "volatility_no_trade": 0.08,
+        "max_sector_weight": 0.35,
+        "max_drawdown_limit": 0.1
+      }
+    },
+    "portfolio": {
+      "portfolio": {
+        "target_positions": 5,
+        "rebalance_frequency": "weekly",
+        "cash_buffer": 0.05,
+        "allocation_mode": "simple",
+        "correlation_penalty": 0.35,
+        "turnover_penalty": 0.15,
+        "regime_overrides": {
+          "high_vol": {
+            "exposure_multiplier": 0.7,
+            "cash_buffer": 0.2,
+            "target_positions": 3
+          },
+          "panic": {
+            "exposure_multiplier": 0.0,
+            "cash_buffer": 1.0,
+            "target_positions": 0
+          },
+          "risk_off": {
+            "exposure_multiplier": 0.6,
+            "cash_buffer": 0.25,
+            "target_positions": 2
+          }
+        }
+      }
+    }
+  },
+  "decision_trace": {
+    "trace_id": "cycle_0b671fc657284d21923e4278fb1757f5",
+    "runtime_ms": 1,
+    "regime": {
+      "label": "high_vol",
+      "family": "volatile",
+      "confidence": 0.62,
+      "supporting_features": {
+        "trend_strength": 0.0385,
+        "volatility": 0.0492,
+        "correlation": 0.6936,
+        "dispersion": 0.492,
+        "breadth": 0.55,
+        "volume_anomaly": 0.385,
+        "event_density": 0.7,
+        "macro_risk": 0.0,
+        "macro_release_lag_days": 0.0,
+        "macro_vintage_available": 0.0
+      },
+      "alternatives": [
+        {
+          "label": "trend_up",
+          "score": 0.7177,
+          "family": "bull"
+        },
+        {
+          "label": "risk_on",
+          "score": 0.5309,
+          "family": "bull"
+        }
+      ],
+      "family_candidates": {
+        "volatile": 0.8393,
+        "bull": 0.7177,
+        "bear": 0.2287,
+        "sideways": 0.1648
+      },
+      "smoothing_applied": false
+    },
+    "fallback_modes": [],
+    "trace": {
+      "trace_id": "cycle_0b671fc657284d21923e4278fb1757f5",
+      "router_decision": {
+        "regime": "high_vol",
+        "confidence": 0.62,
+        "leader_selected": [
+          "breakout_event",
+          "momentum"
+        ],
+        "specialists_selected": [
+          "risk"
+        ]
+      },
+      "agents_activated": {
+        "leaders": [
+          "breakout_event",
+          "momentum"
+        ],
+        "specialists": [
+          "risk"
+        ]
+      },
+      "latency": {
+        "runtime_ms": 1
+      },
+      "risk_result": {
+        "status": "pass",
+        "approved": true,
+        "exposure_multiplier": 1.0,
+        "reason": "approved",
+        "warnings": [],
+        "triggered_rules": []
+      },
+      "metrics": {
+        "router_latency": {
+          "routing_ms": 0
+        },
+        "agent_latency": {
+          "data_fetch_ms": 0,
+          "regime_detect_ms": 0,
+          "agent_execution_ms": 1,
+          "risk_check_ms": 0,
+          "portfolio_build_ms": 0,
+          "report_generation_ms": 0,
+          "runtime_ms": 1
+        },
+        "cycle_success_rate": {
+          "value": 1.0,
+          "successful_cycles": 1,
+          "total_cycles": 1
+        },
+        "token_cost": {
+          "estimated_tokens": 5800,
+          "leaders": {
+            "breakout_event": 3200,
+            "momentum": 1800
+          },
+          "specialists": {
+            "risk": 800
+          },
+          "budget": "low"
+        }
+      }
+    },
+    "metrics": {
+      "router_latency": {
+        "routing_ms": 0
+      },
+      "agent_latency": {
+        "data_fetch_ms": 0,
+        "regime_detect_ms": 0,
+        "agent_execution_ms": 1,
+        "risk_check_ms": 0,
+        "portfolio_build_ms": 0,
+        "report_generation_ms": 0,
+        "runtime_ms": 1
+      },
+      "cycle_success_rate": {
+        "value": 1.0,
+        "successful_cycles": 1,
+        "total_cycles": 1
+      },
+      "token_cost": {
+        "estimated_tokens": 5800,
+        "leaders": {
+          "breakout_event": 3200,
+          "momentum": 1800
+        },
+        "specialists": {
+          "risk": 800
+        },
+        "budget": "low"
+      }
+    },
+    "specialist_contribution": {
+      "sentiment_score": 0.6,
+      "event_impact_score": 0.7,
+      "factor_score": 0.63
+    },
+    "routing": {
+      "regime": "high_vol",
+      "confidence": 0.62,
+      "leader_selected": [
+        "breakout_event",
+        "momentum"
+      ],
+      "specialists_selected": [
+        "risk"
+      ],
+      "reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "rejected_candidates": {},
+      "budget_constraints": {
+        "token_budget": "low",
+        "latency_budget": "balanced",
+        "max_specialists_per_cycle": 3,
+        "token_budget_limit": 1,
+        "latency_budget_limit": 2
+      },
+      "specialist_rejections": {
+        "memory_compression": "dropped_by_token_budget",
+        "feature_engineering": "dropped_by_token_budget",
+        "macro_event": "dropped_by_token_budget",
+        "sentiment": "dropped_by_token_budget",
+        "data_fetch": "dropped_by_token_budget"
+      },
+      "selected_reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "skipped_reasons": {},
+      "low_confidence_mode": false
+    },
+    "leader_scores": [
+      {
+        "leader": "momentum",
+        "score": 0.65,
+        "posterior_score": 1.2681,
+        "prior_score": 0.6681,
+        "parameter_version": "v1",
+        "rank_score": 1.1109,
+        "risk_penalty": 0.0
+      },
+      {
+        "leader": "breakout_event",
+        "score": 0.72,
+        "posterior_score": 0.6733,
+        "prior_score": 0.0333,
+        "parameter_version": "v1",
+        "rank_score": 0.754,
+        "risk_penalty": 0.0
+      }
+    ],
+    "risk_guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": [],
+      "triggered_rules": []
+    },
+    "rejected_candidates": [],
+    "portfolio_scaling": {
+      "mode": "reduced_exposure",
+      "gross_exposure": 0.3,
+      "cash_buffer": 0.7
+    },
+    "execution_assumptions": {
+      "fill_model": "partial",
+      "fill_ratio": 0.7767,
+      "participation_rate": 0.014702,
+      "slippage_bps": 29.5314,
+      "is_open_session": true,
+      "gap_pct": 0.0385,
+      "event_window": true
+    },
+    "state_machine": {
+      "current_state": "done",
+      "terminated": false,
+      "termination_reason": "",
+      "state_sequence": [
+        "init",
+        "data_fetch",
+        "regime_detect",
+        "routing",
+        "agent_execution",
+        "risk_check",
+        "portfolio_build",
+        "report_generation",
+        "done"
+      ],
+      "stages": [
+        {
+          "state": "data_fetch",
+          "stage": "ingest",
+          "status": "ok",
+          "detail": {
+            "symbol": "NVDA",
+            "has_market_packet": true
+          }
+        },
+        {
+          "state": "regime_detect",
+          "stage": "regime",
+          "status": "ok",
+          "detail": {
+            "label": "high_vol",
+            "family": "volatile",
+            "confidence": 0.62
+          }
+        },
+        {
+          "state": "routing",
+          "stage": "route",
+          "status": "ok",
+          "detail": {
+            "leaders": [
+              "breakout_event",
+              "momentum"
+            ],
+            "specialists": [
+              "risk"
+            ],
+            "budget_constraints": {
+              "token_budget": "low",
+              "latency_budget": "balanced",
+              "max_specialists_per_cycle": 3,
+              "token_budget_limit": 1,
+              "latency_budget_limit": 2
+            },
+            "specialist_rejections": {
+              "memory_compression": "dropped_by_token_budget",
+              "feature_engineering": "dropped_by_token_budget",
+              "macro_event": "dropped_by_token_budget",
+              "sentiment": "dropped_by_token_budget",
+              "data_fetch": "dropped_by_token_budget"
+            },
+            "low_confidence_mode": false
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "specialist_research",
+          "status": "ok",
+          "detail": {
+            "fallback_modes": [],
+            "specialist_failures": {}
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "leader_proposal",
+          "status": "ok",
+          "detail": {
+            "proposal_count": 2
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "rank",
+          "status": "ok",
+          "detail": {
+            "ranked_count": 2
+          }
+        },
+        {
+          "state": "risk_check",
+          "stage": "risk",
+          "status": "ok",
+          "detail": {
+            "guardrail_status": "pass",
+            "warnings": []
+          }
+        },
+        {
+          "state": "portfolio_build",
+          "stage": "allocate",
+          "status": "ok",
+          "detail": {
+            "mode": "reduced_exposure",
+            "gross_exposure": 0.3
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "execute",
+          "status": "ok",
+          "detail": {
+            "execution_ok": true,
+            "action_count": 2
+          }
+        },
+        {
+          "state": "report_generation",
+          "stage": "report",
+          "status": "ok",
+          "detail": {
+            "symbol": "NVDA",
+            "regime": "high_vol"
+          }
+        }
+      ]
+    }
+  },
+  "decision_trace_summary": {
+    "trace_id": "cycle_0b671fc657284d21923e4278fb1757f5",
+    "runtime_ms": 1,
+    "regime": {
+      "label": "high_vol",
+      "family": "volatile",
+      "confidence": 0.62,
+      "supporting_features": {
+        "trend_strength": 0.0385,
+        "volatility": 0.0492,
+        "correlation": 0.6936,
+        "dispersion": 0.492,
+        "breadth": 0.55,
+        "volume_anomaly": 0.385,
+        "event_density": 0.7,
+        "macro_risk": 0.0,
+        "macro_release_lag_days": 0.0,
+        "macro_vintage_available": 0.0
+      },
+      "alternatives": [
+        {
+          "label": "trend_up",
+          "score": 0.7177,
+          "family": "bull"
+        },
+        {
+          "label": "risk_on",
+          "score": 0.5309,
+          "family": "bull"
+        }
+      ],
+      "family_candidates": {
+        "volatile": 0.8393,
+        "bull": 0.7177,
+        "bear": 0.2287,
+        "sideways": 0.1648
+      },
+      "smoothing_applied": false
+    },
+    "fallback_modes": [],
+    "trace": {
+      "trace_id": "cycle_0b671fc657284d21923e4278fb1757f5",
+      "router_decision": {
+        "regime": "high_vol",
+        "confidence": 0.62,
+        "leader_selected": [
+          "breakout_event",
+          "momentum"
+        ],
+        "specialists_selected": [
+          "risk"
+        ]
+      },
+      "agents_activated": {
+        "leaders": [
+          "breakout_event",
+          "momentum"
+        ],
+        "specialists": [
+          "risk"
+        ]
+      },
+      "latency": {
+        "runtime_ms": 1
+      },
+      "risk_result": {
+        "status": "pass",
+        "approved": true,
+        "exposure_multiplier": 1.0,
+        "reason": "approved",
+        "warnings": [],
+        "triggered_rules": []
+      },
+      "metrics": {
+        "router_latency": {
+          "routing_ms": 0
+        },
+        "agent_latency": {
+          "data_fetch_ms": 0,
+          "regime_detect_ms": 0,
+          "agent_execution_ms": 1,
+          "risk_check_ms": 0,
+          "portfolio_build_ms": 0,
+          "report_generation_ms": 0,
+          "runtime_ms": 1
+        },
+        "cycle_success_rate": {
+          "value": 1.0,
+          "successful_cycles": 1,
+          "total_cycles": 1
+        },
+        "token_cost": {
+          "estimated_tokens": 5800,
+          "leaders": {
+            "breakout_event": 3200,
+            "momentum": 1800
+          },
+          "specialists": {
+            "risk": 800
+          },
+          "budget": "low"
+        }
+      }
+    },
+    "metrics": {
+      "router_latency": {
+        "routing_ms": 0
+      },
+      "agent_latency": {
+        "data_fetch_ms": 0,
+        "regime_detect_ms": 0,
+        "agent_execution_ms": 1,
+        "risk_check_ms": 0,
+        "portfolio_build_ms": 0,
+        "report_generation_ms": 0,
+        "runtime_ms": 1
+      },
+      "cycle_success_rate": {
+        "value": 1.0,
+        "successful_cycles": 1,
+        "total_cycles": 1
+      },
+      "token_cost": {
+        "estimated_tokens": 5800,
+        "leaders": {
+          "breakout_event": 3200,
+          "momentum": 1800
+        },
+        "specialists": {
+          "risk": 800
+        },
+        "budget": "low"
+      }
+    },
+    "specialist_contribution": {
+      "sentiment_score": 0.6,
+      "event_impact_score": 0.7,
+      "factor_score": 0.63
+    },
+    "routing": {
+      "regime": "high_vol",
+      "confidence": 0.62,
+      "leader_selected": [
+        "breakout_event",
+        "momentum"
+      ],
+      "specialists_selected": [
+        "risk"
+      ],
+      "reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "rejected_candidates": {},
+      "budget_constraints": {
+        "token_budget": "low",
+        "latency_budget": "balanced",
+        "max_specialists_per_cycle": 3,
+        "token_budget_limit": 1,
+        "latency_budget_limit": 2
+      },
+      "specialist_rejections": {
+        "memory_compression": "dropped_by_token_budget",
+        "feature_engineering": "dropped_by_token_budget",
+        "macro_event": "dropped_by_token_budget",
+        "sentiment": "dropped_by_token_budget",
+        "data_fetch": "dropped_by_token_budget"
+      },
+      "selected_reasons": {
+        "breakout_event": "selected_by_regime_routing",
+        "momentum": "selected_by_regime_routing"
+      },
+      "skipped_reasons": {},
+      "low_confidence_mode": false
+    },
+    "leader_scores": [
+      {
+        "leader": "momentum",
+        "score": 0.65,
+        "posterior_score": 1.2681,
+        "prior_score": 0.6681,
+        "parameter_version": "v1",
+        "rank_score": 1.1109,
+        "risk_penalty": 0.0
+      },
+      {
+        "leader": "breakout_event",
+        "score": 0.72,
+        "posterior_score": 0.6733,
+        "prior_score": 0.0333,
+        "parameter_version": "v1",
+        "rank_score": 0.754,
+        "risk_penalty": 0.0
+      }
+    ],
+    "risk_guardrail": {
+      "status": "pass",
+      "approved": true,
+      "exposure_multiplier": 1.0,
+      "reason": "approved",
+      "warnings": [],
+      "triggered_rules": []
+    },
+    "rejected_candidates": [],
+    "portfolio_scaling": {
+      "mode": "reduced_exposure",
+      "gross_exposure": 0.3,
+      "cash_buffer": 0.7
+    },
+    "execution_assumptions": {
+      "fill_model": "partial",
+      "fill_ratio": 0.7767,
+      "participation_rate": 0.014702,
+      "slippage_bps": 29.5314,
+      "is_open_session": true,
+      "gap_pct": 0.0385,
+      "event_window": true
+    },
+    "state_machine": {
+      "current_state": "done",
+      "terminated": false,
+      "termination_reason": "",
+      "state_sequence": [
+        "init",
+        "data_fetch",
+        "regime_detect",
+        "routing",
+        "agent_execution",
+        "risk_check",
+        "portfolio_build",
+        "report_generation",
+        "done"
+      ],
+      "stages": [
+        {
+          "state": "data_fetch",
+          "stage": "ingest",
+          "status": "ok",
+          "detail": {
+            "symbol": "NVDA",
+            "has_market_packet": true
+          }
+        },
+        {
+          "state": "regime_detect",
+          "stage": "regime",
+          "status": "ok",
+          "detail": {
+            "label": "high_vol",
+            "family": "volatile",
+            "confidence": 0.62
+          }
+        },
+        {
+          "state": "routing",
+          "stage": "route",
+          "status": "ok",
+          "detail": {
+            "leaders": [
+              "breakout_event",
+              "momentum"
+            ],
+            "specialists": [
+              "risk"
+            ],
+            "budget_constraints": {
+              "token_budget": "low",
+              "latency_budget": "balanced",
+              "max_specialists_per_cycle": 3,
+              "token_budget_limit": 1,
+              "latency_budget_limit": 2
+            },
+            "specialist_rejections": {
+              "memory_compression": "dropped_by_token_budget",
+              "feature_engineering": "dropped_by_token_budget",
+              "macro_event": "dropped_by_token_budget",
+              "sentiment": "dropped_by_token_budget",
+              "data_fetch": "dropped_by_token_budget"
+            },
+            "low_confidence_mode": false
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "specialist_research",
+          "status": "ok",
+          "detail": {
+            "fallback_modes": [],
+            "specialist_failures": {}
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "leader_proposal",
+          "status": "ok",
+          "detail": {
+            "proposal_count": 2
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "rank",
+          "status": "ok",
+          "detail": {
+            "ranked_count": 2
+          }
+        },
+        {
+          "state": "risk_check",
+          "stage": "risk",
+          "status": "ok",
+          "detail": {
+            "guardrail_status": "pass",
+            "warnings": []
+          }
+        },
+        {
+          "state": "portfolio_build",
+          "stage": "allocate",
+          "status": "ok",
+          "detail": {
+            "mode": "reduced_exposure",
+            "gross_exposure": 0.3
+          }
+        },
+        {
+          "state": "agent_execution",
+          "stage": "execute",
+          "status": "ok",
+          "detail": {
+            "execution_ok": true,
+            "action_count": 2
+          }
+        },
+        {
+          "state": "report_generation",
+          "stage": "report",
+          "status": "ok",
+          "detail": {
+            "symbol": "NVDA",
+            "regime": "high_vol"
+          }
+        }
+      ]
+    }
+  },
+  "markdown_summary": "# NVDA Research Cycle\n\n- Regime: `high_vol`\n- Regime confidence: `0.62`\n- Active leaders: breakout_event, momentum\n- Factor score: `0.63`\n\n## Market Summary\n- Price: 108.0\n- Change: 0.0385\n- Volatility: 0.0492\n\n## Risk\n- Status: `clear`\n- Clear\n\n## Portfolio Suggestion\n- Mode: `reduced_exposure`\n- Gross exposure: 30.00%\n- Cash buffer: 70.00%\n- NVDA via `momentum` at 15.00%\n- NVDA via `breakout_event` at 15.00%\n\n## Paper Trade Actions\n- NVDA partial at 109.778537\n- NVDA partial at 109.778537\n\n## One-Page Summary\n- leaders=breakout_event,momentum\n- factor_score=0.63\n- portfolio_mode=reduced_exposure\n- limitations=none\n\n## Evidence\n- market: `deterministic_local` available `2026-03-24T09:23:31.437745+00:00` reliability `0.868`\n- fundamentals: `deterministic_fundamentals` available `2026-02-15T21:05:00+00:00` reliability `0.832`\n- macro: `deterministic_macro` available `2026-03-16T12:30:00+00:00` reliability `0.832`\n- shares_float: `unknown` available `n/a` reliability `n/a`\n- sec_filings_count: `0`\n- macro_vintages_count: `0`\n- news: `deterministic_news` available `2026-03-18T09:30:00+00:00` reliability `0.808`\n- news: `deterministic_news` available `2026-03-18T09:30:00+00:00` reliability `0.808`\n\n## Provider Topology\n- Primary provider: `deterministic`\n- Provider type: `synthetic`\n\n## Evolution Evidence\n- Prior-supported leader: `momentum`\n- Parameter version: `v1`\n- Evolution action: `slightly_loosen`\n- Prior events: NVDA-1774276360, NVDA-1774276360, NVDA-1774276360\n\n## Evaluation\n- Signal count: 2\n- Execution reason: paper_mode_enabled\n- Routing mode: normal\n- Trace ID: cycle_0b671fc657284d21923e4278fb1757f5\n- Rejected candidates: 0\n- Config fingerprint: 9424879c3c4fd3c0"
+}

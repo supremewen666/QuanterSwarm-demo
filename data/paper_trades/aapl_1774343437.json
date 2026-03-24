@@ -1,0 +1,153 @@
+{
+  "symbol": "AAPL",
+  "actions": [
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_16d0a45208d347e08b5f883a49e3d61d",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 109.0,
+        "decision_price": 109.0,
+        "volatility": 0.06,
+        "avg_volume": 1020286,
+        "is_open_session": true,
+        "gap_pct": 0.0,
+        "event_window": false
+      },
+      "decision_price": 109.0,
+      "execution_price": 109.0,
+      "fill_price": 109.343082,
+      "fill_ratio": 0.7335,
+      "filled_notional": 11002.5,
+      "slippage_bps": 31.4754,
+      "commission_cost": 1.10025,
+      "total_cost": 35.731059,
+      "audit": {
+        "order_intent": {
+          "symbol": "AAPL",
+          "leader": "momentum",
+          "notional": 15000.0,
+          "decision_price": 109.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7335,
+          "participation_rate": 0.014702,
+          "slippage_bps": 31.4754,
+          "is_open_session": true,
+          "gap_pct": 0.0,
+          "event_window": false
+        },
+        "slippage_amount": 34.630809,
+        "total_cost": 35.731059,
+        "execution_summary": {
+          "execution_price": 109.0,
+          "realized_fill_price": 109.343082,
+          "filled_notional": 11002.5,
+          "commission_cost": 1.10025
+        }
+      },
+      "simulation": {
+        "status": "partial",
+        "fill_ratio": 0.7335,
+        "fill_price": 109.277682,
+        "slippage_bps": 25.4754,
+        "filled_notional": 11002.5,
+        "delayed": false,
+        "partial_fill": true
+      }
+    },
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_323f1ede187342309882c4e95272d417",
+      "order": {
+        "symbol": "AAPL",
+        "leader": "breakout_event",
+        "notional": 15000.0,
+        "reference_price": 109.0,
+        "decision_price": 109.0,
+        "volatility": 0.06,
+        "avg_volume": 1020286,
+        "is_open_session": true,
+        "gap_pct": 0.0,
+        "event_window": false
+      },
+      "decision_price": 109.0,
+      "execution_price": 109.0,
+      "fill_price": 109.343082,
+      "fill_ratio": 0.7335,
+      "filled_notional": 11002.5,
+      "slippage_bps": 31.4754,
+      "commission_cost": 1.10025,
+      "total_cost": 35.731059,
+      "audit": {
+        "order_intent": {
+          "symbol": "AAPL",
+          "leader": "breakout_event",
+          "notional": 15000.0,
+          "decision_price": 109.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7335,
+          "participation_rate": 0.014702,
+          "slippage_bps": 31.4754,
+          "is_open_session": true,
+          "gap_pct": 0.0,
+          "event_window": false
+        },
+        "slippage_amount": 34.630809,
+        "total_cost": 35.731059,
+        "execution_summary": {
+          "execution_price": 109.0,
+          "realized_fill_price": 109.343082,
+          "filled_notional": 11002.5,
+          "commission_cost": 1.10025
+        }
+      },
+      "simulation": {
+        "status": "partial",
+        "fill_ratio": 0.7335,
+        "fill_price": 109.277682,
+        "slippage_bps": 25.4754,
+        "filled_notional": 11002.5,
+        "delayed": false,
+        "partial_fill": true
+      }
+    }
+  ],
+  "metrics": {
+    "router_latency": {
+      "routing_ms": 0
+    },
+    "agent_latency": {
+      "data_fetch_ms": 0,
+      "regime_detect_ms": 0,
+      "agent_execution_ms": 1,
+      "risk_check_ms": 0,
+      "portfolio_build_ms": 0,
+      "report_generation_ms": 0,
+      "runtime_ms": 2
+    },
+    "cycle_success_rate": {
+      "value": 1.0,
+      "successful_cycles": 1,
+      "total_cycles": 1
+    },
+    "token_cost": {
+      "estimated_tokens": 5800,
+      "leaders": {
+        "breakout_event": 3200,
+        "momentum": 1800
+      },
+      "specialists": {
+        "risk": 800
+      },
+      "budget": "low"
+    }
+  }
+}

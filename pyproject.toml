@@ -24,6 +24,13 @@ dependencies = [
   "uvicorn>=0.30.0"
 ]
 
+[project.scripts]
+run_backtest = "app.cli.run_backtest:main"
+generate_signals = "app.cli.generate_signals:main"
+run_replay = "app.cli.run_replay:main"
+build_dashboard_data = "app.cli.build_dashboard_data:main"
+serve_dashboard = "app.cli.serve_dashboard:main"
+
 [project.optional-dependencies]
 dev = [
   "pytest>=8.3.0",

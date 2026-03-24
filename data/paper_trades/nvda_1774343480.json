@@ -1,0 +1,153 @@
+{
+  "symbol": "NVDA",
+  "actions": [
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_7a3d15671008435a9041f7ef26556680",
+      "order": {
+        "symbol": "NVDA",
+        "leader": "momentum",
+        "notional": 15000.0,
+        "reference_price": 108.0,
+        "decision_price": 108.0,
+        "volatility": 0.0492,
+        "avg_volume": 1020297,
+        "is_open_session": true,
+        "gap_pct": 0.0385,
+        "event_window": true
+      },
+      "decision_price": 108.0,
+      "execution_price": 109.4553,
+      "fill_price": 109.778537,
+      "fill_ratio": 0.7767,
+      "filled_notional": 11650.5,
+      "slippage_bps": 29.5314,
+      "commission_cost": 1.16505,
+      "total_cost": 193.02471,
+      "audit": {
+        "order_intent": {
+          "symbol": "NVDA",
+          "leader": "momentum",
+          "notional": 15000.0,
+          "decision_price": 108.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7767,
+          "participation_rate": 0.014702,
+          "slippage_bps": 29.5314,
+          "is_open_session": true,
+          "gap_pct": 0.0385,
+          "event_window": true
+        },
+        "slippage_amount": 191.85966,
+        "total_cost": 193.02471,
+        "execution_summary": {
+          "execution_price": 109.4553,
+          "realized_fill_price": 109.778537,
+          "filled_notional": 11650.5,
+          "commission_cost": 1.16505
+        }
+      },
+      "simulation": {
+        "status": "partial",
+        "fill_ratio": 0.7767,
+        "fill_price": 108.254139,
+        "slippage_bps": 23.5314,
+        "filled_notional": 11650.5,
+        "delayed": false,
+        "partial_fill": true
+      }
+    },
+    {
+      "executed": true,
+      "status": "partial",
+      "order_id": "paper_acbf474748a6493d918226b4b44a4d34",
+      "order": {
+        "symbol": "NVDA",
+        "leader": "breakout_event",
+        "notional": 15000.0,
+        "reference_price": 108.0,
+        "decision_price": 108.0,
+        "volatility": 0.0492,
+        "avg_volume": 1020297,
+        "is_open_session": true,
+        "gap_pct": 0.0385,
+        "event_window": true
+      },
+      "decision_price": 108.0,
+      "execution_price": 109.4553,
+      "fill_price": 109.778537,
+      "fill_ratio": 0.7767,
+      "filled_notional": 11650.5,
+      "slippage_bps": 29.5314,
+      "commission_cost": 1.16505,
+      "total_cost": 193.02471,
+      "audit": {
+        "order_intent": {
+          "symbol": "NVDA",
+          "leader": "breakout_event",
+          "notional": 15000.0,
+          "decision_price": 108.0
+        },
+        "fill_assumption": {
+          "fill_model": "partial",
+          "fill_ratio": 0.7767,
+          "participation_rate": 0.014702,
+          "slippage_bps": 29.5314,
+          "is_open_session": true,
+          "gap_pct": 0.0385,
+          "event_window": true
+        },
+        "slippage_amount": 191.85966,
+        "total_cost": 193.02471,
+        "execution_summary": {
+          "execution_price": 109.4553,
+          "realized_fill_price": 109.778537,
+          "filled_notional": 11650.5,
+          "commission_cost": 1.16505
+        }
+      },
+      "simulation": {
+        "status": "partial",
+        "fill_ratio": 0.7767,
+        "fill_price": 108.254139,
+        "slippage_bps": 23.5314,
+        "filled_notional": 11650.5,
+        "delayed": false,
+        "partial_fill": true
+      }
+    }
+  ],
+  "metrics": {
+    "router_latency": {
+      "routing_ms": 0
+    },
+    "agent_latency": {
+      "data_fetch_ms": 0,
+      "regime_detect_ms": 0,
+      "agent_execution_ms": 1,
+      "risk_check_ms": 0,
+      "portfolio_build_ms": 0,
+      "report_generation_ms": 0,
+      "runtime_ms": 2
+    },
+    "cycle_success_rate": {
+      "value": 1.0,
+      "successful_cycles": 1,
+      "total_cycles": 1
+    },
+    "token_cost": {
+      "estimated_tokens": 5800,
+      "leaders": {
+        "breakout_event": 3200,
+        "momentum": 1800
+      },
+      "specialists": {
+        "risk": 800
+      },
+      "budget": "low"
+    }
+  }
+}

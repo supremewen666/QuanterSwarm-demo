@@ -1,0 +1,89 @@
+{
+  "generated_at": "2026-03-24T09:02:59.686779+00:00",
+  "source": "internal_sim",
+  "as_of_date": "2026-03-24",
+  "signals": [
+    {
+      "signal_id": "aapl-2026-03-24T09:02:59.686779+00:00",
+      "symbol": "AAPL",
+      "direction": "long",
+      "confidence": 0.498,
+      "agent_outputs": {
+        "leader": "momentum",
+        "leader_scores": [
+          {
+            "leader": "momentum",
+            "score": 0.45,
+            "posterior_score": 0.5471,
+            "prior_score": 0.1471,
+            "parameter_version": "v1",
+            "rank_score": 0.6783,
+            "risk_penalty": 0.0
+          },
+          {
+            "leader": "breakout_event",
+            "score": 0.4,
+            "posterior_score": 0.32,
+            "prior_score": 0.0,
+            "parameter_version": "v1",
+            "rank_score": 0.542,
+            "risk_penalty": 0.0
+          }
+        ],
+        "routing": {
+          "regime": "high_vol",
+          "confidence": 0.69,
+          "leader_selected": [
+            "breakout_event",
+            "momentum"
+          ],
+          "specialists_selected": [
+            "risk"
+          ],
+          "reasons": {
+            "breakout_event": "selected_by_regime_routing",
+            "momentum": "selected_by_regime_routing"
+          },
+          "rejected_candidates": {},
+          "budget_constraints": {
+            "token_budget": "low",
+            "latency_budget": "balanced",
+            "max_specialists_per_cycle": 3,
+            "token_budget_limit": 1,
+            "latency_budget_limit": 2
+          },
+          "specialist_rejections": {
+            "memory_compression": "dropped_by_token_budget",
+            "feature_engineering": "dropped_by_token_budget",
+            "macro_event": "dropped_by_token_budget",
+            "sentiment": "dropped_by_token_budget",
+            "data_fetch": "dropped_by_token_budget"
+          },
+          "selected_reasons": {
+            "breakout_event": "selected_by_regime_routing",
+            "momentum": "selected_by_regime_routing"
+          },
+          "skipped_reasons": {},
+          "low_confidence_mode": false
+        },
+        "specialist_contribution": {
+          "sentiment_score": 0.45,
+          "event_impact_score": 0.3,
+          "factor_score": 0.41
+        }
+      },
+      "evidence_refs": [
+        "market:2026-03-24T09:02:59.679003+00:00",
+        "fundamentals:2026-02-15T21:05:00+00:00",
+        "macro:2026-03-16T12:30:00+00:00",
+        "news:2026-03-18T09:30:00+00:00",
+        "news:2026-03-18T09:30:00+00:00"
+      ],
+      "risk_flags": [],
+      "created_at": "2026-03-24T09:02:59.686779+00:00",
+      "score": 0.6783,
+      "portfolio_candidate": true,
+      "regime": "high_vol"
+    }
+  ]
+}

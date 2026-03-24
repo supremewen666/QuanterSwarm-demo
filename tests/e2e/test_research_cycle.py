@@ -1,16 +1,18 @@
 import json
 from pathlib import Path
+from typing import Any
 
 from quanter_swarm.orchestrator.root_agent import RootAgent
 
 GOLDEN_DIR = Path("tests/golden")
 
 
-def _subset(payload: dict, template: dict) -> dict:
-    output = {}
+def _subset(payload: dict[str, Any], template: dict[str, Any]) -> dict[str, Any]:
+    output: dict[str, Any] = {}
     for key, value in template.items():
         if isinstance(value, dict):
-            output[key] = _subset(payload.get(key, {}), value)
+            nested_payload = payload.get(key)
+            output[key] = _subset(nested_payload if isinstance(nested_payload, dict) else {}, value)
         else:
             output[key] = payload.get(key)
     return output

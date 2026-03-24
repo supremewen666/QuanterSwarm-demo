@@ -369,6 +369,7 @@ Every cycle is designed to produce something reviewable:
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+pip install -e ".[dev]"
 ```
 
 ### 2. Configure
@@ -377,7 +378,7 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Default config is paper-only and deterministic.
+Default operation is paper-only, deterministic, and centered on the internal simulation source.
 
 ### 3. Run quality checks
 
@@ -399,6 +400,77 @@ PYTHONPATH=src .venv/bin/python scripts/run_local_cycle.py
 ```bash
 make api
 ```
+
+## Daily Workflows
+
+The repo now exposes a task-oriented command surface that matches the internal simulation-first workflow described in `codex.md`.
+
+### Research and signals
+
+```bash
+python -m app.cli.generate_signals --source internal_sim --date 2025-06-01
+```
+
+or, after `pip install -e ".[dev]"`:
+
+```bash
+generate_signals --source internal_sim --date 2025-06-01
+```
+
+### Backtests
+
+```bash
+python -m app.cli.run_backtest --source internal_sim --config configs/backtest/default.yaml
+```
+
+or:
+
+```bash
+run_backtest --source internal_sim --config configs/backtest/default.yaml
+```
+
+### Replay
+
+```bash
+python -m app.cli.run_replay --run-id <RUN_ID>
+```
+
+or:
+
+```bash
+run_replay --run-id <RUN_ID>
+```
+
+### Build dashboard data
+
+```bash
+python -m app.cli.build_dashboard_data --source internal_sim --with-alpaca-readonly
+```
+
+or:
+
+```bash
+build_dashboard_data --source internal_sim --with-alpaca-readonly
+```
+
+### Serve dashboard
+
+```bash
+python -m app.cli.serve_dashboard
+```
+
+or:
+
+```bash
+serve_dashboard
+```
+
+### Output conventions
+
+- Research, signal, backtest, replay, and dashboard artifacts are written under `DATA_DIR`, which defaults to `data/`.
+- Tests override `DATA_DIR` automatically so routine test runs do not pollute repository artifacts.
+- `internal_sim` is the default and only supported source for research, backtest, and replay flows.
+- Alpaca is dashboard-only and explicitly marked `external / read-only`.
 
 ## OpenClaw Skill Packaging
 
@@ -549,18 +621,30 @@ Markdown reports also expose:
 
 ## Backtest and Replay
 
-Walk-forward and replay tools live in:
+Backtest, replay, and dashboard aggregation are exposed through the task-oriented CLI layer:
+
+- `python -m app.cli.run_backtest`
+- `python -m app.cli.run_replay`
+- `python -m app.cli.build_dashboard_data`
+- `python -m app.cli.serve_dashboard`
+
+Script wrappers also exist under `scripts/` for local development:
 
 - `scripts/run_backtest.py`
-- `src/quanter_swarm/backtest/`
+- `scripts/run_replay.py`
+- `scripts/build_dashboard_data.py`
+- `scripts/serve_dashboard.py`
 
-Replay artifacts can now include:
+Replay and backtest artifacts now carry the operational metadata needed for reconstruction and review, including:
 
-- market summary
-- evidence summary
-- signal events
-- portfolio updates
-- order and fill events
+- `run_id`
+- `dataset_version`
+- `config_hash`
+- `router_version`
+- `ranking_version`
+- `risk_version`
+- portfolio plan and mock execution summary
+- evidence-linked report payloads
 
 ## Experiments
 
@@ -596,6 +680,8 @@ or
 ```bash
 .venv/bin/python -m pytest
 ```
+
+Tests automatically redirect runtime outputs to a temporary `DATA_DIR`, so running them does not mutate the repository's tracked `data/` artifacts.
 
 ## Safety Boundaries
 

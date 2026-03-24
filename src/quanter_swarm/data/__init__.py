@@ -25,13 +25,29 @@ FileDataProvider: Any
 try:
     from quanter_swarm.data.live_providers import (
         AlfredVintageMacroProvider as _AlfredVintageMacroProvider,
+    )
+    from quanter_swarm.data.live_providers import (
         CompanyIRProvider as _CompanyIRProvider,
+    )
+    from quanter_swarm.data.live_providers import (
         CompositeMarketDataProvider as _CompositeMarketDataProvider,
+    )
+    from quanter_swarm.data.live_providers import (
         FmpMarketDataProvider as _FmpMarketDataProvider,
+    )
+    from quanter_swarm.data.live_providers import (
         FmpSharesFloatProvider as _FmpSharesFloatProvider,
+    )
+    from quanter_swarm.data.live_providers import (
         FredMacroProvider as _FredMacroProvider,
+    )
+    from quanter_swarm.data.live_providers import (
         PolygonMarketDataProvider as _PolygonMarketDataProvider,
+    )
+    from quanter_swarm.data.live_providers import (
         SecFilingsProvider as _SecFilingsProvider,
+    )
+    from quanter_swarm.data.live_providers import (
         SecXbrlFactsProvider as _SecXbrlFactsProvider,
     )
     AlfredVintageMacroProvider = _AlfredVintageMacroProvider

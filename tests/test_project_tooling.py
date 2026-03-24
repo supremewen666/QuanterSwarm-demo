@@ -16,6 +16,13 @@ def test_pyproject_declares_core_tooling() -> None:
     assert "pytest" in pyproject["tool"]
     assert "ruff" in pyproject["tool"]
     assert "mypy" in pyproject["tool"]
+    assert set(pyproject["project"]["scripts"]) >= {
+        "run_backtest",
+        "generate_signals",
+        "run_replay",
+        "build_dashboard_data",
+        "serve_dashboard",
+    }
 
 
 def test_makefile_exposes_quality_targets() -> None:
