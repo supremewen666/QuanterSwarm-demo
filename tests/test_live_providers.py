@@ -1,6 +1,6 @@
 import httpx
 
-from quanter_swarm.data import (
+from quanter_swarm.services.data import (
     AlfredVintageMacroProvider,
     FmpMarketDataProvider,
     FmpSharesFloatProvider,

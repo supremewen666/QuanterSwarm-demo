@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 
 from app.services.common import INTERNAL_SIM_SOURCE, write_output_payload
-from app.services.dashboard_service import build_dashboard_dataset
+from quanter_swarm.application import BuildDashboardData
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -24,7 +24,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    payload = build_dashboard_dataset(
+    payload = BuildDashboardData().execute(
         source=args.source,
         symbols=args.symbols,
         with_alpaca_readonly=args.with_alpaca_readonly,

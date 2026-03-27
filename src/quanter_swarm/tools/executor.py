@@ -8,9 +8,9 @@ from time import perf_counter
 from typing import Any
 
 from quanter_swarm.contracts import Status
+from quanter_swarm.core.runtime.logging import get_logger
 from quanter_swarm.tools.registry import ToolRegistry
 from quanter_swarm.tools.schemas import ToolExecutionResult
-from quanter_swarm.utils.logging import get_logger
 
 logger = get_logger(__name__)
 

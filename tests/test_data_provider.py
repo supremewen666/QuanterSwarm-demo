@@ -1,10 +1,10 @@
-from quanter_swarm.data.base import (
+from quanter_swarm.agents.specialists.data_fetch_specialist import DataFetchSpecialist
+from quanter_swarm.services.data.base import (
     BaseDataProvider,
     DeterministicDataProvider,
     get_default_data_provider,
 )
-from quanter_swarm.data.reliability import compute_source_reliability
-from quanter_swarm.specialists.data_fetch_specialist import DataFetchSpecialist
+from quanter_swarm.services.snapshot.reliability import compute_source_reliability
 
 
 def test_default_data_provider_implements_interface() -> None:

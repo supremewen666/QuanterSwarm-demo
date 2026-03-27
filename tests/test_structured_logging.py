@@ -4,8 +4,8 @@ import logging
 from pathlib import Path
 from typing import cast
 
-from quanter_swarm.orchestrator.root_agent import RootAgent
-from quanter_swarm.utils.logging import JsonFormatter, configure_logging
+from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.core.runtime.logging import JsonFormatter, configure_logging
 
 
 def test_json_formatter_emits_structured_fields() -> None:

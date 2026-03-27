@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from quanter_swarm.evolution import EvolutionManager
+from quanter_swarm.services.evolution import EvolutionManager
 
 
 def test_evolution_manager_builds_priors_and_writes_audit(tmp_path: Path) -> None:

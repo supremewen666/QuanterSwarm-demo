@@ -1,4 +1,4 @@
-from quanter_swarm.research.factor_score_engine import compute_factor_score
+from quanter_swarm.services.research.factor_score_engine import compute_factor_score
 
 
 def test_factor_score_engine_sums_values() -> None:

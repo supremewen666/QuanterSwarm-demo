@@ -1,3 +1,4 @@
+from quanter_swarm.agents.orchestrator.root_agent import RootAgent
 from quanter_swarm.backtest.events import (
     FillEvent,
     MarketEvent,
@@ -6,7 +7,6 @@ from quanter_swarm.backtest.events import (
     SignalEvent,
 )
 from quanter_swarm.backtest.replay_engine import emit_replay_events
-from quanter_swarm.orchestrator.root_agent import RootAgent
 
 
 def test_backtest_event_models_validate() -> None:

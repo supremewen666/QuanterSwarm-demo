@@ -1,6 +1,6 @@
-from quanter_swarm.leaders.breakout_event_leader import BreakoutEventLeader
-from quanter_swarm.leaders.momentum_leader import MomentumLeader
-from quanter_swarm.specialists.risk_specialist import RiskSpecialist
+from quanter_swarm.agents.leaders.breakout_event_leader import BreakoutEventLeader
+from quanter_swarm.agents.leaders.momentum_leader import MomentumLeader
+from quanter_swarm.agents.specialists.risk_specialist import RiskSpecialist
 
 
 def test_leader_exposes_capability_metadata() -> None:

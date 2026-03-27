@@ -1,4 +1,4 @@
-from quanter_swarm.orchestrator.router_agent import RouterAgent
+from quanter_swarm.agents.orchestrator.router_agent import RouterAgent
 
 
 def test_router_agent_selects_route() -> None:

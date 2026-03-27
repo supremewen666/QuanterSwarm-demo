@@ -1,4 +1,4 @@
-from quanter_swarm.research.fundamentals_parser import parse_fundamentals
+from quanter_swarm.services.research.fundamentals_parser import parse_fundamentals
 
 
 def test_parse_fundamentals_uses_xbrl_and_filings_when_present() -> None:

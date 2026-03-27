@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 
 from app.services.common import DEFAULT_CAPITAL, write_output_payload
-from app.services.replay_service import run_replay
+from quanter_swarm.application import RunReplay
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -18,7 +18,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    payload = run_replay(run_id=args.run_id, capital=args.capital)
+    payload = RunReplay().execute(run_id=args.run_id, capital=args.capital)
     print(write_output_payload(payload, args.output))
 
 

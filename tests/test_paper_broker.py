@@ -1,4 +1,4 @@
-from quanter_swarm.decision.paper_broker import PaperBroker
+from quanter_swarm.services.execution.paper_broker import PaperBroker
 
 
 def test_paper_broker_accepts_order() -> None:

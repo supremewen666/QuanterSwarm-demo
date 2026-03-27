@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from quanter_swarm.api.app import app
+from quanter_swarm.adapters.api.app import app
 
 
 def test_research_endpoint_returns_structured_payload() -> None:
@@ -12,6 +12,12 @@ def test_research_endpoint_returns_structured_payload() -> None:
     assert body["regime"] == body["active_regime"]
     assert "portfolio_suggestion" in body
     assert body["provider_summary"]["provider"] == "deterministic"
+    assert body["architecture_summary"]["control_plane"]["flow"] == [
+        "orchestrator",
+        "router",
+        "leader",
+        "specialist",
+    ]
 
 
 def test_batch_research_endpoint_returns_multiple_results() -> None:

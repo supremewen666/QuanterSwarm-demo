@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from quanter_swarm.errors import BacktestError
-from quanter_swarm.experiments.runner import ConfiguredExperimentRunner
+from quanter_swarm.services.backtest.configured_runner import ConfiguredExperimentRunner
 
 
 def test_configured_experiment_runner_executes_baseline_config(tmp_path: Path) -> None:

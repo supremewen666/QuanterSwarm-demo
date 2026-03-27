@@ -4,7 +4,7 @@ This document defines the continuous monitoring output for QuanterSwarm runs.
 
 ## Scope
 
-`src/quanter_swarm/evaluation/monitoring.py` aggregates saved cycle reports (`data/reports/*.json`) into one snapshot with:
+`src/quanter_swarm/services/monitoring/evaluation.py` aggregates saved cycle reports (`data/reports/*.json`) into one snapshot with:
 
 - leader leaderboard
 - regime-level performance breakdown
@@ -42,3 +42,4 @@ python scripts/export_metrics.py \
 
 - Drift status can be `stable`, `alert`, or `insufficient_data`.
 - Legacy reports lacking `decision_trace_summary.runtime_ms` are still accepted; latency sampling will ignore missing values.
+- Cycle-level traces and metrics now live alongside the aggregation helpers under `src/quanter_swarm/services/monitoring/`.

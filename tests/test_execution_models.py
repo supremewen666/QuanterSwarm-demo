@@ -1,5 +1,5 @@
-from quanter_swarm.execution.fills import decide_fill_status, estimate_fill_ratio
-from quanter_swarm.execution.slippage import estimate_slippage_bps
+from quanter_swarm.services.execution.fills import decide_fill_status, estimate_fill_ratio
+from quanter_swarm.services.execution.slippage import estimate_slippage_bps
 
 
 def test_slippage_model_increases_with_volatility_and_participation() -> None:

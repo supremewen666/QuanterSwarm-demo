@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from quanter_swarm.data.base import BaseDataProvider, get_default_data_provider
-from quanter_swarm.data.cache import SnapshotCache
-from quanter_swarm.market.snapshot_builder import build_snapshot, build_snapshots
+from quanter_swarm.services.data.base import BaseDataProvider, get_default_data_provider
+from quanter_swarm.services.snapshot.builder import build_snapshot, build_snapshots
+from quanter_swarm.services.snapshot.cache import SnapshotCache
 from quanter_swarm.tools.base import Tool
 from quanter_swarm.tools.registry import ToolRegistry
 

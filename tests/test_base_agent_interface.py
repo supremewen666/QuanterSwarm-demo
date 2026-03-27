@@ -1,11 +1,11 @@
 import asyncio
 
 from quanter_swarm.agents.base import BaseAgent
+from quanter_swarm.agents.leaders.momentum_leader import MomentumLeader
+from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator.router_agent import RouterAgent
+from quanter_swarm.agents.specialists.data_fetch_specialist import DataFetchSpecialist
 from quanter_swarm.contracts import AgentContext
-from quanter_swarm.leaders.momentum_leader import MomentumLeader
-from quanter_swarm.orchestrator.root_agent import RootAgent
-from quanter_swarm.orchestrator.router_agent import RouterAgent
-from quanter_swarm.specialists.data_fetch_specialist import DataFetchSpecialist
 
 
 def test_leader_and_specialist_inherit_base_agent() -> None:

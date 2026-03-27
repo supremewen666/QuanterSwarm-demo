@@ -1,4 +1,4 @@
-from quanter_swarm.execution.paper_executor import execute
+from quanter_swarm.services.execution.paper_executor import execute
 
 
 def test_paper_executor_handles_event_window_with_delayed_fill() -> None:

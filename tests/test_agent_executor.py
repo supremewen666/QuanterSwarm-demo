@@ -4,7 +4,7 @@ import time
 import pytest
 
 from quanter_swarm.agents.base import BaseAgent
-from quanter_swarm.orchestrator.agent_executor import AgentExecutor
+from quanter_swarm.agents.orchestrator.agent_executor import AgentExecutor
 
 
 class _SleepAgent(BaseAgent):

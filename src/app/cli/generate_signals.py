@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 
 from app.services.common import INTERNAL_SIM_SOURCE, write_output_payload
-from app.services.signal_service import generate_signals
+from quanter_swarm.application import GenerateSignals
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -24,7 +24,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    payload = generate_signals(source=args.source, symbols=args.symbols, as_of_date=args.date)
+    payload = GenerateSignals().execute(source=args.source, symbols=args.symbols, as_of_date=args.date)
     print(write_output_payload(payload, args.output))
 
 

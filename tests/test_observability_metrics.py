@@ -1,4 +1,4 @@
-from quanter_swarm.observability.metrics import build_cycle_metrics, estimate_token_cost
+from quanter_swarm.services.monitoring.metrics import build_cycle_metrics, estimate_token_cost
 
 
 def test_estimate_token_cost_uses_agent_cost_hints() -> None:

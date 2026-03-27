@@ -1,4 +1,4 @@
-from quanter_swarm.execution.slippage import apply_slippage, estimate_slippage_bps
+from quanter_swarm.services.execution.slippage import apply_slippage, estimate_slippage_bps
 
 
 def test_estimate_slippage_bps_not_fixed_constant() -> None:

@@ -7,7 +7,7 @@ from quanter_swarm.config.defaults import (
     DEFAULT_SYMBOLS,
     DEFAULT_TOKEN_BUDGET,
 )
-from quanter_swarm.utils.config import load_settings
+from quanter_swarm.core.runtime.config import load_settings
 
 
 def test_load_settings_uses_centralized_defaults(monkeypatch) -> None:

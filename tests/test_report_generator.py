@@ -1,4 +1,4 @@
-from quanter_swarm.reporting.report_generator import generate_report
+from quanter_swarm.services.reporting.report_generator import generate_report
 
 
 def test_report_generator_returns_summary() -> None:
@@ -62,5 +62,7 @@ def test_report_generator_returns_summary() -> None:
     assert report["regime_confidence"] == 0.72
     assert report["router_decision"]["regime"] == "trend_up"
     assert "# AAPL Research Cycle" in report["markdown_summary"]
+    assert "## Architecture Layers" in report["markdown_summary"]
     assert "## Evidence" in report["markdown_summary"]
+    assert report["architecture_summary"]["control_plane"]["router"]["selected_leaders"] == ["momentum"]
     assert report["evidence_summary"]["evolution"]["top_posterior_leader"] == "momentum"

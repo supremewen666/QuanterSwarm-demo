@@ -1,4 +1,4 @@
-from quanter_swarm.orchestrator.ranking_engine import rank_candidates
+from quanter_swarm.services.ranking import rank_candidates
 
 
 def test_ranking_engine_sorts_descending() -> None:

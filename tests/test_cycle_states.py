@@ -1,4 +1,9 @@
-from quanter_swarm.orchestrator.states import CycleStage, CycleState, StageRecord, state_for_stage
+from quanter_swarm.agents.orchestrator.states import (
+    CycleStage,
+    CycleState,
+    StageRecord,
+    state_for_stage,
+)
 
 
 def test_cycle_state_enum_matches_roadmap_states() -> None:

@@ -1,9 +1,9 @@
 import json
 from pathlib import Path
 
-from quanter_swarm.data.cache import FileSnapshotCache, MemorySnapshotCache
-from quanter_swarm.data.mock_provider import MockDataProvider
-from quanter_swarm.specialists.data_fetch_specialist import DataFetchSpecialist
+from quanter_swarm.agents.specialists.data_fetch_specialist import DataFetchSpecialist
+from quanter_swarm.services.data.mock_provider import MockDataProvider
+from quanter_swarm.services.snapshot.cache import FileSnapshotCache, MemorySnapshotCache
 
 
 def test_memory_snapshot_cache_round_trips_snapshot() -> None:

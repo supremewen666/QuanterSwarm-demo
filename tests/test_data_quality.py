@@ -1,4 +1,4 @@
-from quanter_swarm.market.data_quality import validate_snapshot
+from quanter_swarm.services.snapshot.validator import validate_snapshot
 
 
 def test_validate_snapshot_flags_missing_news() -> None:

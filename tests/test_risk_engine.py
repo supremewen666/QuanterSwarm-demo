@@ -1,5 +1,5 @@
-from quanter_swarm.risk.engine import evaluate_risk_rules
-from quanter_swarm.risk.rules import (
+from quanter_swarm.services.risk.engine import evaluate_risk_rules
+from quanter_swarm.services.risk.rules import (
     earnings_no_trade_rule,
     max_daily_loss_rule,
     max_leverage_rule,

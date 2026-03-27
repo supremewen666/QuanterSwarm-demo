@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from quanter_swarm.errors import BacktestError
-from quanter_swarm.evaluation.experiment_runner import ExperimentRunner
+from quanter_swarm.services.backtest.experiment_runner import ExperimentRunner
 
 
 def test_experiment_runner_router_ablation_outputs_results(tmp_path: Path) -> None:

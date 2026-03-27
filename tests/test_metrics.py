@@ -1,4 +1,4 @@
-from quanter_swarm.evaluation.metrics import summarize_metrics
+from quanter_swarm.services.backtest.metrics import summarize_metrics
 
 
 def test_summarize_metrics_returns_expected_keys() -> None:

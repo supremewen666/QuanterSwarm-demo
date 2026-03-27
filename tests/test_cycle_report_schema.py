@@ -1,5 +1,5 @@
+from quanter_swarm.agents.orchestrator.root_agent import RootAgent
 from quanter_swarm.contracts import AgentContext, AgentResult, CycleReport, RouterDecision
-from quanter_swarm.orchestrator.root_agent import RootAgent
 
 
 def test_agent_schema_models_round_trip() -> None:

@@ -1,4 +1,4 @@
-from quanter_swarm.decision.portfolio_optimizer import optimize_weights
+from quanter_swarm.services.portfolio.optimizer import optimize_weights
 
 
 def test_optimizer_penalizes_high_correlation_and_volatility() -> None:

@@ -5,20 +5,24 @@ from __future__ import annotations
 from typing import TypeVar
 
 from quanter_swarm.agents.base import BaseAgent
+from quanter_swarm.agents.leaders.breakout_event_leader import BreakoutEventLeader
+from quanter_swarm.agents.leaders.mean_reversion_leader import MeanReversionLeader
+from quanter_swarm.agents.leaders.momentum_leader import MomentumLeader
+from quanter_swarm.agents.leaders.stat_arb_leader import StatArbLeader
+from quanter_swarm.agents.orchestrator.evolution_agent import EvolutionAgent
+from quanter_swarm.agents.orchestrator.regime_agent import RegimeAgent
+from quanter_swarm.agents.orchestrator.router_agent import RouterAgent
+from quanter_swarm.agents.specialists.data_fetch_specialist import DataFetchSpecialist
+from quanter_swarm.agents.specialists.feature_engineering_specialist import (
+    FeatureEngineeringSpecialist,
+)
+from quanter_swarm.agents.specialists.macro_event_specialist import MacroEventSpecialist
+from quanter_swarm.agents.specialists.memory_compression_specialist import (
+    MemoryCompressionSpecialist,
+)
+from quanter_swarm.agents.specialists.risk_specialist import RiskSpecialist
+from quanter_swarm.agents.specialists.sentiment_specialist import SentimentSpecialist
 from quanter_swarm.errors import RouterError
-from quanter_swarm.leaders.breakout_event_leader import BreakoutEventLeader
-from quanter_swarm.leaders.mean_reversion_leader import MeanReversionLeader
-from quanter_swarm.leaders.momentum_leader import MomentumLeader
-from quanter_swarm.leaders.stat_arb_leader import StatArbLeader
-from quanter_swarm.orchestrator.evolution_agent import EvolutionAgent
-from quanter_swarm.orchestrator.regime_agent import RegimeAgent
-from quanter_swarm.orchestrator.router_agent import RouterAgent
-from quanter_swarm.specialists.data_fetch_specialist import DataFetchSpecialist
-from quanter_swarm.specialists.feature_engineering_specialist import FeatureEngineeringSpecialist
-from quanter_swarm.specialists.macro_event_specialist import MacroEventSpecialist
-from quanter_swarm.specialists.memory_compression_specialist import MemoryCompressionSpecialist
-from quanter_swarm.specialists.risk_specialist import RiskSpecialist
-from quanter_swarm.specialists.sentiment_specialist import SentimentSpecialist
 
 AgentType = TypeVar("AgentType", bound=BaseAgent)
 

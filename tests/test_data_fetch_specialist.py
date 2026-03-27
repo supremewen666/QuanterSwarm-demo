@@ -1,4 +1,4 @@
-from quanter_swarm.specialists.data_fetch_specialist import DataFetchSpecialist
+from quanter_swarm.agents.specialists.data_fetch_specialist import DataFetchSpecialist
 
 
 def test_data_fetch_specialist_returns_symbol() -> None:

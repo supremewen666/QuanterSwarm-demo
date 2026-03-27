@@ -134,35 +134,49 @@ QuanterSwarm is opinionated in a few important ways:
 ### End-to-end flow
 
 ```text
-External Data
-  -> Snapshot Builder
-  -> Regime Detection
-  -> Specialist Research
-  -> Leader Proposal
-  -> Posterior Ranking
-  -> Risk Guardrails
-  -> Portfolio Construction
-  -> Paper Execution
-  -> Reporting / Replay / Monitoring
+Application Adapters (API / CLI / Skill)
+  -> Application Use Cases
+    -> Orchestrator
+      -> Router
+        -> Leaders
+          -> Specialists
+    -> System Services
+      -> Snapshot / Provider
+      -> Ranking
+      -> Evolution
+      -> Risk
+      -> Portfolio
+      -> Execution
+      -> Reporting
 ```
 
 ### Core runtime graph
 
 ```text
-RootAgent
-  -> CycleManager
-     -> DataFetchSpecialist
-     -> RegimeAgent
-     -> RouterAgent
-     -> Shared Specialists
-     -> Ephemeral Leaders
-     -> RankingEngine
-     -> EvolutionManager
-     -> Risk Engine
-     -> Portfolio Builder
-     -> Paper Executor
-     -> Report Generator
+External Adapters
+  -> RunResearchCycle / RunBatchResearch / GetProviderTopology / RiskPrecheck / PromoteLeaderVersion
+    -> RootAgent (Orchestrator)
+      -> RouterAgent (Router)
+        -> Ephemeral Leaders
+          -> Shared Specialists
+
+System Services
+  -> Snapshot / Provider Factory
+  -> Ranking Engine
+  -> Evolution Manager
+  -> Risk Engine
+  -> Portfolio Builder
+  -> Paper Executor
+  -> Report Generator
 ```
+
+### Layering rules
+
+- External adapters do not call orchestration internals directly.
+- API, CLI, and skill adapters share the same application-layer use cases.
+- Risk, ranking, execution, evolution, reporting, and provider topology are expressed as system services, not pseudo-agents.
+- A thin bootstrap stage still exists for snapshot assembly and regime evidence before routing, but it stays inside the orchestrator lifecycle.
+- The application layer is shaped so these use cases can later be wrapped as MCP tools or remote task endpoints without exposing orchestration internals.
 
 ### What makes this graph different
 
@@ -343,21 +357,16 @@ Every cycle is designed to produce something reviewable:
 ├── shared/                   # Schemas, templates, prompts, constants
 ├── skill/quanter-swarm/      # OpenClaw skill packaging assets
 ├── src/quanter_swarm/
-│   ├── agents/
-│   ├── api/
-│   ├── backtest/
-│   ├── data/
-│   ├── decision/
-│   ├── evaluation/
-│   ├── evolution/
-│   ├── execution/
-│   ├── leaders/
-│   ├── market/
-│   ├── orchestrator/
-│   ├── reporting/
-│   ├── research/
-│   ├── risk/
-│   └── router/
+│   ├── adapters/             # API and external adapters
+│   ├── agents/               # Orchestrator -> Router -> Leaders -> Specialists
+│   ├── application/          # Shared use-case entrypoints
+│   ├── core/                 # Runtime config, ids, logging, storage primitives
+│   ├── services/             # Snapshot, ranking, risk, execution, reporting, evolution, etc.
+│   ├── backtest/             # Replay/event engine kept separate for now
+│   ├── config/
+│   ├── llm/
+│   ├── tools/
+│   └── validation/
 └── tests/
 ```
 
@@ -739,6 +748,8 @@ See:
 - [docs/evolution-policy.md](docs/evolution-policy.md)
 - [docs/monitoring.md](docs/monitoring.md)
 - [docs/status-matrix.md](docs/status-matrix.md)
+- [docs/example-cycle-output.md](docs/example-cycle-output.md)
+- [docs/codex-acceptance-checklist.md](docs/codex-acceptance-checklist.md)
 
 ## Final Note
 

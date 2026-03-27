@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from quanter_swarm.execution.fills import decide_fill_status, estimate_fill_ratio
-from quanter_swarm.execution.slippage import apply_slippage, estimate_slippage_bps
+from quanter_swarm.services.execution.fills import decide_fill_status, estimate_fill_ratio
+from quanter_swarm.services.execution.slippage import apply_slippage, estimate_slippage_bps
 
 
 class ExecutionSimulator:

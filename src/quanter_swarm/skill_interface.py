@@ -6,11 +6,11 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from quanter_swarm.agents.orchestrator.runtime import RuntimeContext
+from quanter_swarm.application import RunResearchCycle
 from quanter_swarm.config.settings import Settings
 from quanter_swarm.contracts import CycleReport, ResearchRequestContract
-from quanter_swarm.orchestrator.root_agent import RootAgent
-from quanter_swarm.orchestrator.runtime import RuntimeContext
-from quanter_swarm.utils.config import load_settings
+from quanter_swarm.core.runtime.config import load_settings
 
 SkillMode = Literal["normal", "degraded", "missing_data", "no_trade"]
 
@@ -86,7 +86,7 @@ def run_skill(
     symbol = symbols[0]
     settings = _settings_with_policy(load_settings(), policy)
     runtime = RuntimeContext.build(settings=settings)
-    report = RootAgent(runtime=runtime).run_sync(symbol=symbol, scenario=_scenario_from_mode(mode))
+    report = RunResearchCycle(runtime=runtime).execute(symbol=symbol, scenario=_scenario_from_mode(mode))
     validated = CycleReport.model_validate(report)
     if policy is not None and not policy.strict_output:
         return validated

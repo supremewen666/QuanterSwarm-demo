@@ -1,4 +1,4 @@
-from quanter_swarm.orchestrator.regime_agent import RegimeAgent
+from quanter_swarm.agents.orchestrator.regime_agent import RegimeAgent
 
 
 def test_regime_agent_classifies_market_state() -> None:

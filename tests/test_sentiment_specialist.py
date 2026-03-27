@@ -1,4 +1,4 @@
-from quanter_swarm.specialists.sentiment_specialist import SentimentSpecialist
+from quanter_swarm.agents.specialists.sentiment_specialist import SentimentSpecialist
 
 
 def test_sentiment_specialist_scores_text() -> None:

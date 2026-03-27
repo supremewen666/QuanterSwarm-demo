@@ -1,9 +1,9 @@
 from pathlib import Path
 
-from quanter_swarm.evolution import EvolutionManager
-from quanter_swarm.monitoring.metrics import build_runtime_monitoring_snapshot
-from quanter_swarm.monitoring.tracing import build_monitoring_trace
-from quanter_swarm.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.services.evolution import EvolutionManager
+from quanter_swarm.services.monitoring.runtime_metrics import build_runtime_monitoring_snapshot
+from quanter_swarm.services.monitoring.runtime_tracing import build_monitoring_trace
 
 
 def test_monitoring_layer_extracts_runtime_metrics() -> None:

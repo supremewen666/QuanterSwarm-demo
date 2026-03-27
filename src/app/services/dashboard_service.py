@@ -13,8 +13,8 @@ from app.services.backtest_service import run_backtest
 from app.services.common import ensure_directory, normalize_source, utc_now_iso
 from app.services.portfolio_service import mock_execution_from_report, portfolio_plan_from_report
 from app.services.signal_service import generate_signals
-from quanter_swarm.storage.file_store import write_json
-from quanter_swarm.utils.config import load_settings
+from quanter_swarm.core.runtime.config import load_settings
+from quanter_swarm.core.storage.file_store import write_json
 
 if TYPE_CHECKING:
     from fastapi import FastAPI

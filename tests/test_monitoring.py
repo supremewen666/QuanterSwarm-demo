@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from quanter_swarm.evaluation.monitoring import (
+from quanter_swarm.services.monitoring.evaluation import (
     build_monitoring_from_report_dir,
     build_monitoring_snapshot,
 )

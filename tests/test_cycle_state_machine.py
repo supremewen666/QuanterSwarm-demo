@@ -1,4 +1,4 @@
-from quanter_swarm.orchestrator.cycle_manager import CycleManager
+from quanter_swarm.agents.orchestrator.cycle_manager import CycleManager
 
 
 def _stage_names(report: dict) -> list[str]:

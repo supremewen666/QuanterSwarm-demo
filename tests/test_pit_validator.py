@@ -5,7 +5,7 @@ from quanter_swarm.backtest.execution_simulator import ExecutionSimulator
 from quanter_swarm.backtest.models import Fill
 from quanter_swarm.backtest.validator import BacktestValidator
 from quanter_swarm.errors import BacktestError, DataProviderError
-from quanter_swarm.market.snapshot_builder import build_snapshot
+from quanter_swarm.services.snapshot.builder import build_snapshot
 from quanter_swarm.validation.pit_validator import PITValidator
 
 

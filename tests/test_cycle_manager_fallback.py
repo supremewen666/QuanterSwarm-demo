@@ -1,4 +1,4 @@
-from quanter_swarm.orchestrator.cycle_manager import CycleManager
+from quanter_swarm.agents.orchestrator.cycle_manager import CycleManager
 
 
 def test_cycle_manager_records_specialist_fallback_modes() -> None:

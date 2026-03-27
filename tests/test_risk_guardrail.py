@@ -1,4 +1,4 @@
-from quanter_swarm.decision.risk_guardrail import assess_guardrails, passes_guardrails
+from quanter_swarm.services.risk.guardrail import assess_guardrails, passes_guardrails
 
 
 def test_risk_guardrail_blocks_warnings() -> None:

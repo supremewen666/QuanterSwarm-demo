@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.services.common import provider_override_for_source, resolve_symbols
-from quanter_swarm.orchestrator.root_agent import RootAgent
+from quanter_swarm.application import RunBatchResearch
 
 
 def run_research_cycle(
@@ -15,8 +15,9 @@ def run_research_cycle(
     scenario: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     normalized_symbols = resolve_symbols(symbols)
-    return RootAgent().run_batch_sync(
+    provider_override = provider_override_for_source(source)
+    return RunBatchResearch().execute(
         symbols=normalized_symbols,
         scenario=scenario,
-        provider_override=provider_override_for_source(source),
+        data_provider=provider_override["provider"],
     )

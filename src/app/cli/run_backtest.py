@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import argparse
 
-from app.services.backtest_service import run_backtest
 from app.services.common import DEFAULT_CAPITAL, INTERNAL_SIM_SOURCE, write_output_payload
+from quanter_swarm.application import RunBacktest
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -25,7 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    payload = run_backtest(
+    payload = RunBacktest().execute(
         source=args.source,
         symbols=args.symbols,
         config_path=args.config,

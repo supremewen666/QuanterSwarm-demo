@@ -1,5 +1,5 @@
-from quanter_swarm.observability.trace import build_cycle_trace, new_trace_id
-from quanter_swarm.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.services.monitoring.trace import build_cycle_trace, new_trace_id
 
 
 def test_build_cycle_trace_contains_required_fields() -> None:

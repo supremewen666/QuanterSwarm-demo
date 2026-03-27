@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "src"))
 
-from quanter_swarm.evaluation.experiment_runner import ExperimentRunner
+from quanter_swarm.services.backtest.experiment_runner import ExperimentRunner
 
 
 def main() -> None:

@@ -1,7 +1,7 @@
+from quanter_swarm.agents.orchestrator.root_agent import RootAgent
 from quanter_swarm.backtest.costs import slippage, transaction_fee
 from quanter_swarm.backtest.models import Fill
 from quanter_swarm.backtest.replay_engine import replay_report
-from quanter_swarm.orchestrator.root_agent import RootAgent
 
 
 def test_backtest_cost_model_sums_transaction_fees_and_slippage() -> None:

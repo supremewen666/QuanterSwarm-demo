@@ -5,10 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from quanter_swarm.data.base import BaseDataProvider, DeterministicDataProvider
-from quanter_swarm.data.schemas import record_hash
-from quanter_swarm.orchestrator.root_agent import RootAgent
-from quanter_swarm.utils.config import load_settings
+from quanter_swarm.application import RunBatchResearch
+from quanter_swarm.core.runtime.config import load_settings
+from quanter_swarm.services.data.base import BaseDataProvider, DeterministicDataProvider
+from quanter_swarm.services.snapshot.schemas import record_hash
 
 
 @dataclass(slots=True)
@@ -28,7 +28,7 @@ class InternalSimSource:
 
     def fetch_reports(self, symbols: list[str] | None = None) -> list[dict[str, Any]]:
         normalized = self.resolve_symbols(symbols)
-        return RootAgent().run_batch_sync(symbols=normalized, provider_override=self.provider_override())
+        return RunBatchResearch().execute(symbols=normalized, data_provider=self.provider_override()["provider"])
 
     def snapshot_universe(self, symbols: list[str] | None = None) -> dict[str, dict[str, Any]]:
         normalized = self.resolve_symbols(symbols)

@@ -1,4 +1,4 @@
-from quanter_swarm.decision.portfolio_suggestion import build_portfolio
+from quanter_swarm.services.portfolio.suggestion import build_portfolio
 
 
 def test_portfolio_suggestion_returns_positions() -> None:

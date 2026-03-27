@@ -7,8 +7,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from quanter_swarm.core.runtime.config import load_settings
 from quanter_swarm.errors import DataProviderError
-from quanter_swarm.utils.config import load_settings
 
 DEFAULT_CAPITAL = 100_000.0
 DEFAULT_HOST = "127.0.0.1"

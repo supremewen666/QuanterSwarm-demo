@@ -1,4 +1,4 @@
-from quanter_swarm.router import (
+from quanter_swarm.agents.router import (
     detect_regime,
     regime_family_for,
     select_leader,
