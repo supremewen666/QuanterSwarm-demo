@@ -370,6 +370,43 @@ Every cycle is designed to produce something reviewable:
 └── tests/
 ```
 
+The package root is now fully unified under `quanter_swarm.*`.
+
+- `quanter_swarm.adapters`
+  - API, CLI, dashboard, and external integration entrypoints
+- `quanter_swarm.application`
+  - task-oriented use cases shared by adapters
+- `quanter_swarm.agents`
+  - orchestrator, router, leaders, and specialists
+- `quanter_swarm.services`
+  - non-agent system capabilities such as ranking, risk, execution, reporting, and monitoring
+- `quanter_swarm.core`
+  - contracts, errors, runtime config, ids, tracing, and storage helpers
+
+## Public API and Import Style
+
+For new code, prefer package-level imports over deep module paths whenever you are crossing layers.
+
+Recommended examples:
+
+```python
+from quanter_swarm import RunResearchCycle
+from quanter_swarm.core import AgentContext, CycleReport, load_settings
+from quanter_swarm.services import generate_report, rank_candidates
+from quanter_swarm.agents.orchestrator import RootAgent, RuntimeContext
+from quanter_swarm.agents.leaders import MomentumLeader
+from quanter_swarm.agents.specialists import DataFetchSpecialist
+from quanter_swarm.adapters import api_app
+```
+
+Practical rule of thumb:
+
+- use `quanter_swarm` or `quanter_swarm.application` for app-facing use cases
+- use `quanter_swarm.core` for contracts, exceptions, config, ids, tracing, and storage
+- use `quanter_swarm.services` for system capabilities
+- use `quanter_swarm.agents.*` package exports for public agent classes
+- use direct submodule imports only for implementation details inside the same subsystem
+
 ## Quick Start
 
 ### 1. Install
@@ -410,6 +447,13 @@ PYTHONPATH=src .venv/bin/python scripts/run_local_cycle.py
 make api
 ```
 
+### 6. Sanity-check the package surface
+
+```bash
+ruff check .
+pytest
+```
+
 ## Daily Workflows
 
 The repo now exposes a task-oriented command surface that matches the internal simulation-first workflow described in `codex.md`.
@@ -417,7 +461,7 @@ The repo now exposes a task-oriented command surface that matches the internal s
 ### Research and signals
 
 ```bash
-python -m app.cli.generate_signals --source internal_sim --date 2025-06-01
+python -m quanter_swarm.adapters.cli.generate_signals --source internal_sim --date 2025-06-01
 ```
 
 or, after `pip install -e ".[dev]"`:
@@ -429,7 +473,7 @@ generate_signals --source internal_sim --date 2025-06-01
 ### Backtests
 
 ```bash
-python -m app.cli.run_backtest --source internal_sim --config configs/backtest/default.yaml
+python -m quanter_swarm.adapters.cli.run_backtest --source internal_sim --config configs/backtest/default.yaml
 ```
 
 or:
@@ -441,7 +485,7 @@ run_backtest --source internal_sim --config configs/backtest/default.yaml
 ### Replay
 
 ```bash
-python -m app.cli.run_replay --run-id <RUN_ID>
+python -m quanter_swarm.adapters.cli.run_replay --run-id <RUN_ID>
 ```
 
 or:
@@ -453,7 +497,7 @@ run_replay --run-id <RUN_ID>
 ### Build dashboard data
 
 ```bash
-python -m app.cli.build_dashboard_data --source internal_sim --with-alpaca-readonly
+python -m quanter_swarm.adapters.cli.build_dashboard_data --source internal_sim --with-alpaca-readonly
 ```
 
 or:
@@ -465,7 +509,7 @@ build_dashboard_data --source internal_sim --with-alpaca-readonly
 ### Serve dashboard
 
 ```bash
-python -m app.cli.serve_dashboard
+python -m quanter_swarm.adapters.cli.serve_dashboard
 ```
 
 or:
@@ -566,6 +610,14 @@ See [.env.example](.env.example) for:
 
 ## API
 
+If you need the ASGI app in code, prefer:
+
+```python
+from quanter_swarm.adapters import api_app
+```
+
+instead of importing the `app.py` submodule directly.
+
 ### Research
 
 `POST /research`
@@ -632,10 +684,10 @@ Markdown reports also expose:
 
 Backtest, replay, and dashboard aggregation are exposed through the task-oriented CLI layer:
 
-- `python -m app.cli.run_backtest`
-- `python -m app.cli.run_replay`
-- `python -m app.cli.build_dashboard_data`
-- `python -m app.cli.serve_dashboard`
+- `python -m quanter_swarm.adapters.cli.run_backtest`
+- `python -m quanter_swarm.adapters.cli.run_replay`
+- `python -m quanter_swarm.adapters.cli.build_dashboard_data`
+- `python -m quanter_swarm.adapters.cli.serve_dashboard`
 
 Script wrappers also exist under `scripts/` for local development:
 
@@ -654,6 +706,16 @@ Replay and backtest artifacts now carry the operational metadata needed for reco
 - `risk_version`
 - portfolio plan and mock execution summary
 - evidence-linked report payloads
+
+## Compatibility Notice
+
+`quanter_swarm.*` is the canonical package root.
+
+The historical `app.*` namespace has been retired.
+Repository-owned code, tests, docs, and packaging entrypoints now use `quanter_swarm.*`.
+
+If you still import `app.*`, migrate to the corresponding `quanter_swarm.*` path.
+See [docs/compatibility-layer-retirement.md](docs/compatibility-layer-retirement.md).
 
 ## Experiments
 
@@ -750,6 +812,12 @@ See:
 - [docs/status-matrix.md](docs/status-matrix.md)
 - [docs/example-cycle-output.md](docs/example-cycle-output.md)
 - [docs/codex-acceptance-checklist.md](docs/codex-acceptance-checklist.md)
+- [docs/compatibility-layer-retirement.md](docs/compatibility-layer-retirement.md)
+
+For package-surface and acceptance-state tracking, start with:
+
+- [docs/codex-acceptance-checklist.md](docs/codex-acceptance-checklist.md)
+- [docs/compatibility-layer-retirement.md](docs/compatibility-layer-retirement.md)
 
 ## Final Note
 

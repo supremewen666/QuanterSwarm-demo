@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator import RootAgent
 
 GOLDEN_DIR = Path("tests/golden")
 

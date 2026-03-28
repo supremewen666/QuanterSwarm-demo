@@ -5,13 +5,16 @@ pytest.importorskip("httpx")
 
 from fastapi.testclient import TestClient
 
-from app.adapters.market_data.alpaca_dashboard_source import AlpacaDashboardSource
-from app.cli.build_dashboard_data import build_parser as build_dashboard_parser
-from app.cli.generate_signals import build_parser as generate_signals_parser
-from app.cli.run_backtest import build_parser as run_backtest_parser
-from app.cli.run_replay import build_parser as run_replay_parser
-from app.services.common import INTERNAL_SIM_SOURCE
-from app.services.dashboard_service import build_dashboard_dataset, create_dashboard_app
+from quanter_swarm.adapters.cli.build_dashboard_data import build_parser as build_dashboard_parser
+from quanter_swarm.adapters.cli.generate_signals import build_parser as generate_signals_parser
+from quanter_swarm.adapters.cli.run_backtest import build_parser as run_backtest_parser
+from quanter_swarm.adapters.cli.run_replay import build_parser as run_replay_parser
+from quanter_swarm.adapters.external import AlpacaDashboardSource
+from quanter_swarm.application.task_flows import (
+    INTERNAL_SIM_SOURCE,
+    build_dashboard_dataset,
+    create_dashboard_app,
+)
 
 
 def test_task_oriented_clis_only_allow_internal_sim() -> None:

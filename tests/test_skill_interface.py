@@ -1,4 +1,4 @@
-from quanter_swarm.contracts import CycleReport, ResearchRequestContract
+from quanter_swarm.core import CycleReport, ResearchRequestContract
 from quanter_swarm.skill_interface import run_skill, run_skill_request
 
 

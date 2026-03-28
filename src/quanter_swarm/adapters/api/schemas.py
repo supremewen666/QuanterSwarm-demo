@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, Field
 
-from quanter_swarm.contracts import CycleReport, ResearchRequestContract
+from quanter_swarm.core import CycleReport, ResearchRequestContract
 
 
 class HealthResponse(BaseModel):

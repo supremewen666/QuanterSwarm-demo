@@ -1,7 +1,7 @@
 import pytest
 
 from quanter_swarm.agents.orchestrator.cycle_manager import CycleManager
-from quanter_swarm.errors import AgentExecutionError
+from quanter_swarm.core import AgentExecutionError
 
 
 class _BrokenLeader:

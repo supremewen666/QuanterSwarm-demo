@@ -1,4 +1,4 @@
-from quanter_swarm.agents.leaders.stat_arb_leader import StatArbLeader
+from quanter_swarm.agents.leaders import StatArbLeader
 
 
 def test_stat_arb_leader_name() -> None:

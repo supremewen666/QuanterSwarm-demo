@@ -1,10 +1,10 @@
 from fastapi.testclient import TestClient
 
-from quanter_swarm.adapters.api.app import app
+from quanter_swarm.adapters import api_app
 
 
 def test_research_endpoint_returns_structured_payload() -> None:
-    client = TestClient(app)
+    client = TestClient(api_app)
     response = client.post("/research", json={"symbol": "AAPL"})
     assert response.status_code == 200
     body = response.json()
@@ -21,7 +21,7 @@ def test_research_endpoint_returns_structured_payload() -> None:
 
 
 def test_batch_research_endpoint_returns_multiple_results() -> None:
-    client = TestClient(app)
+    client = TestClient(api_app)
     response = client.post("/research/batch", json={"symbols": ["AAPL", "MSFT"]})
     assert response.status_code == 200
     body = response.json()
@@ -29,7 +29,7 @@ def test_batch_research_endpoint_returns_multiple_results() -> None:
 
 
 def test_batch_data_endpoints_return_payloads() -> None:
-    client = TestClient(app)
+    client = TestClient(api_app)
     fundamentals = client.post("/data/fundamentals/batch", json={"symbols": ["AAPL", "MSFT"]})
     assert fundamentals.status_code == 200
     assert set(fundamentals.json()["results"]) == {"AAPL", "MSFT"}
@@ -40,7 +40,7 @@ def test_batch_data_endpoints_return_payloads() -> None:
 
 
 def test_provider_catalog_endpoint_returns_configured_topology() -> None:
-    client = TestClient(app)
+    client = TestClient(api_app)
     response = client.get("/data/providers")
     assert response.status_code == 200
     body = response.json()
@@ -49,6 +49,6 @@ def test_provider_catalog_endpoint_returns_configured_topology() -> None:
 
 
 def test_research_endpoint_requires_symbol_or_symbols() -> None:
-    client = TestClient(app)
+    client = TestClient(api_app)
     response = client.post("/research", json={})
     assert response.status_code == 422

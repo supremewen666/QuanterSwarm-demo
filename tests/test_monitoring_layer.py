@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from quanter_swarm.agents.orchestrator.root_agent import RootAgent
-from quanter_swarm.services.evolution import EvolutionManager
+from quanter_swarm.agents.orchestrator import RootAgent
+from quanter_swarm.services import EvolutionManager
 from quanter_swarm.services.monitoring.runtime_metrics import build_runtime_monitoring_snapshot
 from quanter_swarm.services.monitoring.runtime_tracing import build_monitoring_trace
 

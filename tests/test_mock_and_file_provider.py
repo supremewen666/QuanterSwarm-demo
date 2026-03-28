@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from quanter_swarm.errors import DataProviderError
+from quanter_swarm.core import DataProviderError
 from quanter_swarm.services.data.file_provider import FileDataProvider
 from quanter_swarm.services.data.mock_provider import MockDataProvider
 

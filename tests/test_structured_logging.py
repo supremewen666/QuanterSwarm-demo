@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import cast
 
-from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator import RootAgent
 from quanter_swarm.core.runtime.logging import JsonFormatter, configure_logging
 
 

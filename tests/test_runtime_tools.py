@@ -1,7 +1,7 @@
 import pytest
 from pydantic import BaseModel
 
-from quanter_swarm.agents.orchestrator.runtime import RuntimeContext
+from quanter_swarm.agents.orchestrator import RuntimeContext
 from quanter_swarm.config.settings import Settings
 from quanter_swarm.llm.client import LLMClient
 from quanter_swarm.llm.exceptions import StructuredOutputError

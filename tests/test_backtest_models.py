@@ -1,4 +1,4 @@
-from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator import RootAgent
 from quanter_swarm.backtest.models import Fill, Order, Portfolio, Position
 from quanter_swarm.backtest.replay_engine import replay_report
 

@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator import RootAgent
+from quanter_swarm.core import RiskGuardrailError
 from quanter_swarm.core.runtime.config import validate_config_consistency
-from quanter_swarm.errors import RiskGuardrailError
 
 
 def test_report_includes_config_provenance() -> None:

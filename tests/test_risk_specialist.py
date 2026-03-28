@@ -1,4 +1,4 @@
-from quanter_swarm.agents.specialists.risk_specialist import RiskSpecialist
+from quanter_swarm.agents.specialists import RiskSpecialist
 
 
 def test_risk_specialist_approves_placeholder_proposal() -> None:

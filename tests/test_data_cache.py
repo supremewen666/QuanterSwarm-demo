@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from quanter_swarm.agents.specialists.data_fetch_specialist import DataFetchSpecialist
+from quanter_swarm.agents.specialists import DataFetchSpecialist
 from quanter_swarm.services.data.mock_provider import MockDataProvider
 from quanter_swarm.services.snapshot.cache import FileSnapshotCache, MemorySnapshotCache
 

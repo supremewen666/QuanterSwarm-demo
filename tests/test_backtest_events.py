@@ -1,4 +1,4 @@
-from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator import RootAgent
 from quanter_swarm.backtest.events import (
     FillEvent,
     MarketEvent,

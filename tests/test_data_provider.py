@@ -1,4 +1,4 @@
-from quanter_swarm.agents.specialists.data_fetch_specialist import DataFetchSpecialist
+from quanter_swarm.agents.specialists import DataFetchSpecialist
 from quanter_swarm.services.data.base import (
     BaseDataProvider,
     DeterministicDataProvider,

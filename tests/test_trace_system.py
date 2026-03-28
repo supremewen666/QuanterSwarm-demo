@@ -1,4 +1,4 @@
-from quanter_swarm.agents.orchestrator.root_agent import RootAgent
+from quanter_swarm.agents.orchestrator import RootAgent
 from quanter_swarm.services.monitoring.trace import build_cycle_trace, new_trace_id
 
 

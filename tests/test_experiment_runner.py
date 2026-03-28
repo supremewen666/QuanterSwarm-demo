@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from quanter_swarm.errors import BacktestError
+from quanter_swarm.core import BacktestError
 from quanter_swarm.services.backtest.experiment_runner import ExperimentRunner
 
 

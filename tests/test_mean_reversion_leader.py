@@ -1,4 +1,4 @@
-from quanter_swarm.agents.leaders.mean_reversion_leader import MeanReversionLeader
+from quanter_swarm.agents.leaders import MeanReversionLeader
 
 
 def test_mean_reversion_leader_name() -> None:

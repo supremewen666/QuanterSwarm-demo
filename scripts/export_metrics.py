@@ -11,8 +11,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from quanter_swarm.evaluation.monitoring import build_monitoring_from_report_dir
-from quanter_swarm.storage.file_store import write_json, write_text
+from quanter_swarm.core.storage.file_store import write_json, write_text
+from quanter_swarm.services.monitoring.evaluation import build_monitoring_from_report_dir
 
 
 def _render_markdown(snapshot: dict) -> str:

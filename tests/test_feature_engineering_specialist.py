@@ -1,6 +1,4 @@
-from quanter_swarm.agents.specialists.feature_engineering_specialist import (
-    FeatureEngineeringSpecialist,
-)
+from quanter_swarm.agents.specialists import FeatureEngineeringSpecialist
 
 
 def test_feature_engineering_specialist_wraps_features() -> None:

@@ -25,11 +25,11 @@ dependencies = [
 ]
 
 [project.scripts]
-run_backtest = "app.cli.run_backtest:main"
-generate_signals = "app.cli.generate_signals:main"
-run_replay = "app.cli.run_replay:main"
-build_dashboard_data = "app.cli.build_dashboard_data:main"
-serve_dashboard = "app.cli.serve_dashboard:main"
+run_backtest = "quanter_swarm.adapters.cli.run_backtest:main"
+generate_signals = "quanter_swarm.adapters.cli.generate_signals:main"
+run_replay = "quanter_swarm.adapters.cli.run_replay:main"
+build_dashboard_data = "quanter_swarm.adapters.cli.build_dashboard_data:main"
+serve_dashboard = "quanter_swarm.adapters.cli.serve_dashboard:main"
 
 [project.optional-dependencies]
 dev = [

@@ -17,7 +17,7 @@ class RunBacktest:
         config_path: str | None = None,
         capital: float = 100_000.0,
     ) -> dict:
-        from app.services.backtest_service import run_backtest
+        from quanter_swarm.application.task_flows import run_backtest
 
         return run_backtest(source=source, symbols=symbols, config_path=config_path, capital=capital)
 
@@ -27,7 +27,7 @@ class RunReplay:
     """Execute replay through the application layer."""
 
     def execute(self, *, run_id: str, capital: float = 100_000.0) -> dict:
-        from app.services.replay_service import run_replay
+        from quanter_swarm.application.task_flows import run_replay
 
         return run_replay(run_id=run_id, capital=capital)
 
@@ -43,7 +43,7 @@ class GenerateSignals:
         symbols: list[str] | None = None,
         as_of_date: str | None = None,
     ) -> dict:
-        from app.services.signal_service import generate_signals
+        from quanter_swarm.application.task_flows import generate_signals
 
         return generate_signals(source=source, symbols=symbols, as_of_date=as_of_date)
 
@@ -59,7 +59,7 @@ class BuildDashboardData:
         symbols: list[str] | None = None,
         with_alpaca_readonly: bool = False,
     ) -> dict:
-        from app.services.dashboard_service import build_dashboard_dataset
+        from quanter_swarm.application.task_flows import build_dashboard_dataset
 
         return build_dashboard_dataset(
             source=source,

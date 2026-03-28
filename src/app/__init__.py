@@ -1,1 +1,0 @@
-"""Task-oriented application entrypoints."""
